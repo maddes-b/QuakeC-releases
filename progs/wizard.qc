@@ -283,7 +283,7 @@ void() Wiz_idlesound =
 {
     local float wr;
 
-    wr = random() * 5;
+    wr = random() * 5; // FIXME/Maddes: put inside if block
 
     if (self.waitmin < time)
     {

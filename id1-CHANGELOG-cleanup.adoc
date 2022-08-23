@@ -33,5 +33,5 @@ This will already be done with v1.01 for people that have concerns about the ori
 ** block comments on separate lines
 ** curly brackets also for single line blocks
 ** if conditions: put operations in brackets
-* [ ] add "FIXME/Maddes" for some known issues
+* [x] add "FIXME/Maddes" for some known issues
 ** for more known bugs visit https://www.quake-info-pool.net/

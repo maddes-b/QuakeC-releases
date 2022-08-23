@@ -294,7 +294,7 @@ void() ogre_smash11 = [ $smash11, ogre_smash12 ] {
     chainsaw(0);
     self.nextthink = self.nextthink + random() * 0.2; // slight variation
 };
-void() ogre_smash12 = [ $smash12, ogre_smash13 ] { ai_charge(); };
+void() ogre_smash12 = [ $smash12, ogre_smash13 ] { ai_charge(); }; // FIXME/Maddes: missing parameter (defaults to 0, FALSE, etc.)
 void() ogre_smash13 = [ $smash13, ogre_smash14 ] { ai_charge(4); };
 void() ogre_smash14 = [ $smash14, ogre_run1    ] { ai_charge(12); };
 
@@ -402,7 +402,7 @@ void() ogre_die1  = [ $death1,  ogre_die2  ] {};
 void() ogre_die2  = [ $death2,  ogre_die3  ] {};
 void() ogre_die3  = [ $death3,  ogre_die4  ] {
     self.solid = SOLID_NOT;
-    self.ammo_rockets = 2;
+    self.ammo_rockets = 2; // FIXME/Maddes: restructure weapons/ammo - define ammo backpack constant
     DropBackpack();
 };
 void() ogre_die4  = [ $death4,  ogre_die5  ] {};
@@ -421,7 +421,7 @@ void() ogre_bdie1  = [ $bdeath1,  ogre_bdie2  ] {};
 void() ogre_bdie2  = [ $bdeath2,  ogre_bdie3  ] { ai_forward(5); };
 void() ogre_bdie3  = [ $bdeath3,  ogre_bdie4  ] {
     self.solid = SOLID_NOT;
-    self.ammo_rockets = 2;
+    self.ammo_rockets = 2; // FIXME/Maddes: restructure weapons/ammo - define ammo backpack constant
     DropBackpack();
 };
 void() ogre_bdie4  = [ $bdeath4,  ogre_bdie5  ] { ai_forward(1); };

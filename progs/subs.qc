@@ -23,7 +23,7 @@ void(vector destangle, float tspeed, void() func) SUB_CalcAngleMove;
 void() SUB_CalcAngleMoveDone;
 void() SUB_UseTargets;
 
-void() SUB_Null = {};
+void() SUB_Null = {}; // FIXME/Maddes: abused also for .th_pain function with different definition
 
 
 void() SUB_Remove = { remove(self); };
@@ -351,7 +351,7 @@ some monsters refire twice automatically
 void(float normal) SUB_AttackFinished =
 {
     self.cnt = 0; // refire count for nightmare
-    if (skill != 3)
+    if (skill != 3) // FIXME/Maddes: use < (or: <= 2) to have more resilient code
     {
         self.attack_finished = time + normal;
     }
@@ -360,7 +360,7 @@ void(float normal) SUB_AttackFinished =
 
 void(void() thinkst) SUB_CheckRefire =
 {
-    if (skill != 3)
+    if (skill != 3) // FIXME/Maddes: use < (or: <= 2) to have more resilient code
     {
         return;
     }

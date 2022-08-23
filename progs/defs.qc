@@ -193,7 +193,7 @@ void end_sys_globals; // flag for structure dumping
 .float armortype; // save this fraction of incoming damage
 .float armorvalue;
 
-.float waterlevel; // 0 = not in, 1 = feet, 2 = waist, 3 = eyes
+.float waterlevel; // 0 = not in, 1 = feet, 2 = waist, 3 = eyes // FIXME/Maddes: create constants
 .float watertype; // a contents value
 
 .float ideal_yaw;
@@ -427,7 +427,7 @@ float skill;
 //
 .string wad;
 .string map;
-.float worldtype; // 0 = medieval, 1 = metal, 2 = base
+.float worldtype; // 0 = medieval, 1 = metal, 2 = base // FIXME/Maddes: create constants
 
 
 //================================================
@@ -501,7 +501,7 @@ float AS_MISSILE  = 4;
 .string mdl;
 .vector mangle; // angle at start
 
-.vector oldorigin; // only used by secret door
+.vector oldorigin; // only used by secret door // FIXME/Maddes: duplicate naming of vars (see sys fields above)
 
 .float t_length, t_width;
 

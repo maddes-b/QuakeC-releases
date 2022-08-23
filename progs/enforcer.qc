@@ -95,7 +95,7 @@ void() Laser_Touch =
 
 void(vector org, vector vec) LaunchLaser =
 {
-    local vector vec;
+    local vector vec; // FIXME/Maddes: duplicate naming of vars
 
     if (self.classname == "monster_enforcer")
     {
@@ -244,7 +244,7 @@ void(entity attacker, float damage) enf_pain =
 {
     local float r;
 
-    r = random();
+    r = random(); // FIXME/Maddes: put after if block
     if (self.pain_finished > time)
     {
         return;
@@ -288,7 +288,7 @@ void() enf_die1  = [ $death1,  enf_die2  ] {};
 void() enf_die2  = [ $death2,  enf_die3  ] {};
 void() enf_die3  = [ $death3,  enf_die4  ] {
     self.solid = SOLID_NOT;
-    self.ammo_cells = 5;
+    self.ammo_cells = 5; // FIXME/Maddes: restructure weapons/ammo - define ammo backpack constant
     DropBackpack();
 };
 void() enf_die4  = [ $death4,  enf_die5  ] { ai_forward(14); };
@@ -307,7 +307,7 @@ void() enf_fdie1  = [ $fdeath1,  enf_fdie2  ] {};
 void() enf_fdie2  = [ $fdeath2,  enf_fdie3  ] {};
 void() enf_fdie3  = [ $fdeath3,  enf_fdie4  ] {
     self.solid = SOLID_NOT;
-    self.ammo_cells = 5;
+    self.ammo_cells = 5; // FIXME/Maddes: restructure weapons/ammo - define ammo backpack constant
     DropBackpack();
 };
 void() enf_fdie4  = [ $fdeath4,  enf_fdie5  ] {};

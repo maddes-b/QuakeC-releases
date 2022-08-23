@@ -106,7 +106,7 @@ SpawnMeatSpray
 void(vector org, vector vel) SpawnMeatSpray =
 {
     local entity missile;
-    local vector org;
+    local vector org; // FIXME/Maddes: duplicate naming of vars
 
     missile = spawn();
     missile.owner = self;
@@ -300,11 +300,13 @@ void() W_FireShotgun =
 {
     local vector dir;
 
+    // FIXME/Maddes: restructure weapons/ammo - analyze NON-continuous shooting weapon: other fire functions, W_Attack/W_CheckNoAmmo
+
     sound(self, CHAN_WEAPON, "weapons/guncock.wav", 1, ATTN_NORM);
 
     self.punchangle_x = -2;
 
-    self.currentammo = self.ammo_shells = self.ammo_shells - 1;
+    self.currentammo = self.ammo_shells = self.ammo_shells - 1; // FIXME/Maddes: restructure weapons/ammo - define min ammo per weapon constant
     dir = aim(self, 100000);
     FireBullets(6, dir, '0.04 0.04 0');
 };
@@ -319,7 +321,9 @@ void() W_FireSuperShotgun =
 {
     local vector dir;
 
-    if (self.currentammo == 1)
+    // FIXME/Maddes: restructure weapons/ammo - analyze NON-continuous shooting weapon: other fire functions, W_Attack/W_CheckNoAmmo
+
+    if (self.currentammo == 1) // FIXME/Maddes: use <= (or: 2) to have more resilient code // FIXME/Maddes: restructure weapons/ammo - define min ammo per weapon constant // FIXME/Maddes: use .ammo_shells
     {
         W_FireShotgun();
         return;
@@ -329,7 +333,7 @@ void() W_FireSuperShotgun =
 
     self.punchangle_x = -4;
 
-    self.currentammo = self.ammo_shells = self.ammo_shells - 2;
+    self.currentammo = self.ammo_shells = self.ammo_shells - 2; // FIXME/Maddes: restructure weapons/ammo - define min ammo per weapon constant
     dir = aim(self, 100000);
     FireBullets(14, dir, '0.14 0.08 0');
 };
@@ -413,7 +417,9 @@ void() W_FireRocket =
 {
     local entity missile;
 
-    self.currentammo = self.ammo_rockets = self.ammo_rockets - 1;
+    // FIXME/Maddes: restructure weapons/ammo - analyze NON-continuous shooting weapon: other fire functions, W_Attack/W_CheckNoAmmo
+
+    self.currentammo = self.ammo_rockets = self.ammo_rockets - 1; // FIXME/Maddes: restructure weapons/ammo - define min ammo per weapon constant
 
     sound(self, CHAN_WEAPON, "weapons/sgun1.wav", 1, ATTN_NORM);
 
@@ -507,6 +513,8 @@ void() W_FireLightning =
     local vector org;
     local float cells;
 
+    // FIXME/Maddes: restructure weapons/ammo - analyze CONTINUOUS shooting weapon: other fire functions, W_Attack/W_CheckNoAmmo
+
     if (self.ammo_cells < 1)
     {
         self.weapon = W_BestWeapon();
@@ -531,7 +539,7 @@ void() W_FireLightning =
     }
 
     self.punchangle_x = -2;
-    self.currentammo = self.ammo_cells = self.ammo_cells - 1;
+    self.currentammo = self.ammo_cells = self.ammo_cells - 1; // FIXME/Maddes: restructure weapons/ammo - define min ammo per weapon constant
 
     org = self.origin + '0 0 16';
     traceline(org, org + v_forward * 600, TRUE, self);
@@ -597,7 +605,9 @@ void() W_FireGrenade =
 {
     local entity missile;
 
-    self.currentammo = self.ammo_rockets = self.ammo_rockets - 1;
+    // FIXME/Maddes: restructure weapons/ammo - analyze NON-continuous shooting weapon: other fire functions, W_Attack/W_CheckNoAmmo
+
+    self.currentammo = self.ammo_rockets = self.ammo_rockets - 1; // FIXME/Maddes: restructure weapons/ammo - define min ammo per weapon constant
 
     sound(self, CHAN_WEAPON, "weapons/grenade.wav", 1, ATTN_NORM);
 
@@ -677,7 +687,7 @@ void() W_FireSuperSpikes =
 
     sound(self, CHAN_WEAPON, "weapons/spike2.wav", 1, ATTN_NORM);
     self.attack_finished = time + 0.2;
-    self.currentammo = self.ammo_nails = self.ammo_nails - 2;
+    self.currentammo = self.ammo_nails = self.ammo_nails - 2; // FIXME/Maddes: restructure weapons/ammo - define min ammo per weapon constant
     dir = aim(self, 1000);
     launch_spike(self.origin + '0 0 16', dir);
     newmis.touch = superspike_touch;
@@ -693,7 +703,9 @@ void(float ox) W_FireSpikes =
 
     makevectors(self.v_angle);
 
-    if (self.ammo_nails >= 2 && self.weapon == IT_SUPER_NAILGUN)
+    // FIXME/Maddes: restructure weapons/ammo - analyze CONTINUOUS shooting weapon: other fire functions, W_Attack/W_CheckNoAmmo
+
+    if (self.ammo_nails >= 2 && self.weapon == IT_SUPER_NAILGUN) // FIXME/Maddes: restructure weapons/ammo - define min ammo per weapon constant
     {
         W_FireSuperSpikes();
         return;
@@ -708,7 +720,7 @@ void(float ox) W_FireSpikes =
 
     sound(self, CHAN_WEAPON, "weapons/rocket1i.wav", 1, ATTN_NORM);
     self.attack_finished = time + 0.2;
-    self.currentammo = self.ammo_nails = self.ammo_nails - 1;
+    self.currentammo = self.ammo_nails = self.ammo_nails - 1; // FIXME/Maddes: restructure weapons/ammo - define min ammo per weapon constant
     dir = aim(self, 1000);
     launch_spike(self.origin + '0 0 16' + v_right * ox, dir);
 
@@ -809,6 +821,8 @@ PLAYER WEAPON USE
 
 void() W_SetCurrentAmmo =
 {
+    // FIXME/Maddes: calling player_run() can cause "player ghosts" (not able to respawn), if the player died and lost all his ammo in the same frame (e.g. dying through discharging in water)
+    // FIXME/Maddes: see Quake Info Pool for ideas, check deadflag and additionally health
     player_run(); // get out of any weapon firing states
 
     self.items = self.items - (self.items & (IT_SHELLS | IT_NAILS | IT_ROCKETS | IT_CELLS));
@@ -883,23 +897,23 @@ float() W_BestWeapon =
 
     it = self.items;
 
-    if (self.waterlevel <= 1 && self.ammo_cells >= 1 && (it & IT_LIGHTNING))
+    if (self.waterlevel <= 1 && self.ammo_cells >= 1 && (it & IT_LIGHTNING)) // FIXME/Maddes: restructure weapons/ammo - define min ammo per weapon constant
     {
         return IT_LIGHTNING;
     }
-    if (self.ammo_nails >= 2 && (it & IT_SUPER_NAILGUN))
+    if (self.ammo_nails >= 2 && (it & IT_SUPER_NAILGUN)) // FIXME/Maddes: restructure weapons/ammo - define min ammo per weapon constant
     {
         return IT_SUPER_NAILGUN;
     }
-    if (self.ammo_shells >= 2 && (it & IT_SUPER_SHOTGUN))
+    if (self.ammo_shells >= 2 && (it & IT_SUPER_SHOTGUN)) // FIXME/Maddes: restructure weapons/ammo - define min ammo per weapon constant
     {
         return IT_SUPER_SHOTGUN;
     }
-    if (self.ammo_nails >= 1 && (it & IT_NAILGUN))
+    if (self.ammo_nails >= 1 && (it & IT_NAILGUN)) // FIXME/Maddes: restructure weapons/ammo - define min ammo per weapon constant
     {
         return IT_NAILGUN;
     }
-    if (self.ammo_shells >= 1 && (it & IT_SHOTGUN))
+    if (self.ammo_shells >= 1 && (it & IT_SHOTGUN)) // FIXME/Maddes: restructure weapons/ammo - define min ammo per weapon constant
     {
         return IT_SHOTGUN;
     }
@@ -908,7 +922,7 @@ float() W_BestWeapon =
 };
 
 
-float() W_CheckNoAmmo =
+float() W_CheckNoAmmo = // FIXME/Maddes: misleading function name - returns TRUE if current ammo present (>0), otherwise changes weapon, suggestion W_CheckCurrentAmmo
 {
     if (self.currentammo > 0)
     {
@@ -1030,7 +1044,7 @@ void() W_ChangeWeapon =
     else if (self.impulse == 2)
     {
         fl = IT_SHOTGUN;
-        if (self.ammo_shells < 1)
+        if (self.ammo_shells < 1) // FIXME/Maddes: restructure weapons/ammo - define min ammo per weapon constant
         {
             am = TRUE;
         }
@@ -1038,7 +1052,7 @@ void() W_ChangeWeapon =
     else if (self.impulse == 3)
     {
         fl = IT_SUPER_SHOTGUN;
-        if (self.ammo_shells < 2)
+        if (self.ammo_shells < 2) // FIXME/Maddes: restructure weapons/ammo - define min ammo per weapon constant
         {
             am = TRUE;
         }
@@ -1046,7 +1060,7 @@ void() W_ChangeWeapon =
     else if (self.impulse == 4)
     {
         fl = IT_NAILGUN;
-        if (self.ammo_nails < 1)
+        if (self.ammo_nails < 1) // FIXME/Maddes: restructure weapons/ammo - define min ammo per weapon constant
         {
             am = TRUE;
         }
@@ -1054,7 +1068,7 @@ void() W_ChangeWeapon =
     else if (self.impulse == 5)
     {
         fl = IT_SUPER_NAILGUN;
-        if (self.ammo_nails < 2)
+        if (self.ammo_nails < 2) // FIXME/Maddes: restructure weapons/ammo - define min ammo per weapon constant
         {
             am = TRUE;
         }
@@ -1062,7 +1076,7 @@ void() W_ChangeWeapon =
     else if (self.impulse == 6)
     {
         fl = IT_GRENADE_LAUNCHER;
-        if (self.ammo_rockets < 1)
+        if (self.ammo_rockets < 1) // FIXME/Maddes: restructure weapons/ammo - define min ammo per weapon constant
         {
             am = TRUE;
         }
@@ -1070,7 +1084,7 @@ void() W_ChangeWeapon =
     else if (self.impulse == 7)
     {
         fl = IT_ROCKET_LAUNCHER;
-        if (self.ammo_rockets < 1)
+        if (self.ammo_rockets < 1) // FIXME/Maddes: restructure weapons/ammo - define min ammo per weapon constant
         {
             am = TRUE;
         }
@@ -1078,7 +1092,7 @@ void() W_ChangeWeapon =
     else if (self.impulse == 8)
     {
         fl = IT_LIGHTNING;
-        if (self.ammo_cells < 1)
+        if (self.ammo_cells < 1) // FIXME/Maddes: restructure weapons/ammo - define min ammo per weapon constant
         {
             am = TRUE;
         }
@@ -1120,9 +1134,9 @@ void() CheatCommand =
         return;
     }
 
-    self.ammo_rockets = 100;
-    self.ammo_nails = 200;
-    self.ammo_shells = 100;
+    self.ammo_rockets = 100; // FIXME/Maddes: restructure weapons/ammo - define max ammo constant
+    self.ammo_nails = 200; // FIXME/Maddes: restructure weapons/ammo - define max ammo constant
+    self.ammo_shells = 100; // FIXME/Maddes: restructure weapons/ammo - define max ammo constant
     self.items = self.items |
                  IT_AXE |
                  IT_SHOTGUN |
@@ -1133,7 +1147,7 @@ void() CheatCommand =
                  IT_ROCKET_LAUNCHER |
                  IT_KEY1 | IT_KEY2;
 
-    self.ammo_cells = 200;
+    self.ammo_cells = 200; // FIXME/Maddes: restructure weapons/ammo - define max ammo constant
     self.items = self.items | IT_LIGHTNING;
 
     self.weapon = IT_ROCKET_LAUNCHER;
@@ -1156,6 +1170,8 @@ void() CycleWeaponCommand =
     it = self.items;
     self.impulse = 0;
 
+    // FIXME/Maddes: restructure weapons/ammo - avoid loop iterations
+
     while (TRUE)
     {
         am = FALSE;
@@ -1167,7 +1183,7 @@ void() CycleWeaponCommand =
         else if (self.weapon == IT_AXE)
         {
             self.weapon = IT_SHOTGUN;
-            if (self.ammo_shells < 1)
+            if (self.ammo_shells < 1) // FIXME/Maddes: restructure weapons/ammo - define min ammo per weapon constant
             {
                 am = TRUE;
             }
@@ -1175,7 +1191,7 @@ void() CycleWeaponCommand =
         else if (self.weapon == IT_SHOTGUN)
         {
             self.weapon = IT_SUPER_SHOTGUN;
-            if (self.ammo_shells < 2)
+            if (self.ammo_shells < 2) // FIXME/Maddes: restructure weapons/ammo - define min ammo per weapon constant
             {
                 am = TRUE;
             }
@@ -1183,7 +1199,7 @@ void() CycleWeaponCommand =
         else if (self.weapon == IT_SUPER_SHOTGUN)
         {
             self.weapon = IT_NAILGUN;
-            if (self.ammo_nails < 1)
+            if (self.ammo_nails < 1) // FIXME/Maddes: restructure weapons/ammo - define min ammo per weapon constant
             {
                 am = TRUE;
             }
@@ -1191,7 +1207,7 @@ void() CycleWeaponCommand =
         else if (self.weapon == IT_NAILGUN)
         {
             self.weapon = IT_SUPER_NAILGUN;
-            if (self.ammo_nails < 2)
+            if (self.ammo_nails < 2) // FIXME/Maddes: restructure weapons/ammo - define min ammo per weapon constant
             {
                 am = TRUE;
             }
@@ -1199,7 +1215,7 @@ void() CycleWeaponCommand =
         else if (self.weapon == IT_SUPER_NAILGUN)
         {
             self.weapon = IT_GRENADE_LAUNCHER;
-            if (self.ammo_rockets < 1)
+            if (self.ammo_rockets < 1) // FIXME/Maddes: restructure weapons/ammo - define min ammo per weapon constant
             {
                 am = TRUE;
             }
@@ -1207,7 +1223,7 @@ void() CycleWeaponCommand =
         else if (self.weapon == IT_GRENADE_LAUNCHER)
         {
             self.weapon = IT_ROCKET_LAUNCHER;
-            if (self.ammo_rockets < 1)
+            if (self.ammo_rockets < 1) // FIXME/Maddes: restructure weapons/ammo - define min ammo per weapon constant
             {
                 am = TRUE;
             }
@@ -1215,13 +1231,13 @@ void() CycleWeaponCommand =
         else if (self.weapon == IT_ROCKET_LAUNCHER)
         {
             self.weapon = IT_LIGHTNING;
-            if (self.ammo_cells < 1)
+            if (self.ammo_cells < 1) // FIXME/Maddes: restructure weapons/ammo - define min ammo per weapon constant
             {
                 am = TRUE;
             }
         }
 
-        if ((it & self.weapon) && am == FALSE)
+        if ((it & self.weapon) && am == FALSE) // FIXME/Maddes: do not use explicit comparison
         {
             W_SetCurrentAmmo();
             return;
@@ -1244,6 +1260,8 @@ void() CycleWeaponReverseCommand =
     it = self.items;
     self.impulse = 0;
 
+    // FIXME/Maddes: restructure weapons/ammo - avoid loop iterations
+
     while (TRUE)
     {
         am = FALSE;
@@ -1251,7 +1269,7 @@ void() CycleWeaponReverseCommand =
         if (self.weapon == IT_LIGHTNING)
         {
             self.weapon = IT_ROCKET_LAUNCHER;
-            if (self.ammo_rockets < 1)
+            if (self.ammo_rockets < 1) // FIXME/Maddes: restructure weapons/ammo - define min ammo per weapon constant
             {
                 am = TRUE;
             }
@@ -1259,7 +1277,7 @@ void() CycleWeaponReverseCommand =
         else if (self.weapon == IT_ROCKET_LAUNCHER)
         {
             self.weapon = IT_GRENADE_LAUNCHER;
-            if (self.ammo_rockets < 1)
+            if (self.ammo_rockets < 1) // FIXME/Maddes: restructure weapons/ammo - define min ammo per weapon constant
             {
                 am = TRUE;
             }
@@ -1267,7 +1285,7 @@ void() CycleWeaponReverseCommand =
         else if (self.weapon == IT_GRENADE_LAUNCHER)
         {
             self.weapon = IT_SUPER_NAILGUN;
-            if (self.ammo_nails < 2)
+            if (self.ammo_nails < 2) // FIXME/Maddes: restructure weapons/ammo - define min ammo per weapon constant
             {
                 am = TRUE;
             }
@@ -1275,7 +1293,7 @@ void() CycleWeaponReverseCommand =
         else if (self.weapon == IT_SUPER_NAILGUN)
         {
             self.weapon = IT_NAILGUN;
-            if (self.ammo_nails < 1)
+            if (self.ammo_nails < 1) // FIXME/Maddes: restructure weapons/ammo - define min ammo per weapon constant
             {
                 am = TRUE;
             }
@@ -1283,7 +1301,7 @@ void() CycleWeaponReverseCommand =
         else if (self.weapon == IT_NAILGUN)
         {
             self.weapon = IT_SUPER_SHOTGUN;
-            if (self.ammo_shells < 2)
+            if (self.ammo_shells < 2) // FIXME/Maddes: restructure weapons/ammo - define min ammo per weapon constant
             {
                 am = TRUE;
             }
@@ -1291,7 +1309,7 @@ void() CycleWeaponReverseCommand =
         else if (self.weapon == IT_SUPER_SHOTGUN)
         {
             self.weapon = IT_SHOTGUN;
-            if (self.ammo_shells < 1)
+            if (self.ammo_shells < 1) // FIXME/Maddes: restructure weapons/ammo - define min ammo per weapon constant
             {
                 am = TRUE;
             }
@@ -1303,13 +1321,13 @@ void() CycleWeaponReverseCommand =
         else if (self.weapon == IT_AXE)
         {
             self.weapon = IT_LIGHTNING;
-            if (self.ammo_cells < 1)
+            if (self.ammo_cells < 1) // FIXME/Maddes: restructure weapons/ammo - define min ammo per weapon constant
             {
                 am = TRUE;
             }
         }
 
-        if ((it & self.weapon) && am == FALSE)
+        if ((it & self.weapon) && am == FALSE) // FIXME/Maddes: do not use explicit comparison
         {
             W_SetCurrentAmmo();
             return;

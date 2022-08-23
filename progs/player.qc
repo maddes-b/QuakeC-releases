@@ -140,7 +140,7 @@ void() player_run = [ $rockrun1, player_run ] {
 
     if (self.weapon == IT_AXE)
     {
-        if (self.walkframe == 6)
+        if (self.walkframe == 6) // FIXME/Maddes: axe animation has more than 6 frames, use >=, could lead to ever increasing walkframe
         {
             self.walkframe = 0;
         }
@@ -148,7 +148,7 @@ void() player_run = [ $rockrun1, player_run ] {
     }
     else
     {
-        if (self.walkframe == 6)
+        if (self.walkframe == 6) // FIXME/Maddes: use >= to have more resilient code
         {
             self.walkframe = 0;
         }
@@ -196,7 +196,7 @@ void() player_nail1 = [ $nailatt1, player_nail2 ] {
     }
 
     self.weaponframe = self.weaponframe + 1;
-    if (self.weaponframe == 9)
+    if (self.weaponframe == 9) // FIXME/Maddes: use >= to have more resilient code
     {
         self.weaponframe = 1;
     }
@@ -215,7 +215,7 @@ void() player_nail2 = [ $nailatt2, player_nail1 ] {
     }
 
     self.weaponframe = self.weaponframe + 1;
-    if (self.weaponframe == 9)
+    if (self.weaponframe == 9) // FIXME/Maddes: use >= to have more resilient code
     {
         self.weaponframe = 1;
     }
@@ -237,7 +237,7 @@ void() player_light1 = [ $light1, player_light2 ] {
     }
 
     self.weaponframe = self.weaponframe + 1;
-    if (self.weaponframe == 5)
+    if (self.weaponframe == 5) // FIXME/Maddes: use >= to have more resilient code
     {
         self.weaponframe = 1;
     }
@@ -256,7 +256,7 @@ void() player_light2 = [ $light2, player_light1 ] {
     }
 
     self.weaponframe = self.weaponframe + 1;
-    if (self.weaponframe == 5)
+    if (self.weaponframe == 5) // FIXME/Maddes: use >= to have more resilient code
     {
         self.weaponframe = 1;
     }
@@ -294,7 +294,7 @@ void() PainSound =
     }
 
     // water pain sounds
-    if (self.watertype == CONTENT_WATER && self.waterlevel == 3)
+    if (self.watertype == CONTENT_WATER && self.waterlevel == 3) // FIXME/Maddes: use >= to have more resilient code
     {
         DeathBubbles(1);
         if (random() > 0.5)
@@ -347,7 +347,7 @@ void() PainSound =
     // don't make multiple pain sounds right after each other
 
     // axe pain sound
-    if (self.axhitme == TRUE)
+    if (self.axhitme == TRUE) // FIXME/Maddes: do not use explicit comparison
     {
         self.axhitme = FALSE;
         sound(self, CHAN_VOICE, "player/axhit1.wav", 1, ATTN_NORM);
@@ -434,7 +434,7 @@ void() DeathBubblesSpawn =
 {
     local entity bubble;
 
-    if (self.owner.waterlevel != 3)
+    if (self.owner.waterlevel != 3) // FIXME/Maddes: use < (or: <= 2) to have more resilient code
     {
         return;
     }
@@ -483,7 +483,7 @@ void() DeathSound =
     local float rs;
 
     // water death sounds
-    if (self.waterlevel == 3)
+    if (self.waterlevel == 3) // FIXME/Maddes: use >= to have more resilient code
     {
         DeathBubbles(20);
         sound(self, CHAN_VOICE, "player/h2odeath.wav", 1, ATTN_NONE);
@@ -627,6 +627,7 @@ void() PlayerDie =
 {
     local float i;
 
+    // FIXME/Maddes: remove all special items, and initialize effects too
     self.items = self.items - (self.items & IT_INVISIBILITY);
     self.invisible_finished = 0; // don't die as eyes
     self.invincible_finished = 0;

@@ -286,7 +286,7 @@ void() misc_explobox =
 
     self.origin_z = self.origin_z + 2;
     oldz = self.origin_z;
-    droptofloor();
+    droptofloor(); // FIXME/Maddes: missing parameters (defaults to 0, FALSE, etc.)
     if ((oldz - self.origin_z) > 250)
     {
         dprint("item fell out of level at ");
@@ -315,7 +315,7 @@ void() misc_explobox2 =
 
     self.origin_z = self.origin_z + 2;
     oldz = self.origin_z;
-    droptofloor();
+    droptofloor(); // FIXME/Maddes: missing parameters (defaults to 0, FALSE, etc.)
     if ((oldz - self.origin_z) > 250)
     {
         dprint("item fell out of level at ");
@@ -467,7 +467,7 @@ void() bubble_split =
     setsize(bubble, '-8 -8 -8', '8 8 8');
     self.frame = 1;
     self.cnt = 10;
-    if (self.waterlevel != 3)
+    if (self.waterlevel != 3) // FIXME/Maddes: use < (or: <= 2) to have more resilient code
     {
         remove(self);
     }
@@ -495,7 +495,7 @@ void() bubble_bob =
     {
         bubble_split();
     }
-    else if (self.cnt == 20)
+    else if (self.cnt == 20) // FIXME/Maddes: use >= to have more resilient code
     {
         remove(self);
     }
@@ -592,7 +592,7 @@ void() func_illusionary =
     self.movetype = MOVETYPE_NONE;
     self.solid = SOLID_NOT;
     setmodel(self, self.model);
-    makestatic();
+    makestatic(); // FIXME/Maddes: missing entity parameter (defaults to 0, FALSE, etc.) - assuming self here
 };
 
 
@@ -719,10 +719,10 @@ void() ambient_swamp2 =
 void() noise_think =
 {
     self.nextthink = time + 0.5;
-    sound(self, 1, "enforcer/enfire.wav", 1, ATTN_NORM);
-    sound(self, 2, "enforcer/enfstop.wav", 1, ATTN_NORM);
-    sound(self, 3, "enforcer/sight1.wav", 1, ATTN_NORM);
-    sound(self, 4, "enforcer/sight2.wav", 1, ATTN_NORM);
+    sound(self, 1, "enforcer/enfire.wav", 1, ATTN_NORM); // FIXME/Maddes: use CHAN_ constants from defs.qc?
+    sound(self, 2, "enforcer/enfstop.wav", 1, ATTN_NORM); // FIXME/Maddes: use CHAN_ constants from defs.qc?
+    sound(self, 3, "enforcer/sight1.wav", 1, ATTN_NORM); // FIXME/Maddes: use CHAN_ constants from defs.qc?
+    sound(self, 4, "enforcer/sight2.wav", 1, ATTN_NORM); // FIXME/Maddes: use CHAN_ constants from defs.qc?
     sound(self, 5, "enforcer/sight3.wav", 1, ATTN_NORM);
     sound(self, 6, "enforcer/sight4.wav", 1, ATTN_NORM);
     sound(self, 7, "enforcer/pain1.wav", 1, ATTN_NORM);

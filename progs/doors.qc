@@ -143,7 +143,7 @@ void() door_fire =
     // play use key sound
     if (self.items)
     {
-        sound(self, CHAN_VOICE, self.noise4, 1, ATTN_NORM);
+        sound(self, CHAN_VOICE, self.noise4, 1, ATTN_NORM); // FIXME/Maddes: badly chosen channel, use CHAN_ITEM, otherwise door opening sound replaces unlock sound
     }
 
     self.message = string_null; // no more message
@@ -655,7 +655,7 @@ float SECRET_1ST_DOWN = 4; // 1st move is down from arrow
 float SECRET_NO_SHOOT = 8; // only opened by trigger
 float SECRET_YES_SHOOT = 16; // shootable even if targeted
 
-void() fd_secret_use =
+void() fd_secret_use = // FIXME/Maddes: abused also for .th_pain function with different definition
 {
     local float temp;
 

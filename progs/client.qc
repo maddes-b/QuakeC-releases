@@ -167,6 +167,7 @@ string nextmap;
 
 void() GotoNextMap =
 {
+    // FIXME/Maddes: cvar "samelevel" is for deathmatch only
     if (cvar("samelevel")) // if samelevel is set, stay on same level
     {
         changelevel(mapname);
@@ -338,6 +339,7 @@ void() changelevel_touch =
         return;
     }
 
+    // FIXME/Maddes: cvar "noexit" is for deathmatch only
     if (cvar("noexit") == 1 || (cvar("noexit") == 2 && mapname != "start"))
     {
         T_Damage(other, self, self, 50000);
@@ -397,6 +399,8 @@ void() trigger_changelevel =
 // called by ClientKill and DeadThink
 void() respawn =
 {
+    // FIXME/Maddes: do no allow during intermission in deathmatch and coop
+
     if (coop)
     {
         // make a copy of the dead body for appearances sake
@@ -691,7 +695,7 @@ void() NextLevel =
         else if (!(serverflags & 8))
         {
             mapname = "e4m1";
-            serverflags = serverflags - 7;
+            serverflags = serverflags - 7; // FIXME/Maddes: should always work, but you never know, so use a more secure way
         }
 
         o = spawn();
@@ -733,6 +737,8 @@ void() CheckRules =
 {
     local float timelimit;
     local float fraglimit;
+
+    // FIXME/Maddes: only check if deathmatch is enabled, otherwise may shut down Single Player or Coop
 
     if (gameover) // someone else quit the game already
     {
@@ -880,7 +886,7 @@ void() WaterMove =
         return;
     }
 
-    if (self.waterlevel != 3)
+    if (self.waterlevel != 3) // FIXME/Maddes: use < (or: <= 2) to have more resilient code
     {
         if (self.air_finished < time)
         {
@@ -1547,7 +1553,7 @@ void(entity targ, entity attacker) ClientObituary =
                 {
                     bprint(" was slimed by a Spawn\n");
                 }
-                else if (attacker.classname == "monster_vomit")
+                else if (attacker.classname == "monster_vomit") // FIXME/Maddes: undefined monster
                 {
                     bprint(" was vomited on by a Vomitus\n");
                 }

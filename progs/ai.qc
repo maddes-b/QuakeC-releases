@@ -363,9 +363,9 @@ void() SightSound =
     {
         sound(self, CHAN_VOICE, "blob/sight1.wav", 1, ATTN_NORM);
     }
-    else if (self.classname == "monster_vomit")
+    else if (self.classname == "monster_vomit") // FIXME/Maddes: undefined monster
     {
-        sound(self, CHAN_VOICE, "vomitus/v_sight1.wav", 1, ATTN_NORM);
+        sound(self, CHAN_VOICE, "vomitus/v_sight1.wav", 1, ATTN_NORM); // FIXME/Maddes: sound not precached, due to undefined monster
     }
     else if (self.classname == "monster_enforcer")
     {
@@ -447,7 +447,7 @@ float() FindTarget =
         client = sight_entity;
         if (client.enemy == self.enemy)
         {
-            return;
+            return; // FIXME/Maddes: missing parameter (defaults to 0, FALSE, etc.)
         }
     }
     else
@@ -693,7 +693,7 @@ float() CheckAnyAttack =
 {
     if (!enemy_vis)
     {
-        return;
+        return; // FIXME/Maddes: missing parameter (defaults to 0, FALSE, etc.)
     }
 
     if (self.classname == "monster_army")
@@ -791,7 +791,7 @@ void() ai_run_slide =
         return;
     }
 
-    self.lefty = 1 - self.lefty;
+    self.lefty = 1 - self.lefty; // FIXME/Maddes: use boolean negation as in fight.qc
 
     walkmove(self.ideal_yaw - ofs, movedist);
 };

@@ -236,7 +236,7 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
     {
         self.th_pain(attacker, take);
         // nightmare mode monsters don't go into pain frames often
-        if (skill == 3)
+        if (skill == 3) // FIXME/Maddes: use >= to have more resilient code
         {
             self.pain_finished = time + 5;
         }
@@ -256,6 +256,8 @@ void(entity inflictor, entity attacker, float damage, entity ignore) T_RadiusDam
     local float points;
     local entity head;
     local vector org;
+
+    // FIXME/Maddes: if an attacker dies through his own splash damage, then other players do not get hurt, so hurt the attacker separately at the end
 
     head = findradius(inflictor.origin, damage + 40);
 

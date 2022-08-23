@@ -116,7 +116,7 @@ void() demon1_jump6  = [ $leap6,  demon1_jump7  ] {};
 void() demon1_jump7  = [ $leap7,  demon1_jump8  ] {};
 void() demon1_jump8  = [ $leap8,  demon1_jump9  ] {};
 void() demon1_jump9  = [ $leap9,  demon1_jump10 ] {};
-void() demon1_jump10 = [ $leap10, demon1_jump1  ] { self.nextthink = time + 3; }; // if three seconds pass, assume demon is stuck and jump again
+void() demon1_jump10 = [ $leap10, demon1_jump1  ] { self.nextthink = time + 3; }; // if three seconds pass, assume demon is stuck and jump again // FIXME/Maddes: analyze - typo for demon1_jump11 or jump1 intended?
 
 void() demon1_jump11 = [ $leap11, demon1_jump12 ] {};
 void() demon1_jump12 = [ $leap12, demon1_run1   ] {};

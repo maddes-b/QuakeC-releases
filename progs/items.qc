@@ -59,7 +59,7 @@ void() PlaceItem =
     self.velocity = '0 0 0';
     self.origin_z = self.origin_z + 6;
     oldz = self.origin_z;
-    if (!droptofloor())
+    if (!droptofloor()) // FIXME/Maddes: missing parameters (defaults to 0, FALSE, etc.)
     {
         dprint("Bonus item fell out of level at ");
         dprint(vtos(self.origin));
@@ -134,7 +134,7 @@ one point per second.
 
 float H_ROTTEN = 1;
 float H_MEGA = 2;
-.float healamount, healtype;
+.float healamount, healtype; // FIXME/Maddes: define healtype constants, maybe reuse spawnflags H_
 
 void() health_touch;
 void() item_megahealth_rot;
@@ -151,7 +151,7 @@ void() item_health =
         setmodel(self, "maps/b_bh10.bsp");
         self.noise = "items/r_item1.wav";
         self.healamount = 15;
-        self.healtype = 0;
+        self.healtype = 0; // FIXME/Maddes: define healtype constants, maybe reuse spawnflags H_
     }
     else if ((self.spawnflags & H_MEGA))
     {
@@ -160,7 +160,7 @@ void() item_health =
         setmodel(self, "maps/b_bh100.bsp");
         self.noise = "items/r_item2.wav";
         self.healamount = 100;
-        self.healtype = 2;
+        self.healtype = 2; // FIXME/Maddes: define healtype constants, maybe reuse spawnflags H_
     }
     else
     {
@@ -169,7 +169,7 @@ void() item_health =
         setmodel(self, "maps/b_bh25.bsp");
         self.noise = "items/health1.wav";
         self.healamount = 25;
-        self.healtype = 1;
+        self.healtype = 1; // FIXME/Maddes: define healtype constants, maybe reuse spawnflags H_
     }
     setsize(self, '0 0 0', '32 32 56');
     StartItem();
@@ -185,22 +185,24 @@ void() health_touch =
         return;
     }
 
-    if (self.healtype == 2) // Megahealth? Ignore max_health...
+    // FIXME/Maddes: do not take unnecessary items BUT fire all targets
+
+    if (self.healtype == 2) // Megahealth? Ignore max_health... // FIXME/Maddes: define healtype constants, maybe reuse spawnflags H_
     {
         if (other.health >= 250)
         {
-            return;
+            return; // FIXME/Maddes: do not take unnecessary items BUT fire all targets
         }
         if (!T_Heal(other, self.healamount, TRUE))
         {
-            return;
+            return; // FIXME/Maddes: do not take unnecessary items BUT fire all targets
         }
     }
     else
     {
         if (!T_Heal(other, self.healamount, FALSE))
         {
-            return;
+            return; // FIXME/Maddes: do not take unnecessary items BUT fire all targets
         }
     }
 
@@ -218,9 +220,11 @@ void() health_touch =
     self.solid = SOLID_NOT;
 
     // Megahealth = rot down the player's super health
-    if (self.healtype == 2)
+    if (self.healtype == 2) // FIXME/Maddes: define healtype constants, maybe reuse spawnflags H_
     {
         other.items = other.items | IT_SUPERHEALTH;
+        // FIXME/Maddes: picking up multiple mega healths let's the extra health rot faster, use CheckPowerups() or a separate entity to handle health rot for a player
+        // FIXME/Maddes: let mega health respawn after some time, not when it got depleted for the player (see item_megahealth_rot)
         self.nextthink = time + 5;
         self.think = item_megahealth_rot;
         self.owner = other;
@@ -286,33 +290,35 @@ void() armor_touch =
         return;
     }
 
-    if (self.classname == "item_armor1")
+    // FIXME/Maddes: do not take unnecessary items BUT fire all targets
+
+    if (self.classname == "item_armor1") // FIXME/Maddes: use .items with armor IT_ constants from defs.qc
     {
-        type = 0.3;
-        value = 100;
-        bit = IT_ARMOR1;
+        type = 0.3; // FIXME/Maddes: use .armortype/.armorvalue
+        value = 100; // FIXME/Maddes: use .armortype/.armorvalue
+        bit = IT_ARMOR1; // FIXME/Maddes: use .items with armor IT_ constants from defs.qc
     }
-    else if (self.classname == "item_armor2")
+    else if (self.classname == "item_armor2") // FIXME/Maddes: use .items with armor IT_ constants from defs.qc
     {
-        type = 0.6;
-        value = 150;
-        bit = IT_ARMOR2;
+        type = 0.6; // FIXME/Maddes: use .armortype/.armorvalue
+        value = 150; // FIXME/Maddes: use .armortype/.armorvalue
+        bit = IT_ARMOR2; // FIXME/Maddes: use .items with armor IT_ constants from defs.qc
     }
-    else if (self.classname == "item_armorInv")
+    else if (self.classname == "item_armorInv") // FIXME/Maddes: use .items with armor IT_ constants from defs.qc
     {
-        type = 0.8;
-        value = 200;
-        bit = IT_ARMOR3;
+        type = 0.8; // FIXME/Maddes: use .armortype/.armorvalue
+        value = 200; // FIXME/Maddes: use .armortype/.armorvalue
+        bit = IT_ARMOR3; // FIXME/Maddes: use .items with armor IT_ constants from defs.qc
     }
 
     if ((other.armortype * other.armorvalue) >= (type * value))
     {
-        return;
+        return; // FIXME/Maddes: do not take unnecessary items BUT fire all targets
     }
 
     other.armortype = type;
     other.armorvalue = value;
-    other.items = other.items - (other.items & (IT_ARMOR1 | IT_ARMOR2 | IT_ARMOR3)) + bit;
+    other.items = other.items - (other.items & (IT_ARMOR1 | IT_ARMOR2 | IT_ARMOR3)) + bit; // FIXME/Maddes: use .items with armor IT_ constants from defs.qc
 
     self.solid = SOLID_NOT;
     self.model = string_null;
@@ -336,6 +342,8 @@ void() armor_touch =
 */
 void() item_armor1 =
 {
+    // FIXME/Maddes: use .armortype/.armorvalue
+    // FIXME/Maddes: use .items with armor IT_ constants from defs.qc
     self.touch = armor_touch;
     precache_model("progs/armor.mdl");
     setmodel(self, "progs/armor.mdl");
@@ -349,6 +357,8 @@ void() item_armor1 =
 */
 void() item_armor2 =
 {
+    // FIXME/Maddes: use .armortype/.armorvalue
+    // FIXME/Maddes: use .items with armor IT_ constants from defs.qc
     self.touch = armor_touch;
     precache_model("progs/armor.mdl");
     setmodel(self, "progs/armor.mdl");
@@ -362,6 +372,8 @@ void() item_armor2 =
 */
 void() item_armorInv =
 {
+    // FIXME/Maddes: use .armortype/.armorvalue
+    // FIXME/Maddes: use .items with armor IT_ constants from defs.qc
     self.touch = armor_touch;
     precache_model("progs/armor.mdl");
     setmodel(self, "progs/armor.mdl");
@@ -381,6 +393,7 @@ WEAPONS
 
 void() bound_other_ammo =
 {
+    // FIXME/Maddes: restructure weapons/ammo - define max ammo constant
     if (other.ammo_shells > 100)
     {
         other.ammo_shells = 100;
@@ -402,7 +415,7 @@ void() bound_other_ammo =
 
 float(float w) RankForWeapon =
 {
-    if (w == IT_LIGHTNING)
+    if (w == IT_LIGHTNING) // FIXME/Maddes: recognize .waterlevel
     {
         return 1;
     }
@@ -470,6 +483,8 @@ void() weapon_touch =
         return;
     }
 
+    // FIXME/Maddes: do not take unnecessary items BUT fire all targets
+
     // if the player was using his best weapon, change up to the new one if better
     stemp = self;
     self = other;
@@ -485,71 +500,77 @@ void() weapon_touch =
         leave = FALSE;
     }
 
-    if (self.classname == "weapon_nailgun")
+    if (self.classname == "weapon_nailgun") // FIXME/Maddes: restructure weapons/ammo - use weapon IT_ constants from defs.qc
     {
         if (leave && (other.items & IT_NAILGUN))
         {
-            return;
+            return; // FIXME/Maddes: do not take unnecessary items BUT fire all targets
         }
 
         hadammo = other.ammo_nails;
         new = IT_NAILGUN;
-        other.ammo_nails = other.ammo_nails + 30;
+        // FIXME/Maddes: restructure weapons/ammo - align ammo handling with ammo_touch
+        other.ammo_nails = other.ammo_nails + 30; // FIXME/Maddes: restructure weapons/ammo - use .aflag for ammo included in weapon
     }
-    else if (self.classname == "weapon_supernailgun")
+    else if (self.classname == "weapon_supernailgun") // FIXME/Maddes: restructure weapons/ammo - use weapon IT_ constants from defs.qc
     {
         if (leave && (other.items & IT_SUPER_NAILGUN))
         {
-            return;
+            return; // FIXME/Maddes: do not take unnecessary items BUT fire all targets
         }
 
         hadammo = other.ammo_rockets;
         new = IT_SUPER_NAILGUN;
-        other.ammo_nails = other.ammo_nails + 30;
+        // FIXME/Maddes: restructure weapons/ammo - align ammo handling with ammo_touch
+        other.ammo_nails = other.ammo_nails + 30; // FIXME/Maddes: restructure weapons/ammo - use .aflag for ammo included in weapon
     }
-    else if (self.classname == "weapon_supershotgun")
+    else if (self.classname == "weapon_supershotgun") // FIXME/Maddes: restructure weapons/ammo - use weapon IT_ constants from defs.qc
     {
         if (leave && (other.items & IT_SUPER_SHOTGUN))
         {
-            return;
+            return; // FIXME/Maddes: do not take unnecessary items BUT fire all targets
         }
 
         hadammo = other.ammo_rockets;
         new = IT_SUPER_SHOTGUN;
-        other.ammo_shells = other.ammo_shells + 5;
+        // FIXME/Maddes: restructure weapons/ammo - align ammo handling with ammo_touch
+        other.ammo_shells = other.ammo_shells + 5; // FIXME/Maddes: restructure weapons/ammo - use .aflag for ammo included in weapon
     }
-    else if (self.classname == "weapon_rocketlauncher")
+    else if (self.classname == "weapon_rocketlauncher") // FIXME/Maddes: restructure weapons/ammo - use weapon IT_ constants from defs.qc
     {
         if (leave && (other.items & IT_ROCKET_LAUNCHER))
         {
-            return;
+            return; // FIXME/Maddes: do not take unnecessary items BUT fire all targets
         }
 
         hadammo = other.ammo_rockets;
         new = IT_ROCKET_LAUNCHER;
-        other.ammo_rockets = other.ammo_rockets + 5;
+        // FIXME/Maddes: restructure weapons/ammo - align ammo handling with ammo_touch
+        other.ammo_rockets = other.ammo_rockets + 5; // FIXME/Maddes: restructure weapons/ammo - use .aflag for ammo included in weapon
     }
-    else if (self.classname == "weapon_grenadelauncher")
+    else if (self.classname == "weapon_grenadelauncher") // FIXME/Maddes: restructure weapons/ammo - use weapon IT_ constants from defs.qc
     {
         if (leave && (other.items & IT_GRENADE_LAUNCHER))
         {
-            return;
+            return; // FIXME/Maddes: do not take unnecessary items BUT fire all targets
         }
 
         hadammo = other.ammo_rockets;
         new = IT_GRENADE_LAUNCHER;
-        other.ammo_rockets = other.ammo_rockets + 5;
+        // FIXME/Maddes: restructure weapons/ammo - align ammo handling with ammo_touch
+        other.ammo_rockets = other.ammo_rockets + 5; // FIXME/Maddes: restructure weapons/ammo - use .aflag for ammo included in weapon
     }
-    else if (self.classname == "weapon_lightning")
+    else if (self.classname == "weapon_lightning") // FIXME/Maddes: restructure weapons/ammo - use weapon IT_ constants from defs.qc
     {
         if (leave && (other.items & IT_LIGHTNING))
         {
-            return;
+            return; // FIXME/Maddes: do not take unnecessary items BUT fire all targets
         }
 
         hadammo = other.ammo_rockets;
         new = IT_LIGHTNING;
-        other.ammo_cells = other.ammo_cells + 15;
+        // FIXME/Maddes: restructure weapons/ammo - align ammo handling with ammo_touch
+        other.ammo_cells = other.ammo_cells + 15; // FIXME/Maddes: restructure weapons/ammo - use .aflag for ammo included in weapon
     }
     else
     {
@@ -587,7 +608,7 @@ void() weapon_touch =
 
     if (leave)
     {
-        return;
+        return; // FIXME/Maddes: do not take unnecessary items BUT fire all targets
     }
 
     // remove it in single player, or setup for respawning in deathmatch
@@ -613,6 +634,7 @@ void() weapon_supershotgun =
     self.weapon = IT_SUPER_SHOTGUN;
     self.netname = "Double-barrelled Shotgun";
     self.touch = weapon_touch;
+    // FIXME/Maddes: restructure weapons/ammo - use .aflag for ammo included in weapon
     setsize(self, '-16 -16 0', '16 16 56');
     StartItem();
 };
@@ -627,6 +649,7 @@ void() weapon_nailgun =
     self.weapon = IT_NAILGUN;
     self.netname = "Nailgun";
     self.touch = weapon_touch;
+    // FIXME/Maddes: restructure weapons/ammo - use .aflag for ammo included in weapon
     setsize(self, '-16 -16 0', '16 16 56');
     StartItem();
 };
@@ -641,6 +664,7 @@ void() weapon_supernailgun =
     self.weapon = IT_SUPER_NAILGUN;
     self.netname = "Super Nailgun";
     self.touch = weapon_touch;
+    // FIXME/Maddes: restructure weapons/ammo - use .aflag for ammo included in weapon
     setsize(self, '-16 -16 0', '16 16 56');
     StartItem();
 };
@@ -652,9 +676,10 @@ void() weapon_grenadelauncher =
 {
     precache_model("progs/g_rock.mdl");
     setmodel(self, "progs/g_rock.mdl");
-    self.weapon = 3;
+    self.weapon = 3; // FIXME/Maddes: restructure weapons/ammo - use weapon IT_ constants from defs.qc
     self.netname = "Grenade Launcher";
     self.touch = weapon_touch;
+    // FIXME/Maddes: restructure weapons/ammo - use .aflag for ammo included in weapon
     setsize(self, '-16 -16 0', '16 16 56');
     StartItem();
 };
@@ -666,9 +691,10 @@ void() weapon_rocketlauncher =
 {
     precache_model("progs/g_rock2.mdl");
     setmodel(self, "progs/g_rock2.mdl");
-    self.weapon = 3;
+    self.weapon = 3; // FIXME/Maddes: restructure weapons/ammo - use weapon IT_ constants from defs.qc
     self.netname = "Rocket Launcher";
     self.touch = weapon_touch;
+    // FIXME/Maddes: restructure weapons/ammo - use .aflag for ammo included in weapon
     setsize(self, '-16 -16 0', '16 16 56');
     StartItem();
 };
@@ -680,9 +706,10 @@ void() weapon_lightning =
 {
     precache_model("progs/g_light.mdl");
     setmodel(self, "progs/g_light.mdl");
-    self.weapon = 3;
+    self.weapon = 3; // FIXME/Maddes: restructure weapons/ammo - use weapon IT_ constants from defs.qc
     self.netname = "Thunderbolt";
     self.touch = weapon_touch;
+    // FIXME/Maddes: restructure weapons/ammo - use .aflag for ammo included in weapon
     setsize(self, '-16 -16 0', '16 16 56');
     StartItem();
 };
@@ -710,6 +737,8 @@ void() ammo_touch =
         return;
     }
 
+    // FIXME/Maddes: do not take unnecessary items BUT fire all targets
+
     // if the player was using his best weapon, change up to the new one if better
     stemp = self;
     self = other;
@@ -717,41 +746,41 @@ void() ammo_touch =
     self = stemp;
 
     // shotgun
-    if (self.weapon == 1)
+    if (self.weapon == 1) // FIXME/Maddes: restructure weapons/ammo - use ammo IT_ constants from defs.qc
     {
-        if (other.ammo_shells >= 100)
+        if (other.ammo_shells >= 100) // FIXME/Maddes: restructure weapons/ammo - define max ammo constant
         {
-            return;
+            return; // FIXME/Maddes: do not take unnecessary items BUT fire all targets
         }
 
         other.ammo_shells = other.ammo_shells + self.aflag;
     }
     // spikes
-    else if (self.weapon == 2)
+    else if (self.weapon == 2) // FIXME/Maddes: restructure weapons/ammo - use ammo IT_ constants from defs.qc
     {
-        if (other.ammo_nails >= 200)
+        if (other.ammo_nails >= 200) // FIXME/Maddes: restructure weapons/ammo - define max ammo constant
         {
-            return;
+            return; // FIXME/Maddes: do not take unnecessary items BUT fire all targets
         }
 
         other.ammo_nails = other.ammo_nails + self.aflag;
     }
     // rockets
-    else if (self.weapon == 3)
+    else if (self.weapon == 3) // FIXME/Maddes: restructure weapons/ammo - use ammo IT_ constants from defs.qc
     {
-        if (other.ammo_rockets >= 100)
+        if (other.ammo_rockets >= 100) // FIXME/Maddes: restructure weapons/ammo - define max ammo constant
         {
-            return;
+            return; // FIXME/Maddes: do not take unnecessary items BUT fire all targets
         }
 
         other.ammo_rockets = other.ammo_rockets + self.aflag;
     }
     // cells
-    else if (self.weapon == 4)
+    else if (self.weapon == 4) // FIXME/Maddes: restructure weapons/ammo - use ammo IT_ constants from defs.qc
     {
-        if (other.ammo_cells >= 100)
+        if (other.ammo_cells >= 100) // FIXME/Maddes: restructure weapons/ammo - define max ammo constant
         {
-            return;
+            return; // FIXME/Maddes: do not take unnecessary items BUT fire all targets
         }
 
         other.ammo_cells = other.ammo_cells + self.aflag;
@@ -816,7 +845,7 @@ void() item_shells =
         setmodel(self, "maps/b_shell0.bsp");
         self.aflag = 20;
     }
-    self.weapon = 1;
+    self.weapon = 1; // FIXME/Maddes: restructure weapons/ammo - use ammo IT_ constants from defs.qc
     self.netname = "shells";
     setsize(self, '0 0 0', '32 32 56');
     StartItem();
@@ -841,7 +870,7 @@ void() item_spikes =
         setmodel(self, "maps/b_nail0.bsp");
         self.aflag = 25;
     }
-    self.weapon = 2;
+    self.weapon = 2; // FIXME/Maddes: restructure weapons/ammo - use ammo IT_ constants from defs.qc
     self.netname = "nails";
     setsize(self, '0 0 0', '32 32 56');
     StartItem();
@@ -866,7 +895,7 @@ void() item_rockets =
         setmodel(self, "maps/b_rock0.bsp");
         self.aflag = 5;
     }
-    self.weapon = 3;
+    self.weapon = 3; // FIXME/Maddes: restructure weapons/ammo - use ammo IT_ constants from defs.qc
     self.netname = "rockets";
     setsize(self, '0 0 0', '32 32 56');
     StartItem();
@@ -891,7 +920,7 @@ void() item_cells =
         setmodel(self, "maps/b_batt0.bsp");
         self.aflag = 6;
     }
-    self.weapon = 4;
+    self.weapon = 4; // FIXME/Maddes: restructure weapons/ammo - use ammo IT_ constants from defs.qc
     self.netname = "cells";
     setsize(self, '0 0 0', '32 32 56');
     StartItem();
@@ -902,6 +931,7 @@ void() item_cells =
 DO NOT USE THIS!!!! IT WILL BE REMOVED!
 */
 
+// FIXME/Maddes: restructure weapons/ammo - note: this is actually ammo, keep in sync with item_shells, item_spikes, item_rockets (no cells)
 float WEAPON_SHOTGUN = 1;
 float WEAPON_ROCKET = 2;
 float WEAPON_SPIKES = 4;
@@ -925,7 +955,7 @@ void() item_weapon =
             setmodel(self, "maps/b_shell0.bsp");
             self.aflag = 20;
         }
-        self.weapon = 1;
+        self.weapon = 1; // FIXME/Maddes: restructure weapons/ammo - use ammo IT_ constants from defs.qc
         self.netname = "shells";
     }
 
@@ -935,15 +965,15 @@ void() item_weapon =
         {
             precache_model("maps/b_nail1.bsp");
             setmodel(self, "maps/b_nail1.bsp");
-            self.aflag = 40;
+            self.aflag = 40; // FIXME/Maddes: restructure weapons/ammo - side note: differs from item_spikes (50)
         }
         else
         {
             precache_model("maps/b_nail0.bsp");
             setmodel(self, "maps/b_nail0.bsp");
-            self.aflag = 20;
+            self.aflag = 20; // FIXME/Maddes: restructure weapons/ammo - side note: differs from item_spikes (25)
         }
-        self.weapon = 2;
+        self.weapon = 2; // FIXME/Maddes: restructure weapons/ammo - use ammo IT_ constants from defs.qc
         self.netname = "nails";
     }
 
@@ -961,7 +991,7 @@ void() item_weapon =
             setmodel(self, "maps/b_rock0.bsp");
             self.aflag = 5;
         }
-        self.weapon = 3;
+        self.weapon = 3; // FIXME/Maddes: restructure weapons/ammo - use ammo IT_ constants from defs.qc
         self.netname = "rockets";
     }
 
@@ -980,6 +1010,8 @@ KEYS
 
 void() key_touch =
 {
+    // FIXME/Maddes: do not take unnecessary items BUT fire all targets
+
     if (other.classname != "player")
     {
         return;
@@ -990,7 +1022,7 @@ void() key_touch =
     }
     if ((other.items & self.items))
     {
-        return;
+        return; // FIXME/Maddes: do not take unnecessary items BUT fire all targets
     }
 
     sprint(other, "You got the ");

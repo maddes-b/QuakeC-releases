@@ -442,7 +442,7 @@ void() hknight_melee =
     {
         hknight_smash1();
     }
-    else if (hknight_type == 3)
+    else if (hknight_type == 3) // FIXME/Maddes: use >= to have more resilient code
     {
         hknight_watk1();
         hknight_type = 0;

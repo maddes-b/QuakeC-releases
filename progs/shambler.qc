@@ -205,7 +205,7 @@ void() sham_swingr7 = [ $swingr7, sham_swingr8 ] { ai_charge(6); ShamClaw(-250);
 void() sham_swingr8 = [ $swingr8, sham_swingr9 ] { ai_charge(3); };
 void() sham_swingr9 = [ $swingr9, sham_run1    ] {
     ai_charge(1);
-    ai_charge(10);
+    ai_charge(10); // FIXME/Maddes: why called twice?
     if (random() < 0.5)
     {
         self.think = sham_swingl1;
@@ -291,7 +291,7 @@ void() sham_magic6  = [ $magic6,  sham_magic9  ] {
 void() sham_magic9  = [ $magic9,  sham_magic10 ] { CastLightning(); };
 void() sham_magic10 = [ $magic10, sham_magic11 ] { CastLightning(); };
 void() sham_magic11 = [ $magic11, sham_magic12 ] {
-    if (skill == 3)
+    if (skill == 3) // FIXME/Maddes: use >= to have more resilient code
     {
         CastLightning();
     }
