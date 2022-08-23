@@ -66,7 +66,7 @@ void() W_FireAxe =
 
     if (trace_ent.takedamage)
     {
-        trace_ent.axhitme = 1;
+        trace_ent.axhitme = TRUE;
         SpawnBlood(org, '0 0 0', 20);
         T_Damage(trace_ent, self, self, 20);
     }
@@ -974,7 +974,7 @@ void() W_ChangeWeapon =
     local float it, am, fl;
 
     it = self.items;
-    am = 0;
+    am = FALSE;
 
     if (self.impulse == 1)
     {
@@ -984,43 +984,43 @@ void() W_ChangeWeapon =
     {
         fl = IT_SHOTGUN;
         if (self.ammo_shells < 1)
-            am = 1;
+            am = TRUE;
     }
     else if (self.impulse == 3)
     {
         fl = IT_SUPER_SHOTGUN;
         if (self.ammo_shells < 2)
-            am = 1;
+            am = TRUE;
     }
     else if (self.impulse == 4)
     {
         fl = IT_NAILGUN;
         if (self.ammo_nails < 1)
-            am = 1;
+            am = TRUE;
     }
     else if (self.impulse == 5)
     {
         fl = IT_SUPER_NAILGUN;
         if (self.ammo_nails < 2)
-            am = 1;
+            am = TRUE;
     }
     else if (self.impulse == 6)
     {
         fl = IT_GRENADE_LAUNCHER;
         if (self.ammo_rockets < 1)
-            am = 1;
+            am = TRUE;
     }
     else if (self.impulse == 7)
     {
         fl = IT_ROCKET_LAUNCHER;
         if (self.ammo_rockets < 1)
-            am = 1;
+            am = TRUE;
     }
     else if (self.impulse == 8)
     {
         fl = IT_LIGHTNING;
         if (self.ammo_cells < 1)
-            am = 1;
+            am = TRUE;
     }
 
     self.impulse = 0;
@@ -1091,9 +1091,9 @@ void() CycleWeaponCommand =
     it = self.items;
     self.impulse = 0;
 
-    while (1)
+    while (TRUE)
     {
-        am = 0;
+        am = FALSE;
 
         if (self.weapon == IT_LIGHTNING)
         {
@@ -1103,46 +1103,46 @@ void() CycleWeaponCommand =
         {
             self.weapon = IT_SHOTGUN;
             if (self.ammo_shells < 1)
-                am = 1;
+                am = TRUE;
         }
         else if (self.weapon == IT_SHOTGUN)
         {
             self.weapon = IT_SUPER_SHOTGUN;
             if (self.ammo_shells < 2)
-                am = 1;
+                am = TRUE;
         }
         else if (self.weapon == IT_SUPER_SHOTGUN)
         {
             self.weapon = IT_NAILGUN;
             if (self.ammo_nails < 1)
-                am = 1;
+                am = TRUE;
         }
         else if (self.weapon == IT_NAILGUN)
         {
             self.weapon = IT_SUPER_NAILGUN;
             if (self.ammo_nails < 2)
-                am = 1;
+                am = TRUE;
         }
         else if (self.weapon == IT_SUPER_NAILGUN)
         {
             self.weapon = IT_GRENADE_LAUNCHER;
             if (self.ammo_rockets < 1)
-                am = 1;
+                am = TRUE;
         }
         else if (self.weapon == IT_GRENADE_LAUNCHER)
         {
             self.weapon = IT_ROCKET_LAUNCHER;
             if (self.ammo_rockets < 1)
-                am = 1;
+                am = TRUE;
         }
         else if (self.weapon == IT_ROCKET_LAUNCHER)
         {
             self.weapon = IT_LIGHTNING;
             if (self.ammo_cells < 1)
-                am = 1;
+                am = TRUE;
         }
 
-        if ((self.items & self.weapon) && am == 0)
+        if ((self.items & self.weapon) && am == FALSE)
         {
             W_SetCurrentAmmo();
             return;

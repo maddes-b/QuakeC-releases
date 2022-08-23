@@ -1269,13 +1269,13 @@ void(entity targ, entity attacker) ClientObituary =
                 attacker.frags = attacker.frags - 1;
 
                 bprint(targ.netname);
-                if (targ.weapon == 64 && targ.waterlevel > 1)
+                if (targ.weapon == IT_LIGHTNING && targ.waterlevel > 1)
                 {
                     bprint(" discharges into the water.\n");
                     return;
                 }
 
-                if (targ.weapon == 16)
+                if (targ.weapon == IT_GRENADE_LAUNCHER)
                     bprint(" tries to put the pin back in\n");
                 else if (rnum)
                     bprint(" becomes bored with life\n");
@@ -1355,7 +1355,7 @@ void(entity targ, entity attacker) ClientObituary =
             rnum = targ.watertype;
 
             bprint(targ.netname);
-            if (rnum == -3)
+            if (rnum == CONTENT_WATER)
             {
                 if (random() < 0.5)
                     bprint(" sleeps with the fishes\n");
@@ -1363,7 +1363,7 @@ void(entity targ, entity attacker) ClientObituary =
                     bprint(" sucks it down\n");
                 return;
             }
-            else if (rnum == -4)
+            else if (rnum == CONTENT_SLIME)
             {
                 if (random() < 0.5)
                     bprint(" gulped a load of slime\n");
@@ -1371,7 +1371,7 @@ void(entity targ, entity attacker) ClientObituary =
                     bprint(" can't exist on slime alone\n");
                 return;
             }
-            else if (rnum == -5)
+            else if (rnum == CONTENT_LAVA)
             {
                 if (targ.health < -15)
                 {

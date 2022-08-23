@@ -307,7 +307,7 @@ void() PainSound =
 
     if (self.pain_finished > time)
     {
-        self.axhitme = 0;
+        self.axhitme = FALSE;
         return;
     }
 
@@ -316,9 +316,9 @@ void() PainSound =
     // don't make multiple pain sounds right after each other
 
     // axe pain sound
-    if (self.axhitme == 1)
+    if (self.axhitme == TRUE)
     {
-        self.axhitme = 0;
+        self.axhitme = FALSE;
         sound(self, CHAN_VOICE, "player/axhit1.wav", 1, ATTN_NORM);
         return;
     }

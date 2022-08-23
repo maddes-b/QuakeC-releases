@@ -101,9 +101,9 @@ HEALTH BOX
 float(entity e, float healamount, float ignore) T_Heal =
 {
     if (e.health <= 0)
-        return 0;
+        return FALSE;
     if ((!ignore) && (e.health >= other.max_health))
-        return 0;
+        return FALSE;
 
     healamount = ceil(healamount);
 
@@ -114,7 +114,7 @@ float(entity e, float healamount, float ignore) T_Heal =
     if (e.health > 250)
         e.health = 250;
 
-    return 1;
+    return TRUE;
 };
 
 
@@ -182,12 +182,12 @@ void() health_touch =
     {
         if (other.health >= 250)
             return;
-        if (!T_Heal(other, self.healamount, 1))
+        if (!T_Heal(other, self.healamount, TRUE))
             return;
     }
     else
     {
-        if (!T_Heal(other, self.healamount, 0))
+        if (!T_Heal(other, self.healamount, FALSE))
             return;
     }
 
@@ -434,9 +434,9 @@ void() weapon_touch =
     self = stemp;
 
     if (deathmatch == 2 || coop)
-        leave = 1;
+        leave = TRUE;
     else
-        leave = 0;
+        leave = FALSE;
 
     if (self.classname == "weapon_nailgun")
     {

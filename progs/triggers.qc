@@ -436,7 +436,7 @@ void() teleport_touch =
     other.angles = t.mangle;
     if (other.classname == "player")
     {
-        other.fixangle = 1; // turn this way immediately
+        other.fixangle = TRUE; // turn this way immediately
         other.teleport_time = time + 0.7;
         if (other.flags & FL_ONGROUND)
             other.flags = other.flags - FL_ONGROUND;

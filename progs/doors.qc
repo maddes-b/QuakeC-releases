@@ -340,7 +340,7 @@ void() LinkDoors =
     if (self.enemy)
         return; // already linked by another door
 
-    if (self.spawnflags & 4)
+    if (self.spawnflags & DOOR_DONT_LINK)
     {
         self.owner = self.enemy = self;
         return; // don't want to link this door
@@ -404,7 +404,7 @@ void() LinkDoors =
             if (t.maxs_z > cmaxs_z)
                 cmaxs_z = t.maxs_z;
         }
-    } while (1);
+    } while (TRUE);
 };
 
 

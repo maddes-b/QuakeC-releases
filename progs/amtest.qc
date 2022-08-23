@@ -28,7 +28,7 @@ void() test_teleport =
     precache_model("sprites/s_aball.spr");
     setsize(self, self.mins, self.maxs);
     self.touch = test_teleport_touch;
-    self.solid = 1;
+    self.solid = SOLID_TRIGGER;
 
     if (!self.target)
         objerror("no target\n");
@@ -89,7 +89,7 @@ void() test_spawn =
     body.solid = SOLID_SLIDEBOX;
     body.movetype = MOVETYPE_WALK;
     body.show_hostile = 0;
-    body.weapon = 1;
+    body.weapon = IT_SHOTGUN;
     body.velocity = v_forward * 200;
 
     body.nextthink = time + 5;
