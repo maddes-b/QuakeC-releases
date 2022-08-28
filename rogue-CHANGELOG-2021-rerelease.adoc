@@ -1,0 +1,42 @@
+= Changelog for rogue (mission pack #2 "Dissolution of Eternity") of 2021 Rerelease
+
+== 2021 Rerelease Update 3 (QuakeEx v1.0.5039)
+
+Features:
+
+* String place holders for localization.
+* Ment for QCC compiler https://www.fteqcc.org/[FTEQCC].
+
+Logic changes in:
+
+* buttons.qc
+* client.qc
+* combat.qc
+* defs.qc
+* dmatch.qc
+* doors.qc
+* elevatr.qc
+* ending.qc
+* hknight.qc
+* items.qc
+* lava_wpn.qc
+* monsters.qc
+* motd.qc (defect special chars in MOTD()?)
+* newitems.qc
+* newplats.qc
+* oldone.qc
+* progs.src
+* random.qc
+* runes.qc
+* shalrath.qc
+* shambler.qc
+* sphere.qc
+* subs.qc
+* teamplay.qc (defect special chars in GetCTFTeam()/TeamReturnFlag()/TeamDropFlag()/TeamFlagTouch()/TeamFlagBaseTouch()/TeamFlagStatusReport()?)
+* triggers.qc
+* weapons.qc
+* world.qc
+
+New files:
+
+* bots/bot.qc
