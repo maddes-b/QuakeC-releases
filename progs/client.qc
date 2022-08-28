@@ -312,13 +312,17 @@ void() changelevel_touch =
 	if (other.classname != "player")
 		return;
 
-	if (cvar("noexit"))
+	if ((cvar("noexit") == 1) || ((cvar("noexit") == 2) && (mapname != "start")))
 	{
 		T_Damage (other, self, self, 50000);
 		return;
 	}
-	bprint (other.netname);
-	bprint (" exited the level\n");
+
+	if (coop || deathmatch)
+	{
+		bprint (other.netname);
+		bprint (" exited the level\n");
+	}
 
 	nextmap = self.map;
 
@@ -344,7 +348,7 @@ When the player touches this, he gets sent to the map listed in the "map" variab
 void() trigger_changelevel =
 {
 	if (!self.map)
-		objerror ("chagnelevel trigger doesn't have map");
+		objerror ("changelevel trigger doesn't have map");
 
 	InitTrigger ();
 	self.touch = changelevel_touch;
@@ -421,6 +425,8 @@ Returns the entity to spawn at
 entity() SelectSpawnPoint =
 {
 	local	entity spot;
+	local	entity thing;
+	local	float  pcount;
 
 // testinfo_player_start is only found in regioned levels
 	spot = find (world, classname, "testplayerstart");
@@ -438,11 +444,29 @@ entity() SelectSpawnPoint =
 	}
 	else if (deathmatch)
 	{
-		lastspawn = find(lastspawn, classname, "info_player_deathmatch");
-		if (lastspawn == world)
-			lastspawn = find (lastspawn, classname, "info_player_deathmatch");
-		if (lastspawn != world)
-			return lastspawn;
+		spot = lastspawn;
+		while (1)
+		{
+			spot = find(spot, classname, "info_player_deathmatch");
+			if (spot != world)
+			{
+				if (spot == lastspawn)
+					return lastspawn;
+				pcount = 0;
+				thing = findradius(spot.origin, 32);
+				while(thing)
+				{
+					if (thing.classname == "player")
+						pcount = pcount + 1;
+					thing = thing.chain;
+				}
+				if (pcount == 0)
+				{
+					lastspawn = spot;
+					return spot;
+				}
+			}
+		}
 	}
 
 	if (serverflags)
@@ -474,6 +498,8 @@ void() PutClientInServer =
 {
 	local	entity spot;
 
+	spot = SelectSpawnPoint ();
+
 	self.classname = "player";
 	self.health = 100;
 	self.takedamage = DAMAGE_AIM;
@@ -503,7 +529,7 @@ void() PutClientInServer =
 // paustime is set by teleporters to keep the player from moving a while
 	self.pausetime = 0;
 
-	spot = SelectSpawnPoint ();
+//	spot = SelectSpawnPoint ();
 
 	self.origin = spot.origin + '0 0 1';
 	self.angles = spot.angles;
@@ -603,27 +629,22 @@ void() NextLevel =
 		else if (!(serverflags & 1))
 		{
 			mapname = "e1m1";
-			serverflags = serverflags + 1;
+			serverflags = serverflags | 1;
 		}
 		else if (!(serverflags & 2))
 		{
 			mapname = "e2m1";
-			serverflags = serverflags + 2;
+			serverflags = serverflags | 2;
 		}
 		else if (!(serverflags & 4))
 		{
 			mapname = "e3m1";
-			serverflags = serverflags + 4;
+			serverflags = serverflags | 4;
 		}
 		else if (!(serverflags & 8))
 		{
 			mapname = "e4m1";
-			serverflags = serverflags + 8;
-		}
-		else
-		{
-			mapname = "start";
-			serverflags = serverflags - 15;
+			serverflags = serverflags - 7;
 		}
 
 		o = spawn();
@@ -934,6 +955,12 @@ void() PlayerPreThink =
 // teleporters can force a non-moving pause time
 	if (time < self.pausetime)
 		self.velocity = '0 0 0';
+
+	if(time > self.attack_finished && self.currentammo == 0 && self.weapon != IT_AXE)
+	{
+		self.weapon = W_BestWeapon ();
+		W_SetCurrentAmmo ();
+	}
 };
 
 /*
