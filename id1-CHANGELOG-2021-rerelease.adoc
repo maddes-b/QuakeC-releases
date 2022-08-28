@@ -1,5 +1,19 @@
 = Changelog for id1 (main game) of 2021 Rerelease
 
+== 2021 Rerelease Update 4 (QuakeEx v1.0.5224)
+
+Logic changes in:
+
+* client.qc
+* defs.qc
+* player.qc
+* subs.qc
+* triggers.qc
+* weapons.qc
+* monsters/hellknight.qc
+* monsters/ogre.qc
+
+
 == 2021 Rerelease Update 3 (QuakeEx v1.0.5039)
 
 Features:

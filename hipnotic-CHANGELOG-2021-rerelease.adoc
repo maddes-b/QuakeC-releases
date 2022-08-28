@@ -1,5 +1,13 @@
 = Changelog for hipnotic (mission pack #1 "Scourge of Armagon") of 2021 Rerelease
 
+== 2021 Rerelease Update 4 (QuakeEx v1.0.5224)
+
+Logic changes in:
+
+* monsters/hellknight.qc
+* monsters/ogre.qc
+
+
 == 2021 Rerelease Update 3 (QuakeEx v1.0.5039)
 
 Features:
