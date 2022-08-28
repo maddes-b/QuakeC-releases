@@ -656,7 +656,7 @@ local float		best;
 //	cells
 	if (self.weapon == 4)
 	{
-		if (other.ammo_cells >= 200)
+		if (other.ammo_cells >= 100)
 			return;
 		other.ammo_cells = other.ammo_cells + self.aflag;
 	}
@@ -692,7 +692,6 @@ local float		best;
 	self.solid = SOLID_NOT;
 	if (deathmatch == 1)
 		self.nextthink = time + 30;
-
 	self.think = SUB_regen;
 
 	activator = other;
@@ -1248,7 +1247,7 @@ PLAYER BACKPACKS
 void() BackpackTouch =
 {
 	local string	s;
-	local	float	best;
+	local	float	best, old, new;
 	local		entity	stemp;
 
 	if (other.classname != "player")
@@ -1268,7 +1267,9 @@ void() BackpackTouch =
 	other.ammo_rockets = other.ammo_rockets + self.ammo_rockets;
 	other.ammo_cells = other.ammo_cells + self.ammo_cells;
 
-	other.items = other.items | self.items;
+	old = other.items;
+	new = self.items;
+	other.items = other.items | new;
 
 	bound_other_ammo ();
 
@@ -1304,19 +1305,16 @@ void() BackpackTouch =
 	sound (other, CHAN_ITEM, "weapons/lock4.wav", 1, ATTN_NORM);
 	stuffcmd (other, "bf\n");
 
-// change to a better weapon if appropriate
-	if ( other.weapon == best )
-	{
-		stemp = self;
-		self = other;
-		self.weapon = W_BestWeapon();
-		self = stemp;
-	}
-
-
+// remove the backpack, change self to the player
 	remove(self);
-
 	self = other;
+
+// change to the weapon
+	if (!deathmatch)
+		self.weapon = new;
+	else
+		Deathmatch_Weapon (old, new);
+
 	W_SetCurrentAmmo ();
 };
 

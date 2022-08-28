@@ -788,6 +788,7 @@ void () func_door_secret =
 		self.health = 10000;
 		self.takedamage = DAMAGE_YES;
 		self.th_pain = fd_secret_use;
+		self.th_die = fd_secret_use;
 	}
 	self.oldorigin = self.origin;
 	if (!self.wait)

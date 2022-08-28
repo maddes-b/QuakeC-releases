@@ -24,7 +24,7 @@ OGRE
 ==============================================================================
 */
 
-$cd /raid/quake/id1/models/ogre_c
+$cd id1/models/ogre_c
 $origin 0 0 24
 $base base
 $skin base

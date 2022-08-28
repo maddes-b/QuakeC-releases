@@ -24,7 +24,7 @@ BLOB
 ==============================================================================
 */
 
-$cd /raid/quake/id1/models/tarbaby
+$cd id1/models/tarbaby
 $origin 0 0 24
 $base base
 

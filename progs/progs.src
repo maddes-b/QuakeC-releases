@@ -17,7 +17,9 @@
 //  See file, 'COPYING', for details.
 
 // based on:
+// * re-GPLed versions of v1.05 beta by Maddes (assuming to follow id's intention), https://github.com/maddes-b/QuakeC-releases/
 // * minor cleanup by Maddes (trim trailing spaces), https://github.com/maddes-b/QuakeC-releases/
+// * v1.05 beta release by id Software, https://github.com/Jason2Brownlee/QuakeOfficialArchive
 // * v1.01 GPL release by id Software, https://github.com/id-Software/Quake-Tools/tree/master/qcc/v101qc
 
 ../progs.dat
