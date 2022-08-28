@@ -519,8 +519,8 @@ void() W_FireLightning =
     {
         cells = self.ammo_cells;
         self.ammo_cells = 0;
-        T_RadiusDamage(self, self, 35 * cells, world);
         W_SetCurrentAmmo();
+        T_RadiusDamage(self, self, 35 * cells, world);
         return;
     }
 
@@ -883,7 +883,7 @@ float() W_BestWeapon =
 
     it = self.items;
 
-    if (self.ammo_cells >= 1 && (it & IT_LIGHTNING))
+    if (self.waterlevel <= 1 && self.ammo_cells >= 1 && (it & IT_LIGHTNING))
     {
         return IT_LIGHTNING;
     }
@@ -903,16 +903,6 @@ float() W_BestWeapon =
     {
         return IT_SHOTGUN;
     }
-    /*
-    if (self.ammo_rockets >= 1 && (it & IT_ROCKET_LAUNCHER))
-    {
-        return IT_ROCKET_LAUNCHER;
-    }
-    if (self.ammo_rockets >= 1 && (it & IT_GRENADE_LAUNCHER))
-    {
-        return IT_GRENADE_LAUNCHER;
-    }
-    */
 
     return IT_AXE;
 };

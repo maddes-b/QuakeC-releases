@@ -17,8 +17,9 @@
 //  See file, 'COPYING', for details.
 
 // based on:
-// * re-GPLed versions of v1.05 beta by Maddes (assuming to follow id's intention), https://github.com/maddes-b/QuakeC-releases/
+// * re-GPLed versions of v1.06 and v1.05 beta by Maddes (assuming to follow id's intention), https://github.com/maddes-b/QuakeC-releases/
 // * cleanup by Maddes, https://github.com/maddes-b/QuakeC-releases/
+// * v1.06 release by id Software, https://www.quaddicted.com/files/idgames2/idstuff/unsup/progs106.zip
 // * v1.05 beta release by id Software, https://github.com/Jason2Brownlee/QuakeOfficialArchive
 // * v1.01 GPL release by id Software, https://github.com/id-Software/Quake-Tools/tree/master/qcc/v101qc
 

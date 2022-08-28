@@ -1,5 +1,19 @@
 = Changelog for id1 (main game)
 
+== v1.06
+
+Logic changes in:
+
+* client.qc
+* items.qc
+* weapons.qc
+
+New files:
+
+* flag.qc +
+  ignorable, item_deathball() not used and deathball_touch() not defined
+
+
 == v1.05 beta
 
 Logic changes in:
