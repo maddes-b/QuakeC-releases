@@ -1,0 +1,91 @@
+[{
+	"resource": "progs/ai.qc",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"severity": 4,
+	"message": "[qcc] Already defined: 'stemp'.",
+	"startLineNumber": 24,
+	"startColumn": 41,
+	"endLineNumber": 24,
+	"endColumn": 46
+},{
+	"resource": "progs/client.qc",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"severity": 4,
+	"message": "[qcc] Already defined: 'DecodeLevelParms'.",
+	"startLineNumber": 463,
+	"startColumn": 8,
+	"endLineNumber": 463,
+	"endColumn": 24
+},{
+	"resource": "progs/defs.qc",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"severity": 4,
+	"message": "[qcc] Already defined: 'oldorigin'.",
+	"startLineNumber": 511,
+	"startColumn": 10,
+	"endLineNumber": 511,
+	"endColumn": 19
+},{
+	"resource": "progs/defs.qc",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"severity": 4,
+	"message": "[qcc] Already defined: 'oldorigin_x'.",
+	"startLineNumber": 511,
+	"startColumn": 10,
+	"endLineNumber": 511,
+	"endColumn": 19
+},{
+	"resource": "progs/defs.qc",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"severity": 4,
+	"message": "[qcc] Already defined: 'oldorigin_y'.",
+	"startLineNumber": 511,
+	"startColumn": 10,
+	"endLineNumber": 511,
+	"endColumn": 19
+},{
+	"resource": "progs/defs.qc",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"severity": 4,
+	"message": "[qcc] Already defined: 'oldorigin_z'.",
+	"startLineNumber": 511,
+	"startColumn": 10,
+	"endLineNumber": 511,
+	"endColumn": 19
+},{
+	"resource": "progs/enforcer.qc",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"severity": 4,
+	"message": "[qcc] Already defined: 'vec'.",
+	"startLineNumber": 94,
+	"startColumn": 15,
+	"endLineNumber": 94,
+	"endColumn": 18
+},{
+	"resource": "progs/knight.qc",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"severity": 4,
+	"message": "[qcc] Already defined: 'attackb1'.",
+	"startLineNumber": 50,
+	"startColumn": 17,
+	"endLineNumber": 50,
+	"endColumn": 25
+},{
+	"resource": "progs/oldone.qc",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"severity": 4,
+	"message": "[qcc] Already defined: 'shake12'.",
+	"startLineNumber": 47,
+	"startColumn": 39,
+	"endLineNumber": 47,
+	"endColumn": 46
+},{
+	"resource": "progs/weapons.qc",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"severity": 4,
+	"message": "[qcc] Already defined: 'org'.",
+	"startLineNumber": 109,
+	"startColumn": 15,
+	"endLineNumber": 109,
+	"endColumn": 18
+}]

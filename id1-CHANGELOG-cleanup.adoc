@@ -7,4 +7,4 @@ No logic changes.
 
 == Tasks
 
-* [ ] remove trailing white spaces (VSCode: Trim Trailing Spaces)
+* [x] remove trailing white spaces (VSCode: Trim Trailing Spaces)
