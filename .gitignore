@@ -1,0 +1,13 @@
+## QuakeC related
+progs*.dat
+progdefs.h
+files.dat
+*qcc*.exe
+progs*.lno
+
+## Mac related
+.DS_Store
+
+## Misc stuff
+*.bak
+*~

@@ -1,0 +1,84 @@
+= QuakeC Code Releases for Quake 1 by id Software and Others
+:author: Matthias "Maddes" Bücher
+:url-maddes: https://www.maddes.net/
+:url-qip: https://www.quake-info-pool.net/
+:url-qip-repo-qc: https://github.com/maddes-b/QuakeC-releases/
+:url-qip-repo-urqp: https://github.com/maddes-b/urqp/
+:url-id: https://www.idsoftware.com/
+:url-id-repo: https://github.com/id-Software/Quake-Tools/tree/master/qcc/v101qc
+:url-wikipedia-quake1: https://en.wikipedia.org/wiki/Quake_(video_game)
+:url-git-rebase-io: https://git-rebase.io/
+:url-git-pro-rebase: https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History
+:url-git-docs-rebase: https://git-scm.com/docs/git-rebase
+:toc:
+
+
+== Content of Repository
+
+IMPORTANT: *Branches can be rebased at any time! (=changed history).* +
+Make yourself familar with `git pull --rebase`, `git reset --hard` and `git merge` with different remotes. +
+See the {url-git-pro-rebase}[ProGit book], the {url-git-rebase-io}[git rebase in depth homepage] and the {url-git-docs-rebase}[command line docs].
+
+{url-qip-repo-qc}[This repository] contains all QuakeC code releases by {url-id}[id Software] for the {url-wikipedia-quake1}[Quake 1] main game logic, plus code releases for the official mission packs from other companies.
+
+The code bases are available in the "original" branches in a link:id1-CHANGELOG-cleanup.adoc[cleaned up manner] with no bug-fixes implemented.
+Additional "fixes" branches are available with comments on known issues, and with known issues fixed, that do not break or alter game play.
+
+Contributions are always welcome.
+
+
+== What is QuakeC?
+
+The game Quake 1 by id Software has its own coding language called QuakeC to define the game logic.
+The original main game logic and resources are stored in a subfolder called 'id1'.
+
+The releases of the QuakeC code allowed to fix the original game logic, modify it or even create your own independent game.
+The game logic has to be compiled to create a byte-code program for the Quake 1 engine, which executes the game logic, renders the game to screen, does all the network traffic, etc.
+
+
+== id1 (main game)
+
+The game logic of the original game. The "id1-original" branch just shows the original history of the Quake 1 main game logic. +
+Additionally re-licensing v1.05 beta and v1.06 to GPLv2 assuming to follow id's intention and reducing delta.
+
+=== Known Versions (Releases with date and SHA256)
+
+* v1.01
+** 1996-07-25: `8fe99dbd973a82c302ab4c4374ac4ada7a55d5a48c979b69a227ecb2f08c1d40 *qcc.tar.gz` +
+   No license specified.
+** 2000-05-09: `c0fa18f54e0bb08a3c0d56c0b9905b8c31fa21648bd08e91b7a2fa4962561cfe *q1tools_gpl.tgz` +
+   GPLv2 license added incl. related header in QC files.
+** 2012-01-31: https://github.com/id-Software/Quake-Tools/tree/master/qcc/v101qc +
+   GPLv2 license.
+* v1.05 beta
+** 1996-09-13: `2fb77d9508df59ec8755185d05e07382405fdf5bbc3e1fefe95d7c1b92438abf *q105beta.zip` +
+   No license specified.
+* v1.06
+** 1996-09-30: `469eb51ec18b9e919565df88732d27dcb63175cf729da931a4cb1e97b3f456d0 *progs106.zip` +
+   No license specified.
+
+
+== Known Bugs in Game Logics
+
+{url-qip}[Quake Info Pool] (short: QIP) has a list of known bugs of the Quake 1 main game logics and maps (based on v1.06), plus engine (based on v1.09).
+It also provides a bug-fixed and enhanced version of the Quake 1 main game logic called {url-qip-repo-urqp}["Ultimate Regular Quake Patch"] (short: URQP).
+
+
+== Used Internet Resources
+
+* Archives of the old CDROM.COM mirrors and Planetquake via https://www.gamers.org/[Gamers.org] and its mirror https://www.quaddicted.com/[Quaddicted] +
+** Quaddicted also provides a https://www.quaddicted.com/webarchive/[web archive] of several gone Quake sites.
+   Additionally it is the home of the tool "Quake Injector".
+* Jason Brownlee's https://github.com/Jason2Brownlee/QuakeOfficialArchive[Quake Official Archive] +
+  A nice list with all Quake releases by id Software.
+* id's {url-id-repo}[QuakeC id1 repo]
+* https://www.insideqc.com/[InsideQC] is a good starting point to get into QuakeC. +
+  It was previously known as https://www.inside3d.com/[Inside3D].
+* There's also http://quakeone.com/[Quake One]. If your registration process stalls, then you may trigger the admins on Discord.
+* https://quakewiki.org/[QuakeWiki]
+
+
+== Epilogue
+
+Let's see how long Quake 1 will continue to last and enjoy coding in QuakeC. +
+{url-maddes}[{Author}]
