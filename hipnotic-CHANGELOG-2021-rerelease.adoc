@@ -1,0 +1,53 @@
+= Changelog for hipnotic (mission pack #1 "Scourge of Armagon") of 2021 Rerelease
+
+== 2021 Rerelease Update 3 (QuakeEx v1.0.5039)
+
+Features:
+
+* String place holders for localization.
+* Ment for QCC compiler https://www.fteqcc.org/[FTEQCC].
+
+Files moved to monsters subdir, and partly renamed:
+
+* boss.qc     > chthon.qc
+* demon.qc    > fiend.qc
+* dog.qc      > rottweiler.qc
+* enforcer.qc
+* fish.qc     > rotfish.qc
+* hknight.qc  > hellknight.qc
+* knight.qc
+* ogre.qc
+* oldone.qc   > shub.qc
+* shalrath.qc > vore.qc
+* shambler.qc
+* soldier.qc  > grunt.qc
+* tarbaby.qc  > spawn.qc
+* wizard.qc   > scrag.qc
+* zombie.qc
+
+Logic changes in:
+
+* buttons.qc
+* client.qc
+* combat.qc
+* defs.qc
+* doors.qc
+* hiparma.qc
+* hipgrem.qc
+* hipitems.qc
+* hipscrge.qc
+* hiptrig.qc
+* items.qc
+* monsters.qc
+* subs.qc
+* triggers.qc
+* weapons.qc
+* world.qc
+* monsters/hellknight.qc
+* monsters/shambler.qc
+* monsters/shub.qc
+* monsters/vore.qc
+
+New files:
+
+* bots/bot.qc

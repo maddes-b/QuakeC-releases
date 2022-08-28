@@ -1,0 +1,72 @@
+= Changelog for id1 (main game) of 2021 Rerelease
+
+== 2021 Rerelease Update 3 (QuakeEx v1.0.5039)
+
+Features:
+
+* String place holders for localization.
+* Ment for QCC compiler https://www.fteqcc.org/[FTEQCC].
+
+Files moved to monsters subdir, and partly renamed:
+
+* boss.qc     > chthon.qc
+* demon.qc    > fiend.qc
+* dog.qc      > rottweiler.qc
+* enforcer.qc
+* fish.qc     > rotfish.qc
+* hknight.qc  > hellknight.qc
+* knight.qc
+* ogre.qc
+* oldone.qc   > shub.qc
+* shalrath.qc > vore.qc
+* shambler.qc
+* soldier.qc  > grunt.qc
+* tarbaby.qc  > spawn.qc
+* wizard.qc   > scrag.qc
+* zombie.qc
+
+Logic changes in all files:
+
+* ai.qc
+* buttons.qc
+* client.qc
+* combat.qc
+* defs.qc
+* doors.qc
+* fight.qc
+* misc.qc
+* monsters.qc
+* plats.qc
+* player.qc
+* subs.qc
+* triggers.qc
+* weapons.qc
+* world.qc
+* monsters/chthon.qc
+* monsters/enforcer.qc
+* monsters/fiend.qc
+* monsters/grunt.qc
+* monsters/hellknight.qc
+* monsters/knight.qc
+* monsters/ogre.qc
+* monsters/rotfish.qc
+* monsters/rottweiler.qc
+* monsters/scrag.qc
+* monsters/shambler.qc
+* monsters/shub.qc
+* monsters/spawn.qc
+* monsters/vore.qc
+* monsters/zombie.qc
+
+New files:
+
+* itemnames.qc
+* bots/bot.qc
+
+Deleted files:
+
+* amtest.qc
+* flag.qc
+* jctest.qc
+* models.qc
+* sprites.qc

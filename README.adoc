@@ -56,6 +56,9 @@ Additionally re-licensing v1.05 beta and v1.06 to GPLv2 assuming to follow id's 
 * v1.06
 ** 1996-09-30: `469eb51ec18b9e919565df88732d27dcb63175cf729da931a4cb1e97b3f456d0 *progs106.zip` +
    No license specified.
+* 2021 Rerelease Update 3 (QuakeEx v1.0.5039)
+** 2022-04-06: https://github.com/id-Software/quake-rerelease-qc +
+   GPLv2 license re-added incl. related header in QC files.
 
 
 == hipnotic (Mission Pack #1 "Scourge of Armagon")
@@ -69,6 +72,9 @@ Additionally re-licensing to GPLv2 assuming to follow id's and Hipnotic's intent
 ** 1997-03-14: `53b1e0f9f43cbaafdbb42ccdec93a4bad69ca0bfba92eb188a345912cccee38c *ALL.ZIP` +
    contains `c12e9f57530e60ced275fd72689794a1cc16426c2ca697c0fa38d3afa7379c1d *QC.ZIP` +
    No license specified.
+* 2021 Rerelease Update 3 (QuakeEx v1.0.5039)
+** 2022-04-06: https://github.com/id-Software/quake-rerelease-qc +
+   GPLv2 license added incl. related header in QC files.
 
 
 == rogue (Mission Pack #2 "Dissolution of Eternity")
@@ -81,6 +87,9 @@ Additionally re-licensing to GPLv2 assuming to follow id's and Rogue's intention
 * v1.00
 ** 1997-04-30: `b29c9d92594afe5d66ba3b59b7e1a4387b041061e8be5e814754b3b7c310361e *DOE_QC.ZIP` +
    No license specified.
+* 2021 Rerelease Update 3 (QuakeEx v1.0.5039)
+** 2022-04-06: https://github.com/id-Software/quake-rerelease-qc +
+   GPLv2 license added incl. related header in QC files.
 
 
 == Known Bugs in Game Logics
