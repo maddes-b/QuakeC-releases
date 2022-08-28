@@ -9,7 +9,7 @@ This will already be done with v1.01 for people that have concerns about the ori
 
 == Tasks
 
-* [ ] remove trailing white spaces (VSCode: Trim Trailing Spaces)
+* [x] remove trailing white spaces (VSCode: Trim Trailing Spaces)
 * [ ] convert tabs to spaces
 ** tab size: 4
 ** convert indentations to spaces (VSCode: Convert Indentation to Spaces)
