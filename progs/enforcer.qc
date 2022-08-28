@@ -25,7 +25,7 @@ SOLDIER / PLAYER
 ==============================================================================
 */
 
-$cd /raid/quake/id1/models/enforcer
+$cd id1/models/enforcer
 $origin 0 -6 24
 $base base
 $skin skin

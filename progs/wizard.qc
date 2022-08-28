@@ -25,7 +25,7 @@ WIZARD
 ==============================================================================
 */
 
-$cd /raid/quake/id1/models/a_wizard
+$cd id1/models/a_wizard
 $origin 0 0 24
 $base wizbase
 $skin wizbase

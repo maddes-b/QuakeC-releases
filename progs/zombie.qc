@@ -25,7 +25,7 @@ ZOMBIE
 ==============================================================================
 */
 
-$cd /raid/quake/id1/models/zombie
+$cd id1/models/zombie
 
 $origin 0 0 24
 

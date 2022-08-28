@@ -25,7 +25,7 @@ DEMON
 ==============================================================================
 */
 
-$cd /raid/quake/id1/models/demon3
+$cd id1/models/demon3
 $scale 0.8
 $origin 0 0 24
 $base base

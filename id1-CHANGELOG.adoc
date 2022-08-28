@@ -1,5 +1,18 @@
 = Changelog for id1 (main game)
 
+== v1.05 beta
+
+Logic changes in:
+
+* client.qc
+* doors.qc
+* items.qc
+* oldone.qc
+* weapons.qc
+
+Rest is removing /raid/quake/ from models' and sprites' paths
+
+
 == v1.01
 
 First release.

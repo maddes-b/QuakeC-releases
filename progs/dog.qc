@@ -25,7 +25,7 @@ DOG
 ==============================================================================
 */
 
-$cd /raid/quake/id1/models/dog
+$cd id1/models/dog
 $origin 0 0 24
 $base base
 $skin skin

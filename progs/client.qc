@@ -41,6 +41,12 @@ void() info_intermission =
 
 void() SetChangeParms =
 {
+    if (self.health <= 0)
+    {
+        SetNewParms();
+        return;
+    }
+
     // remove items
     self.items = self.items - (self.items & (IT_KEY1 | IT_KEY2 | IT_INVISIBILITY | IT_INVULNERABILITY | IT_SUIT | IT_QUAD));
 
@@ -81,7 +87,7 @@ void() SetNewParms =
     parm4 = 25;
     parm5 = 0;
     parm6 = 0;
-    parm6 = 0;
+    parm7 = 0;
     parm8 = 1;
     parm9 = 0;
 };
@@ -627,110 +633,65 @@ RULES
 ===============================================================================
 */
 
-void(entity c) PrintClientScore =
-{
-    if (c.frags > -10 && c.frags < 0)
-    {
-        bprint(" ");
-    }
-    else if (c.frags >= 0)
-    {
-        if (c.frags < 100)
-        {
-            bprint(" ");
-        }
-        if (c.frags < 10)
-        {
-            bprint(" ");
-        }
-    }
-    bprint(ftos(c.frags));
-    bprint(" ");
-    bprint(c.netname);
-    bprint("\n");
-};
-
-
-void() DumpScore =
-{
-    local entity e, sort, walk;
-
-    if (world.chain)
-    {
-        error("DumpScore: world.chain is set");
-    }
-
-    // build a sorted list
-    e = find(world, classname, "player");
-    sort = world;
-    while (e)
-    {
-        if (!sort)
-        {
-            sort = e;
-            e.chain = world;
-        }
-        else
-        {
-            if (e.frags > sort.frags)
-            {
-                e.chain = sort;
-                sort = e;
-            }
-            else
-            {
-                walk = sort;
-                do
-                {
-                    if (!walk.chain)
-                    {
-                        e.chain = world;
-                        walk.chain = e;
-                    }
-                    else if (walk.chain.frags < e.frags)
-                    {
-                        e.chain = walk.chain;
-                        walk.chain = e;
-                    }
-                    else
-                    {
-                        walk = walk.chain;
-                    }
-                } while (walk.chain != e);
-            }
-        }
-
-        e = find(e, classname, "player");
-    }
-
-    // print the list
-    bprint("\n");
-    while (sort)
-    {
-        PrintClientScore(sort);
-        sort = sort.chain;
-    }
-    bprint("\n");
-};
-
-
 /*
 go to the next level for deathmatch
+only called if a time or frag limit has expired
 */
 void() NextLevel =
 {
     local entity o;
 
-    // find a trigger_changelevel
-    o = find(world, classname, "trigger_changelevel");
-    if (!o || mapname == "start")
+    if (mapname == "start")
     {
-        // go back to same map if no trigger_changelevel
+        if (!cvar("registered"))
+        {
+            mapname = "e1m1";
+        }
+        else if (!(serverflags & 1))
+        {
+            mapname = "e1m1";
+            serverflags = serverflags + 1;
+        }
+        else if (!(serverflags & 2))
+        {
+            mapname = "e2m1";
+            serverflags = serverflags + 2;
+        }
+        else if (!(serverflags & 4))
+        {
+            mapname = "e3m1";
+            serverflags = serverflags + 4;
+        }
+        else if (!(serverflags & 8))
+        {
+            mapname = "e4m1";
+            serverflags = serverflags + 8;
+        }
+        else
+        {
+            mapname = "start";
+            serverflags = serverflags - 15;
+        }
+
         o = spawn();
         o.map = mapname;
     }
+    else
+    {
+        // find a trigger_changelevel
+        o = find(world, classname, "trigger_changelevel");
+
+        // go back to start if no trigger_changelevel
+        if (!o)
+        {
+            mapname = "start";
+            o = spawn();
+            o.map = mapname;
+        }
+    }
 
     nextmap = o.map;
+    gameover = TRUE;
 
     if (o.nextthink < time)
     {
@@ -763,30 +724,12 @@ void() CheckRules =
     if (timelimit && time >= timelimit)
     {
         NextLevel();
-        /*
-        gameover = TRUE;
-        bprint("\n\n\n==============================\n");
-        bprint("game exited after ");
-        bprint(ftos(timelimit / 60));
-        bprint(" minutes\n");
-        DumpScore();
-        localcmd("killserver\n");
-        */
         return;
     }
 
     if (fraglimit && self.frags >= fraglimit)
     {
         NextLevel();
-        /*
-        gameover = TRUE;
-        bprint("\n\n\n==============================\n");
-        bprint("game exited after ");
-        bprint(ftos(self.frags));
-        bprint(" frags\n");
-        DumpScore();
-        localcmd("killserver\n");
-        */
         return;
     }
 };
@@ -1416,14 +1359,26 @@ void(entity targ, entity attacker) ClientObituary =
                 {
                     bprint(" tries to put the pin back in\n");
                 }
-                else if (rnum)
+                else
                 {
                     bprint(" becomes bored with life\n");
                 }
+                return;
+            }
+            else if ((teamplay == 2) && (targ.team > 0) && (targ.team == attacker.team))
+            {
+                if (rnum < 0.25)
+                    deathstring = " mows down a teammate\n";
+                else if (rnum < 0.50)
+                    deathstring = " checks his glasses\n";
+                else if (rnum < 0.75)
+                    deathstring = " gets a frag for the other team\n";
                 else
-                {
-                    bprint(" checks if his weapon is loaded\n");
-                }
+                    deathstring = " loses another friend\n";
+                bprint(attacker.netname);
+                bprint(deathstring);
+
+                attacker.frags = attacker.frags - 1;
                 return;
             }
             else
@@ -1499,52 +1454,10 @@ void(entity targ, entity attacker) ClientObituary =
         {
             // killed by something else, which was not an attack by any player (incl. itself)
             targ.frags = targ.frags - 1;
-            rnum = targ.watertype;
 
             bprint(targ.netname);
-            if (rnum == CONTENT_WATER)
-            {
-                if (random() < 0.5)
-                {
-                    bprint(" sleeps with the fishes\n");
-                }
-                else
-                {
-                    bprint(" sucks it down\n");
-                }
-                return;
-            }
-            else if (rnum == CONTENT_SLIME)
-            {
-                if (random() < 0.5)
-                {
-                    bprint(" gulped a load of slime\n");
-                }
-                else
-                {
-                    bprint(" can't exist on slime alone\n");
-                }
-                return;
-            }
-            else if (rnum == CONTENT_LAVA)
-            {
-                if (targ.health < -15)
-                {
-                    bprint(" burst into flames\n");
-                    return;
-                }
 
-                if (random() < 0.5)
-                {
-                    bprint(" turned into hot slag\n");
-                }
-                else
-                {
-                    bprint(" visits the Volcano God\n");
-                }
-                return;
-            }
-
+            // killed by a montser?
             if ((attacker.flags & FL_MONSTER))
             {
                 if (attacker.classname == "monster_army")
@@ -1615,6 +1528,7 @@ void(entity targ, entity attacker) ClientObituary =
                 return;
             }
 
+            // tricks and traps
             if (attacker.classname == "explo_box")
             {
                 bprint(" blew up\n");
@@ -1623,12 +1537,6 @@ void(entity targ, entity attacker) ClientObituary =
             if (attacker.solid == SOLID_BSP && attacker != world)
             {
                 bprint(" was squished\n");
-                return;
-            }
-            if (targ.deathtype == "falling")
-            {
-                targ.deathtype = "";
-                bprint(" fell to his death\n");
                 return;
             }
             if (attacker.classname == "trap_shooter" || attacker.classname == "trap_spikeshooter")
@@ -1647,6 +1555,60 @@ void(entity targ, entity attacker) ClientObituary =
                 return;
             }
 
+            // in-water deaths
+            rnum = targ.watertype;
+            if (rnum == CONTENT_WATER)
+            {
+                if (random() < 0.5)
+                {
+                    bprint(" sleeps with the fishes\n");
+                }
+                else
+                {
+                    bprint(" sucks it down\n");
+                }
+                return;
+            }
+            else if (rnum == CONTENT_SLIME)
+            {
+                if (random() < 0.5)
+                {
+                    bprint(" gulped a load of slime\n");
+                }
+                else
+                {
+                    bprint(" can't exist on slime alone\n");
+                }
+                return;
+            }
+            else if (rnum == CONTENT_LAVA)
+            {
+                if (targ.health < -15)
+                {
+                    bprint(" burst into flames\n");
+                    return;
+                }
+
+                if (random() < 0.5)
+                {
+                    bprint(" turned into hot slag\n");
+                }
+                else
+                {
+                    bprint(" visits the Volcano God\n");
+                }
+                return;
+            }
+
+            // fell to their death?
+            if (targ.deathtype == "falling")
+            {
+                targ.deathtype = "";
+                bprint(" fell to his death\n");
+                return;
+            }
+
+            // hell if I know; he's just dead!!!
             bprint(" died\n");
         }
     }
