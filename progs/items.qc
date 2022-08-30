@@ -1,4 +1,4 @@
-/*  Copyright (C) 1996-1997  Id Software, Inc.
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 void() W_SetCurrentAmmo;
 /* ALL LIGHTS SHOULD BE 0 1 0 IN COLOR ALL OTHER ITEMS SHOULD
 BE .8 .3 .4 IN COLOR */
@@ -55,6 +56,14 @@ void() PlaceItem =
 {
 	local float	oldz;
 
+	if( self.netname == string_null ) {
+		if( self.items ) {
+			self.netname = GetNetName( self.items );
+		} else if( self.weapon ) {
+			self.netname = GetNetName( self.weapon );
+		}
+	}
+
 	self.mdl = self.model;		// so it can be restored on respawn
 	self.flags = FL_ITEM;		// make extra wide
 	self.solid = SOLID_TRIGGER;
@@ -62,6 +71,7 @@ void() PlaceItem =
 	self.velocity = '0 0 0';
 	self.origin_z = self.origin_z + 6;
 	oldz = self.origin_z;
+
 	if (!droptofloor())
 	{
 		dprint ("Bonus item fell out of level at ");
@@ -100,16 +110,20 @@ float (entity e, float healamount, float ignore) T_Heal =
 {
 	if (e.health <= 0)
 		return 0;
-	if ((!ignore) && (e.health >= other.max_health))
+
+	if ((!ignore) && (e.health >= e.max_health))
 		return 0;
+
 	healamount = ceil(healamount);
 
 	e.health = e.health + healamount;
-	if ((!ignore) && (e.health >= other.max_health))
-		e.health = other.max_health;
+
+	if ((!ignore) && (e.health >= e.max_health))
+		e.health = e.max_health;
 
 	if (e.health > 250)
 		e.health = 250;
+
 	return 1;
 };
 
@@ -125,7 +139,6 @@ float	H_ROTTEN = 1;
 float	H_MEGA = 2;
 .float	healamount, healtype;
 void() health_touch;
-void() item_megahealth_rot;
 
 void() item_health =
 {
@@ -141,8 +154,7 @@ void() item_health =
 		self.healamount = 15;
 		self.healtype = 0;
 	}
-	else
-	if (self.spawnflags & H_MEGA)
+	else if (self.spawnflags & H_MEGA)
 	{
 		precache_model("maps/b_bh100.bsp");
 		precache_sound("items/r_item2.wav");
@@ -160,16 +172,13 @@ void() item_health =
 		self.healamount = 25;
 		self.healtype = 1;
 	}
+
 	setsize (self, '0 0 0', '32 32 56');
 	StartItem ();
 };
 
-
 void() health_touch =
 {
-	local	float amount;
-	local	string	s;
-
 	if (other.classname != "player")
 		return;
 
@@ -186,12 +195,9 @@ void() health_touch =
 			return;
 	}
 
-	sprint(other, "You receive ");
-	s = ftos(self.healamount);
-	sprint(other, s);
-	sprint(other, " health\n");
+	sprint(other, "$qc_item_health", ftos(self.healamount));
 
-// health touch sound
+	// health touch sound
 	sound(other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
 
 	stuffcmd (other, "bf\n");
@@ -199,48 +205,23 @@ void() health_touch =
 	self.model = string_null;
 	self.solid = SOLID_NOT;
 
-	// Megahealth = rot down the player's super health
-	if (self.healtype == 2)
-	{
+	if ( self.healtype == 2 ) { // If we're a MegaHealth - rot down the player's super health
 		other.items = other.items | IT_SUPERHEALTH;
-		self.nextthink = time + 5;
-		self.think = item_megahealth_rot;
-		self.owner = other;
+		other.healthrot_nextcheck = time + 5;
 	}
-	else
-	{
-		if (deathmatch != 2)		// deathmatch 2 is the silly old rules
-		{
-			if (deathmatch)
-				self.nextthink = time + 20;
-			self.think = SUB_regen;
+
+	if ( deathmatch && deathmatch != 2 ) {	// deathmatch 2 is silly old rules
+		if ( self.healtype == 2 ) {
+			self.nextthink = time + 120;
+		} else {
+			self.nextthink = time + 20;
 		}
 	}
 
+	self.think = SUB_regen;
+
 	activator = other;
 	SUB_UseTargets();				// fire all targets / killtargets
-};
-
-void() item_megahealth_rot =
-{
-	other = self.owner;
-
-	if (other.health > other.max_health)
-	{
-		other.health = other.health - 1;
-		self.nextthink = time + 1;
-		return;
-	}
-
-// it is possible for a player to die and respawn between rots, so don't
-// just blindly subtract the flag off
-	other.items = other.items - (other.items & IT_SUPERHEALTH);
-
-	if (deathmatch == 1)	// deathmatch 2 is silly old rules
-	{
-		self.nextthink = time + 20;
-		self.think = SUB_regen;
-	}
 };
 
 /*
@@ -251,14 +232,17 @@ ARMOR
 ===============================================================================
 */
 
-void() armor_touch;
-
 void() armor_touch =
 {
 	local	float	type, value, bit;
 
+	type = 0.3;
+	value = 100;
+	bit = IT_ARMOR1;
+
 	if (other.health <= 0)
 		return;
+
 	if (other.classname != "player")
 		return;
 
@@ -268,18 +252,21 @@ void() armor_touch =
 		value = 100;
 		bit = IT_ARMOR1;
 	}
+
 	if (self.classname == "item_armor2")
 	{
 		type = 0.6;
 		value = 150;
 		bit = IT_ARMOR2;
 	}
+
 	if (self.classname == "item_armorInv")
 	{
 		type = 0.8;
 		value = 200;
 		bit = IT_ARMOR3;
 	}
+
 	if (other.armortype*other.armorvalue >= type*value)
 		return;
 
@@ -289,12 +276,14 @@ void() armor_touch =
 
 	self.solid = SOLID_NOT;
 	self.model = string_null;
-	if (deathmatch == 1)
+
+	if (deathmatch && deathmatch != 2)
 		self.nextthink = time + 20;
+
 	self.think = SUB_regen;
 
-	sprint(other, "You got armor\n");
-// armor touch sound
+	sprint(other, "$qc_item_armor");
+	// armor touch sound
 	sound(other, CHAN_ITEM, "items/armor1.wav", 1, ATTN_NORM);
 	stuffcmd (other, "bf\n");
 
@@ -303,12 +292,14 @@ void() armor_touch =
 };
 
 
-/*QUAKED item_armor1 (0 .5 .8) (-16 -16 0) (16 16 32)
+/*
+QUAKED item_armor1 (0 .5 .8) (-16 -16 0) (16 16 32)
 */
-
 void() item_armor1 =
 {
 	self.touch = armor_touch;
+	self.armortype = 0.3;
+	self.armorvalue = 100;
 	precache_model ("progs/armor.mdl");
 	setmodel (self, "progs/armor.mdl");
 	self.skin = 0;
@@ -316,12 +307,14 @@ void() item_armor1 =
 	StartItem ();
 };
 
-/*QUAKED item_armor2 (0 .5 .8) (-16 -16 0) (16 16 32)
+/*
+QUAKED item_armor2 (0 .5 .8) (-16 -16 0) (16 16 32)
 */
-
 void() item_armor2 =
 {
 	self.touch = armor_touch;
+	self.armortype = 0.6;
+	self.armorvalue = 150;
 	precache_model ("progs/armor.mdl");
 	setmodel (self, "progs/armor.mdl");
 	self.skin = 1;
@@ -329,12 +322,14 @@ void() item_armor2 =
 	StartItem ();
 };
 
-/*QUAKED item_armorInv (0 .5 .8) (-16 -16 0) (16 16 32)
+/*
+QUAKED item_armorInv (0 .5 .8) (-16 -16 0) (16 16 32)
 */
-
 void() item_armorInv =
 {
 	self.touch = armor_touch;
+	self.armortype = 0.8;
+	self.armorvalue = 200;
 	precache_model ("progs/armor.mdl");
 	setmodel (self, "progs/armor.mdl");
 	self.skin = 2;
@@ -354,10 +349,13 @@ void() bound_other_ammo =
 {
 	if (other.ammo_shells > 100)
 		other.ammo_shells = 100;
+
 	if (other.ammo_nails > 200)
 		other.ammo_nails = 200;
+
 	if (other.ammo_rockets > 100)
 		other.ammo_rockets = 100;
+
 	if (other.ammo_cells > 100)
 		other.ammo_cells = 100;
 };
@@ -367,17 +365,46 @@ float(float w) RankForWeapon =
 {
 	if (w == IT_LIGHTNING)
 		return 1;
+
 	if (w == IT_ROCKET_LAUNCHER)
 		return 2;
+
 	if (w == IT_SUPER_NAILGUN)
 		return 3;
+
 	if (w == IT_GRENADE_LAUNCHER)
 		return 4;
+
 	if (w == IT_SUPER_SHOTGUN)
 		return 5;
+
 	if (w == IT_NAILGUN)
 		return 6;
+
 	return 7;
+};
+
+float (float w) WeaponCode =
+{
+	if (w == IT_SUPER_SHOTGUN)
+		return 3;
+
+	if (w == IT_NAILGUN)
+		return 4;
+
+	if (w == IT_SUPER_NAILGUN)
+		return 5;
+
+	if (w == IT_GRENADE_LAUNCHER)
+		return 6;
+
+	if (w == IT_ROCKET_LAUNCHER)
+		return 7;
+
+	if (w == IT_LIGHTNING)
+		return 8;
+
+	return 1;
 };
 
 /*
@@ -393,9 +420,14 @@ void(float old, float new) Deathmatch_Weapon =
 {
 	local float or, nr;
 
-// change self.weapon if desired
+	if ( self.flags & FL_ISBOT ) {
+		return;
+	} // mal: let bots pick their own weapon.
+
+	// change self.weapon if desired
 	or = RankForWeapon (self.weapon);
 	nr = RankForWeapon (new);
+
 	if ( nr < or )
 		self.weapon = new;
 };
@@ -406,12 +438,15 @@ weapon_touch
 =============
 */
 float() W_BestWeapon;
+float(entity playerEnt, float old, float new) W_WantsToChangeWeapon;
 
 void() weapon_touch =
 {
 	local	float	hadammo, best, new, old;
 	local	entity	stemp;
 	local	float	leave;
+
+	new = other.items;
 
 	if (!(other.flags & FL_CLIENT))
 		return;
@@ -422,7 +457,7 @@ void() weapon_touch =
 	best = W_BestWeapon();
 	self = stemp;
 
-	if (deathmatch == 2 || coop)
+	if (coop || deathmatch == 2 || deathmatch == 3 || deathmatch == 5)
 		leave = 1;
 	else
 		leave = 0;
@@ -431,6 +466,7 @@ void() weapon_touch =
 	{
 		if (leave && (other.items & IT_NAILGUN) )
 			return;
+
 		hadammo = other.ammo_nails;
 		new = IT_NAILGUN;
 		other.ammo_nails = other.ammo_nails + 30;
@@ -439,6 +475,7 @@ void() weapon_touch =
 	{
 		if (leave && (other.items & IT_SUPER_NAILGUN) )
 			return;
+
 		hadammo = other.ammo_rockets;
 		new = IT_SUPER_NAILGUN;
 		other.ammo_nails = other.ammo_nails + 30;
@@ -447,6 +484,7 @@ void() weapon_touch =
 	{
 		if (leave && (other.items & IT_SUPER_SHOTGUN) )
 			return;
+
 		hadammo = other.ammo_rockets;
 		new = IT_SUPER_SHOTGUN;
 		other.ammo_shells = other.ammo_shells + 5;
@@ -455,6 +493,7 @@ void() weapon_touch =
 	{
 		if (leave && (other.items & IT_ROCKET_LAUNCHER) )
 			return;
+
 		hadammo = other.ammo_rockets;
 		new = IT_ROCKET_LAUNCHER;
 		other.ammo_rockets = other.ammo_rockets + 5;
@@ -463,6 +502,7 @@ void() weapon_touch =
 	{
 		if (leave && (other.items & IT_GRENADE_LAUNCHER) )
 			return;
+
 		hadammo = other.ammo_rockets;
 		new = IT_GRENADE_LAUNCHER;
 		other.ammo_rockets = other.ammo_rockets + 5;
@@ -471,6 +511,7 @@ void() weapon_touch =
 	{
 		if (leave && (other.items & IT_LIGHTNING) )
 			return;
+
 		hadammo = other.ammo_rockets;
 		new = IT_LIGHTNING;
 		other.ammo_cells = other.ammo_cells + 15;
@@ -478,26 +519,28 @@ void() weapon_touch =
 	else
 		objerror ("weapon_touch: unknown classname");
 
-	sprint (other, "You got the ");
-	sprint (other, self.netname);
-	sprint (other, "\n");
-// weapon touch sound
+	sprint(other, "$qc_got_item", self.netname);
+
+	// weapon touch sound
 	sound (other, CHAN_ITEM, "weapons/pkup.wav", 1, ATTN_NORM);
 	stuffcmd (other, "bf\n");
 
 	bound_other_ammo ();
 
-// change to the weapon
+	// change to the weapon
 	old = other.items;
 	other.items = other.items | new;
 
 	stemp = self;
 	self = other;
 
-	if (!deathmatch)
-		self.weapon = new;
-	else
-		Deathmatch_Weapon (old, new);
+	if(W_WantsToChangeWeapon(other, old, other.items) == 1)
+	{
+		if (!deathmatch)
+			self.weapon = new;
+		else
+			Deathmatch_Weapon (old, new);
+	}
 
 	W_SetCurrentAmmo();
 
@@ -506,11 +549,13 @@ void() weapon_touch =
 	if (leave)
 		return;
 
-// remove it in single player, or setup for respawning in deathmatch
+	// remove it in single player, or setup for respawning in deathmatch
 	self.model = string_null;
 	self.solid = SOLID_NOT;
-	if (deathmatch == 1)
+
+	if (deathmatch && deathmatch != 2)
 		self.nextthink = time + 30;
+
 	self.think = SUB_regen;
 
 	activator = other;
@@ -518,15 +563,15 @@ void() weapon_touch =
 };
 
 
-/*QUAKED weapon_supershotgun (0 .5 .8) (-16 -16 0) (16 16 32)
+/*
+QUAKED weapon_supershotgun (0 .5 .8) (-16 -16 0) (16 16 32)
 */
-
 void() weapon_supershotgun =
 {
 	precache_model ("progs/g_shot.mdl");
 	setmodel (self, "progs/g_shot.mdl");
 	self.weapon = IT_SUPER_SHOTGUN;
-	self.netname = "Double-barrelled Shotgun";
+	self.netname = "$qc_double_shotgun";
 	self.touch = weapon_touch;
 	setsize (self, '-16 -16 0', '16 16 56');
 	StartItem ();
@@ -540,7 +585,7 @@ void() weapon_nailgun =
 	precache_model ("progs/g_nail.mdl");
 	setmodel (self, "progs/g_nail.mdl");
 	self.weapon = IT_NAILGUN;
-	self.netname = "nailgun";
+	self.netname = "$qc_nailgun";
 	self.touch = weapon_touch;
 	setsize (self, '-16 -16 0', '16 16 56');
 	StartItem ();
@@ -554,7 +599,7 @@ void() weapon_supernailgun =
 	precache_model ("progs/g_nail2.mdl");
 	setmodel (self, "progs/g_nail2.mdl");
 	self.weapon = IT_SUPER_NAILGUN;
-	self.netname = "Super Nailgun";
+	self.netname = "$qc_super_nailgun";
 	self.touch = weapon_touch;
 	setsize (self, '-16 -16 0', '16 16 56');
 	StartItem ();
@@ -567,8 +612,8 @@ void() weapon_grenadelauncher =
 {
 	precache_model ("progs/g_rock.mdl");
 	setmodel (self, "progs/g_rock.mdl");
-	self.weapon = 3;
-	self.netname = "Grenade Launcher";
+	self.weapon = IT_GRENADE_LAUNCHER;
+	self.netname = "$qc_grenade_launcher";
 	self.touch = weapon_touch;
 	setsize (self, '-16 -16 0', '16 16 56');
 	StartItem ();
@@ -581,8 +626,8 @@ void() weapon_rocketlauncher =
 {
 	precache_model ("progs/g_rock2.mdl");
 	setmodel (self, "progs/g_rock2.mdl");
-	self.weapon = 3;
-	self.netname = "Rocket Launcher";
+	self.weapon = IT_ROCKET_LAUNCHER;
+	self.netname = "$qc_rocket_launcher";
 	self.touch = weapon_touch;
 	setsize (self, '-16 -16 0', '16 16 56');
 	StartItem ();
@@ -596,8 +641,8 @@ void() weapon_lightning =
 {
 	precache_model ("progs/g_light.mdl");
 	setmodel (self, "progs/g_light.mdl");
-	self.weapon = 3;
-	self.netname = "Thunderbolt";
+	self.weapon = IT_LIGHTNING;
+	self.netname = "$qc_thunderbolt";
 	self.touch = weapon_touch;
 	setsize (self, '-16 -16 0', '16 16 56');
 	StartItem ();
@@ -614,11 +659,12 @@ AMMO
 
 void() ammo_touch =
 {
-local entity	stemp;
-local float		best;
+	local entity	stemp;
+	local float		best;
 
 	if (other.classname != "player")
 		return;
+
 	if (other.health <= 0)
 		return;
 
@@ -634,26 +680,29 @@ local float		best;
 	{
 		if (other.ammo_shells >= 100)
 			return;
+
 		other.ammo_shells = other.ammo_shells + self.aflag;
 	}
 
-// spikes
+	// spikes
 	if (self.weapon == 2)
 	{
 		if (other.ammo_nails >= 200)
 			return;
+
 		other.ammo_nails = other.ammo_nails + self.aflag;
 	}
 
-//	rockets
+	//	rockets
 	if (self.weapon == 3)
 	{
 		if (other.ammo_rockets >= 100)
 			return;
+
 		other.ammo_rockets = other.ammo_rockets + self.aflag;
 	}
 
-//	cells
+	//	cells
 	if (self.weapon == 4)
 	{
 		if (other.ammo_cells >= 100)
@@ -663,16 +712,14 @@ local float		best;
 
 	bound_other_ammo ();
 
-	sprint (other, "You got the ");
-	sprint (other, self.netname);
-	sprint (other, "\n");
-// ammo touch sound
+	sprint(other, "$qc_got_item", self.netname);
+
+	// ammo touch sound
 	sound (other, CHAN_ITEM, "weapons/lock4.wav", 1, ATTN_NORM);
 	stuffcmd (other, "bf\n");
 
-// change to a better weapon if appropriate
-
-	if ( other.weapon == best )
+	// change to a better weapon if appropriate
+	if ( other.weapon == best && (W_WantsToChangeWeapon(other, 0, 1) == 1))
 	{
 		stemp = self;
 		self = other;
@@ -681,31 +728,35 @@ local float		best;
 		self = stemp;
 	}
 
-// if changed current ammo, update it
+	// if changed current ammo, update it
 	stemp = self;
 	self = other;
 	W_SetCurrentAmmo();
 	self = stemp;
 
-// remove it in single player, or setup for respawning in deathmatch
+	// remove it in single player, or setup for respawning in deathmatch
 	self.model = string_null;
 	self.solid = SOLID_NOT;
-	if (deathmatch == 1)
-		self.nextthink = time + 30;
+
+	if (deathmatch) {
+		if (deathmatch == 3 || deathmatch == 5) {
+			self.nextthink = time + 15;
+		} else if (deathmatch != 2) {
+			self.nextthink = time + 30;
+		}
+	}
+
 	self.think = SUB_regen;
 
 	activator = other;
 	SUB_UseTargets();				// fire all targets / killtargets
 };
 
-
-
-
 float WEAPON_BIG2 = 1;
 
-/*QUAKED item_shells (0 .5 .8) (0 0 0) (32 32 32) big
+/*
+QUAKED item_shells (0 .5 .8) (0 0 0) (32 32 32) big
 */
-
 void() item_shells =
 {
 	self.touch = ammo_touch;
@@ -722,15 +773,16 @@ void() item_shells =
 		setmodel (self, "maps/b_shell0.bsp");
 		self.aflag = 20;
 	}
+
 	self.weapon = 1;
-	self.netname = "shells";
+	self.netname = "$qc_shells";
 	setsize (self, '0 0 0', '32 32 56');
 	StartItem ();
 };
 
-/*QUAKED item_spikes (0 .5 .8) (0 0 0) (32 32 32) big
+/*
+QUAKED item_spikes (0 .5 .8) (0 0 0) (32 32 32) big
 */
-
 void() item_spikes =
 {
 	self.touch = ammo_touch;
@@ -747,15 +799,16 @@ void() item_spikes =
 		setmodel (self, "maps/b_nail0.bsp");
 		self.aflag = 25;
 	}
+
 	self.weapon = 2;
-	self.netname = "nails";
+	self.netname = "$qc_nails";
 	setsize (self, '0 0 0', '32 32 56');
 	StartItem ();
 };
 
-/*QUAKED item_rockets (0 .5 .8) (0 0 0) (32 32 32) big
+/*
+QUAKED item_rockets (0 .5 .8) (0 0 0) (32 32 32) big
 */
-
 void() item_rockets =
 {
 	self.touch = ammo_touch;
@@ -772,16 +825,16 @@ void() item_rockets =
 		setmodel (self, "maps/b_rock0.bsp");
 		self.aflag = 5;
 	}
+
 	self.weapon = 3;
-	self.netname = "rockets";
+	self.netname = "$qc_rockets";
 	setsize (self, '0 0 0', '32 32 56');
 	StartItem ();
 };
 
-
-/*QUAKED item_cells (0 .5 .8) (0 0 0) (32 32 32) big
+/*
+QUAKED item_cells (0 .5 .8) (0 0 0) (32 32 32) big
 */
-
 void() item_cells =
 {
 	self.touch = ammo_touch;
@@ -798,14 +851,16 @@ void() item_cells =
 		setmodel (self, "maps/b_batt0.bsp");
 		self.aflag = 6;
 	}
+
 	self.weapon = 4;
-	self.netname = "cells";
+	self.netname = "$qc_cells";
 	setsize (self, '0 0 0', '32 32 56');
 	StartItem ();
 };
 
 
-/*QUAKED item_weapon (0 .5 .8) (0 0 0) (32 32 32) shotgun rocket spikes big
+/*
+QUAKED item_weapon (0 .5 .8) (0 0 0) (32 32 32) shotgun rocket spikes big
 DO NOT USE THIS!!!! IT WILL BE REMOVED!
 */
 
@@ -832,7 +887,7 @@ void() item_weapon =
 			self.aflag = 20;
 		}
 		self.weapon = 1;
-		self.netname = "shells";
+		self.netname = "$qc_shells";
 	}
 
 	if (self.spawnflags & WEAPON_SPIKES)
@@ -850,7 +905,7 @@ void() item_weapon =
 			self.aflag = 20;
 		}
 		self.weapon = 2;
-		self.netname = "spikes";
+		self.netname = "$qc_spikes";
 	}
 
 	if (self.spawnflags & WEAPON_ROCKET)
@@ -868,7 +923,7 @@ void() item_weapon =
 			self.aflag = 5;
 		}
 		self.weapon = 3;
-		self.netname = "rockets";
+		self.netname = "$qc_rockets";
 	}
 
 	setsize (self, '0 0 0', '32 32 56');
@@ -886,19 +941,16 @@ KEYS
 
 void() key_touch =
 {
-local entity	stemp;
-local float		best;
-
 	if (other.classname != "player")
 		return;
+
 	if (other.health <= 0)
 		return;
+
 	if (other.items & self.items)
 		return;
 
-	sprint (other, "You got the ");
-	sprint (other, self.netname);
-	sprint (other,"\n");
+	sprint(other, "$qc_got_item", self.netname);
 
 	sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
 	stuffcmd (other, "bf\n");
@@ -917,17 +969,19 @@ local float		best;
 
 void() key_setsounds =
 {
-	if (world.worldtype == 0)
+	if (world.worldtype == WORLDTYPE_MEDIEVAL)
 	{
 		precache_sound ("misc/medkey.wav");
 		self.noise = "misc/medkey.wav";
 	}
-	if (world.worldtype == 1)
+
+	if (world.worldtype == WORLDTYPE_METAL)
 	{
 		precache_sound ("misc/runekey.wav");
 		self.noise = "misc/runekey.wav";
 	}
-	if (world.worldtype == 2)
+
+	if (world.worldtype == WORLDTYPE_BASE)
 	{
 		precache_sound2 ("misc/basekey.wav");
 		self.noise = "misc/basekey.wav";
@@ -947,24 +1001,25 @@ following:
 
 void() item_key1 =
 {
-	if (world.worldtype == 0)
+	if (world.worldtype == WORLDTYPE_MEDIEVAL)
 	{
 		precache_model ("progs/w_s_key.mdl");
 		setmodel (self, "progs/w_s_key.mdl");
-		self.netname = "silver key";
+		self.netname = "$qc_silver_key";
 	}
-	else if (world.worldtype == 1)
+	else if (world.worldtype == WORLDTYPE_METAL)
 	{
 		precache_model ("progs/m_s_key.mdl");
 		setmodel (self, "progs/m_s_key.mdl");
-		self.netname = "silver runekey";
+		self.netname = "$qc_silver_runekey";
 	}
-	else if (world.worldtype == 2)
+	else if (world.worldtype == WORLDTYPE_BASE)
 	{
 		precache_model2 ("progs/b_s_key.mdl");
 		setmodel (self, "progs/b_s_key.mdl");
-		self.netname = "silver keycard";
+		self.netname = "$qc_silver_keycard";
 	}
+
 	key_setsounds();
 	self.touch = key_touch;
 	self.items = IT_KEY1;
@@ -985,24 +1040,27 @@ following:
 
 void() item_key2 =
 {
-	if (world.worldtype == 0)
+	if (world.worldtype == WORLDTYPE_MEDIEVAL)
 	{
 		precache_model ("progs/w_g_key.mdl");
 		setmodel (self, "progs/w_g_key.mdl");
-		self.netname = "gold key";
+		self.netname = "$qc_gold_key";
 	}
-	if (world.worldtype == 1)
+
+	if (world.worldtype == WORLDTYPE_METAL)
 	{
 		precache_model ("progs/m_g_key.mdl");
 		setmodel (self, "progs/m_g_key.mdl");
-		self.netname = "gold runekey";
+		self.netname = "$qc_gold_runekey";
 	}
-	if (world.worldtype == 2)
+
+	if (world.worldtype == WORLDTYPE_BASE)
 	{
 		precache_model2 ("progs/b_g_key.mdl");
 		setmodel (self, "progs/b_g_key.mdl");
-		self.netname = "gold keycard";
+		self.netname = "$qc_gold_keycard";
 	}
+
 	key_setsounds();
 	self.touch = key_touch;
 	self.items = IT_KEY2;
@@ -1022,22 +1080,21 @@ END OF LEVEL RUNES
 
 void() sigil_touch =
 {
-local entity	stemp;
-local float		best;
 
 	if (other.classname != "player")
 		return;
+
 	if (other.health <= 0)
 		return;
 
-	centerprint (other, "You got the rune!");
+	centerprint(other, "$qc_got_rune");
 
 	sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
 	stuffcmd (other, "bf\n");
 	self.solid = SOLID_NOT;
 	self.model = string_null;
 	serverflags = serverflags | (self.spawnflags & 15);
-	self.classname = "";		// so rune doors won't find it
+	self.classname = string_null;		// so rune doors won't find it
 
 	activator = other;
 	SUB_UseTargets();				// fire all targets / killtargets
@@ -1061,16 +1118,19 @@ void() item_sigil =
 		precache_model ("progs/end1.mdl");
 		setmodel (self, "progs/end1.mdl");
 	}
+
 	if (self.spawnflags & 2)
 	{
 		precache_model2 ("progs/end2.mdl");
 		setmodel (self, "progs/end2.mdl");
 	}
+
 	if (self.spawnflags & 4)
 	{
 		precache_model2 ("progs/end3.mdl");
 		setmodel (self, "progs/end3.mdl");
 	}
+
 	if (self.spawnflags & 8)
 	{
 		precache_model2 ("progs/end4.mdl");
@@ -1095,24 +1155,20 @@ void() powerup_touch;
 
 void() powerup_touch =
 {
-local entity	stemp;
-local float		best;
 
 	if (other.classname != "player")
 		return;
+
 	if (other.health <= 0)
 		return;
 
-	sprint (other, "You got the ");
-	sprint (other, self.netname);
-	sprint (other,"\n");
+	sprint(other, "$qc_got_item", self.netname);
 
 	if (deathmatch)
 	{
 		self.mdl = self.model;
 
-		if ((self.classname == "item_artifact_invulnerability") ||
-			(self.classname == "item_artifact_invisibility"))
+		if ((self.classname == "item_artifact_invulnerability") || (self.classname == "item_artifact_invisibility"))
 			self.nextthink = time + 60*5;
 		else
 			self.nextthink = time + 60;
@@ -1126,7 +1182,7 @@ local float		best;
 	other.items = other.items | self.items;
 	self.model = string_null;
 
-// do the apropriate action
+	// do the apropriate action
 	if (self.classname == "item_artifact_envirosuit")
 	{
 		other.rad_time = 1;
@@ -1170,7 +1226,7 @@ void() item_artifact_invulnerability =
 	precache_sound ("items/protect3.wav");
 	self.noise = "items/protect.wav";
 	setmodel (self, "progs/invulner.mdl");
-	self.netname = "Pentagram of Protection";
+	self.netname = "$qc_pentagram_of_protection";
 	self.items = IT_INVULNERABILITY;
 	setsize (self, '-16 -16 -24', '16 16 32');
 	StartItem ();
@@ -1188,7 +1244,7 @@ void() item_artifact_envirosuit =
 	precache_sound ("items/suit2.wav");
 	self.noise = "items/suit.wav";
 	setmodel (self, "progs/suit.mdl");
-	self.netname = "Biosuit";
+	self.netname = "$qc_biosuit";
 	self.items = IT_SUIT;
 	setsize (self, '-16 -16 -24', '16 16 32');
 	StartItem ();
@@ -1208,7 +1264,7 @@ void() item_artifact_invisibility =
 	precache_sound ("items/inv3.wav");
 	self.noise = "items/inv1.wav";
 	setmodel (self, "progs/invisibl.mdl");
-	self.netname = "Ring of Shadows";
+	self.netname = "$qc_ring_of_shadows";
 	self.items = IT_INVISIBILITY;
 	setsize (self, '-16 -16 -24', '16 16 32');
 	StartItem ();
@@ -1228,7 +1284,7 @@ void() item_artifact_super_damage =
 	precache_sound ("items/damage3.wav");
 	self.noise = "items/damage.wav";
 	setmodel (self, "progs/quaddama.mdl");
-	self.netname = "Quad Damage";
+	self.netname = "$qc_quad_damage";
 	self.items = IT_QUAD;
 	setsize (self, '-16 -16 -24', '16 16 32');
 	StartItem ();
@@ -1246,34 +1302,35 @@ PLAYER BACKPACKS
 
 void() BackpackTouch =
 {
-	local string	s;
-	local	float	best, old, new;
-	local		entity	stemp;
-	local	float	acount;
+	local   float   best, old, new;
+	local           entity  stemp;
+	local   float   acount;
 
 	if (other.classname != "player")
 		return;
+
 	if (other.health <= 0)
 		return;
 
 	acount = 0;
-	sprint (other, "You get ");
+ 	sprint(other, "$qc_backpack_got");
 
 	if (self.items)
+	{
 		if ((other.items & self.items) == 0)
 		{
 			acount = 1;
-			sprint (other, "the ");
-			sprint (other, self.netname);
+			sprint(other, "{}", self.netname);
 		}
+ 	}
 
-// if the player was using his best weapon, change up to the new one if better
+	// if the player was using his best weapon, change up to the new one if better
 	stemp = self;
 	self = other;
 	best = W_BestWeapon();
 	self = stemp;
 
-// change weapons
+	// change weapons
 	other.ammo_shells = other.ammo_shells + self.ammo_shells;
 	other.ammo_nails = other.ammo_nails + self.ammo_nails;
 	other.ammo_rockets = other.ammo_rockets + self.ammo_rockets;
@@ -1282,61 +1339,72 @@ void() BackpackTouch =
 	new = self.items;
 	if (!new)
 		new = other.weapon;
+
 	old = other.items;
-	other.items = other.items | new;
+	other.items = other.items | self.items;
 
 	bound_other_ammo ();
+
 	if (self.ammo_shells)
 	{
 		if (acount)
 			sprint(other, ", ");
+
 		acount = 1;
-		s = ftos(self.ammo_shells);
-		sprint (other, s);
-		sprint (other, " shells");
+		sprint(other, "$qc_backpack_shells", ftos(self.ammo_shells));
 	}
+
 	if (self.ammo_nails)
 	{
 		if (acount)
 			sprint(other, ", ");
+
 		acount = 1;
-		s = ftos(self.ammo_nails);
-		sprint (other, s);
-		sprint (other, " nails");
+		sprint(other, "$qc_backpack_nails", ftos(self.ammo_nails));
 	}
+
 	if (self.ammo_rockets)
 	{
 		if (acount)
 			sprint(other, ", ");
+
 		acount = 1;
-		s = ftos(self.ammo_rockets);
-		sprint (other, s);
-		sprint (other, " rockets");
+		sprint(other, "$qc_backpack_rockets", ftos(self.ammo_rockets));
 	}
 	if (self.ammo_cells)
 	{
 		if (acount)
 			sprint(other, ", ");
+
 		acount = 1;
-		s = ftos(self.ammo_cells);
-		sprint (other, s);
-		sprint (other, " cells");
+		sprint(other, "$qc_backpack_cells", ftos(self.ammo_cells));
 	}
 
 	sprint (other, "\n");
-// backpack touch sound
+
+	// backpack touch sound
 	sound (other, CHAN_ITEM, "weapons/lock4.wav", 1, ATTN_NORM);
 	stuffcmd (other, "bf\n");
 
-// remove the backpack, change self to the player
 	remove(self);
 	self = other;
 
-// change to the weapon
-	if (!deathmatch)
-		self.weapon = new;
-	else
-		Deathmatch_Weapon (old, new);
+	// change to the weapon
+	if(W_WantsToChangeWeapon(other, old, other.items) == 1)
+	{
+		if (self.flags & FL_INWATER)
+		{
+			if (new != IT_LIGHTNING)
+			{
+				Deathmatch_Weapon (old, new);
+			}
+		}
+
+		else
+		{
+			Deathmatch_Weapon (old, new);
+		}
+	}
 
 	W_SetCurrentAmmo ();
 };
@@ -1348,38 +1416,56 @@ DropBackpack
 */
 void() DropBackpack =
 {
-	local entity	item;
+	local entity    item;
 
 	if (!(self.ammo_shells + self.ammo_nails + self.ammo_rockets + self.ammo_cells))
-		return;	// nothing in it
+		return; // nothing in it
 
 	item = spawn();
 	item.origin = self.origin - '0 0 24';
 
 	item.items = self.weapon;
+
+	item.classname = "item_backpack"; // added for bots.
+
 	if (item.items == IT_AXE)
-		item.netname = "Axe";
+		item.netname = "$qc_axe";
 	else if (item.items == IT_SHOTGUN)
-		item.netname = "Shotgun";
+		item.netname = "$qc_shotgun";
 	else if (item.items == IT_SUPER_SHOTGUN)
-		item.netname = "Double-barrelled Shotgun";
+		item.netname = "$qc_double_shotgun";
 	else if (item.items == IT_NAILGUN)
-		item.netname = "Nailgun";
+		item.netname = "$qc_nailgun";
 	else if (item.items == IT_SUPER_NAILGUN)
-		item.netname = "Super Nailgun";
+		item.netname = "$qc_super_nailgun";
 	else if (item.items == IT_GRENADE_LAUNCHER)
-		item.netname = "Grenade Launcher";
+		item.netname = "$qc_grenade_launcher";
 	else if (item.items == IT_ROCKET_LAUNCHER)
-		item.netname = "Rocket Launcher";
+		item.netname = "$qc_rocket_launcher";
 	else if (item.items == IT_LIGHTNING)
-		item.netname = "Thunderbolt";
-	else
-		item.netname = "";
+		item.netname = "$qc_thunderbolt";
 
 	item.ammo_shells = self.ammo_shells;
 	item.ammo_nails = self.ammo_nails;
 	item.ammo_rockets = self.ammo_rockets;
 	item.ammo_cells = self.ammo_cells;
+
+	// include some ammo in the backpack if the weapon is being given
+	if (item.ammo_shells < 5 && (item.items == IT_SHOTGUN || item.items == IT_SUPER_SHOTGUN)) {
+		item.ammo_shells = 5;
+	}
+
+	if (item.ammo_nails < 20 && (item.items == IT_NAILGUN || item.items == IT_SUPER_NAILGUN)) {
+		item.ammo_nails = 20;
+	}
+
+	if (item.ammo_rockets < 5 && (item.items == IT_GRENADE_LAUNCHER || item.items == IT_ROCKET_LAUNCHER)) {
+		item.ammo_rockets = 5;
+	}
+
+	if (item.ammo_cells < 15 && item.items == IT_LIGHTNING) {
+		item.ammo_cells = 15;
+	}
 
 	item.velocity_z = 300;
 	item.velocity_x = -100 + (random() * 200);
@@ -1392,6 +1478,6 @@ void() DropBackpack =
 	setsize (item, '-16 -16 0', '16 16 56');
 	item.touch = BackpackTouch;
 
-	item.nextthink = time + 120;	// remove after 2 minutes
+	item.nextthink = time + 120;    // remove after 2 minutes
 	item.think = SUB_Remove;
 };

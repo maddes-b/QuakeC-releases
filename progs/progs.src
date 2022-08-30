@@ -1,4 +1,4 @@
-//  Copyright (C) 1996-1997  Id Software, Inc.
+//  Copyright (C) 1996-2022 id Software LLC
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -17,10 +17,10 @@
 //  See file, 'COPYING', for details.
 
 // based on:
-// * re-GPLed versions of v1.06 and v1.05 beta by Maddes (assuming to follow id's intention), https://github.com/maddes-b/QuakeC-releases/
+// * compilation of all releases by Maddes, https://github.com/maddes-b/QuakeC-releases/
 // * minor cleanup by Maddes (trim trailing spaces), https://github.com/maddes-b/QuakeC-releases/
-// * v1.06 release by id Software, https://www.quaddicted.com/files/idgames2/idstuff/unsup/progs106.zip
-// * v1.05 beta release by id Software, https://github.com/Jason2Brownlee/QuakeOfficialArchive
+// * 2021 Rerelease Update 3 (QuakeEx v1.0.5039), https://github.com/id-Software/quake-rerelease-qc
+//   (re-created v1.06 release, some parts with errors, some parts better)
 // * v1.01 GPL release by id Software, https://github.com/id-Software/Quake-Tools/tree/master/qcc/v101qc
 
 ../progs.dat
@@ -30,6 +30,7 @@ subs.qc
 fight.qc
 ai.qc
 combat.qc
+itemnames.qc
 items.qc
 weapons.qc
 world.qc
@@ -58,3 +59,5 @@ monsters/rotfish.qc		// registered
 monsters/vore.qc		// registered
 monsters/enforcer.qc	// registered
 monsters/shub.qc		// registered
+
+bots/bot.qc				// bot support

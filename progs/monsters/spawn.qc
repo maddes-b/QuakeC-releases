@@ -1,4 +1,4 @@
-/*  Copyright (C) 1996-1997  Id Software, Inc.
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 /*
 ==============================================================================
 
@@ -127,17 +128,12 @@ void()	Tar_JumpTouch =
 	{
 		if (self.flags & FL_ONGROUND)
 		{	// jump randomly to not get hung up
-//dprint ("popjump\n");
-	self.touch = SUB_Null;
-	self.think = tbaby_run1;
-	self.movetype = MOVETYPE_STEP;
-	self.nextthink = time + 0.1;
-
-//			self.velocity_x = (random() - 0.5) * 600;
-//			self.velocity_y = (random() - 0.5) * 600;
-//			self.velocity_z = 200;
-//			self.flags = self.flags - FL_ONGROUND;
+			self.touch = SUB_Null;
+			self.think = tbaby_run1;
+			self.movetype = MOVETYPE_STEP;
+			self.nextthink = time + 0.1;
 		}
+
 		return;	// not on ground yet
 	}
 
@@ -152,12 +148,11 @@ void()	tbaby_fly1		=[	$fly1,	tbaby_fly2	] {};
 void()	tbaby_fly2		=[	$fly2,	tbaby_fly3	] {};
 void()	tbaby_fly3		=[	$fly3,	tbaby_fly4	] {};
 void()	tbaby_fly4		=[	$fly4,	tbaby_fly1	] {
-self.cnt = self.cnt + 1;
-if (self.cnt == 4)
-{
-//dprint ("spawn hop\n");
-tbaby_jump5 ();
-}
+	self.cnt = self.cnt + 1;
+
+	if (self.cnt == 4) {
+		tbaby_jump5();
+	}
 };
 
 void()	tbaby_jump1		=[	$jump1,	tbaby_jump2		] {ai_face();};
@@ -168,25 +163,25 @@ void()	tbaby_jump5		=[	$jump5,	tbaby_jump6		]
 {
 	self.movetype = MOVETYPE_BOUNCE;
 	self.touch = Tar_JumpTouch;
-	makevectors (self.angles);
+	makevectorsfixed(self.angles);
 	self.origin_z = self.origin_z + 1;
 	self.velocity = v_forward * 600 + '0 0 200';
 	self.velocity_z = self.velocity_z + random()*150;
+
 	if (self.flags & FL_ONGROUND)
 		self.flags = self.flags - FL_ONGROUND;
+
 	self.cnt = 0;
 };
+
 void()	tbaby_jump6	=[	$jump6,tbaby_fly1	] {};
 
 
 
 //=============================================================================
 
-void()	tbaby_die1	=[	$exp,		tbaby_die2	] {
-self.takedamage = DAMAGE_NO;
-};
-void()	tbaby_die2	=[	$exp,		tbaby_run1	]
-{
+void()	tbaby_die1	=[	$exp,		tbaby_die2	] {self.takedamage = DAMAGE_NO;};
+void()	tbaby_die2	=[	$exp,		tbaby_run1	] {
 	T_RadiusDamage (self, self, 120, world);
 
 	sound (self, CHAN_VOICE, "blob/death1.wav", 1, ATTN_NORM);
@@ -213,6 +208,7 @@ void() monster_tarbaby =
 		remove(self);
 		return;
 	}
+
 	precache_model2 ("progs/tarbaby.mdl");
 
 	precache_sound2 ("blob/death1.wav");
@@ -225,8 +221,13 @@ void() monster_tarbaby =
 
 	setmodel (self, "progs/tarbaby.mdl");
 
+	self.noise = "blob/sight1.wav";
+	self.netname = "$qc_spawn";
+	self.killstring = "$qc_ks_spawn";
+
 	setsize (self, '-16 -16 -24', '16 16 40');
 	self.health = 80;
+	self.max_health = 80;
 
 	self.th_stand = tbaby_stand1;
 	self.th_walk = tbaby_walk1;
@@ -234,6 +235,8 @@ void() monster_tarbaby =
 	self.th_missile = tbaby_jump1;
 	self.th_melee = tbaby_jump1;
 	self.th_die = tbaby_die1;
+	self.allowPathFind = TRUE;
+	self.combat_style = CS_MELEE;
 
 	walkmonster_start ();
 };

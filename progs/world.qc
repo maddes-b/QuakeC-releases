@@ -1,4 +1,4 @@
-/*  Copyright (C) 1996-1997  Id Software, Inc.
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
     See file, 'COPYING', for details.
 */
 
-void() InitBodyQue;
+void() InitBodyQueue;
 
 
 void() main =
@@ -187,27 +187,30 @@ World Types:
 2: base
 */
 //=======================
+float startingserverflags;
+
 void() worldspawn =
 {
+	startingserverflags = serverflags;
 	lastspawn = world;
-	InitBodyQue ();
+	InitBodyQueue ();
 
-// custom map attributes
+	// custom map attributes
 	if (self.model == "maps/e1m8.bsp")
 		cvar_set ("sv_gravity", "100");
 	else
 		cvar_set ("sv_gravity", "800");
 
-// the area based ambient sounds MUST be the first precache_sounds
+	// the area based ambient sounds MUST be the first precache_sounds
 
-// player precaches
+	// player precaches
 	W_Precache ();			// get weapon precaches
 
-// sounds used from C physics code
+	// sounds used from C physics code
 	precache_sound ("demon/dland2.wav");		// landing thud
 	precache_sound ("misc/h2ohit1.wav");		// landing splash
 
-// setup precaches allways needed
+	// setup precaches allways needed
 	precache_sound ("items/itembk2.wav");		// item respawn sound
 	precache_sound ("player/plyrjmp8.wav");		// player jump
 	precache_sound ("player/land.wav");			// player landing
@@ -353,10 +356,19 @@ void() worldspawn =
 	lightstyle(63, "a");
 };
 
-void() StartFrame =
-{
+void StartFrame() {
 	teamplay = cvar("teamplay");
 	skill = cvar("skill");
+	cheats_allowed = cvar("sv_cheats");
+
+    // save off a global here so it gets included in savegames
+    if (!campaign_valid) {
+        campaign_valid = TRUE;
+        campaign = cvar("campaign");
+    } else {
+        cvar_set("campaign", ftos(campaign));
+    }
+
 	framecount = framecount + 1;
 };
 
@@ -368,42 +380,40 @@ BODY QUE
 ==============================================================================
 */
 
-entity	bodyque_head;
+entity	bodyqueue_head;
 
-void() bodyque =
+void() bodyqueue =
 {	// just here so spawn functions don't complain after the world
-	// creates bodyques
+	// creates bodyqueues
 };
 
-void() InitBodyQue =
+void() InitBodyQueue =
 {
-	local entity	e;
-
-	bodyque_head = spawn();
-	bodyque_head.classname = "bodyque";
-	bodyque_head.owner = spawn();
-	bodyque_head.owner.classname = "bodyque";
-	bodyque_head.owner.owner = spawn();
-	bodyque_head.owner.owner.classname = "bodyque";
-	bodyque_head.owner.owner.owner = spawn();
-	bodyque_head.owner.owner.owner.classname = "bodyque";
-	bodyque_head.owner.owner.owner.owner = bodyque_head;
+	bodyqueue_head = spawn();
+	bodyqueue_head.classname = "bodyqueue";
+	bodyqueue_head.owner = spawn();
+	bodyqueue_head.owner.classname = "bodyqueue";
+	bodyqueue_head.owner.owner = spawn();
+	bodyqueue_head.owner.owner.classname = "bodyqueue";
+	bodyqueue_head.owner.owner.owner = spawn();
+	bodyqueue_head.owner.owner.owner.classname = "bodyqueue";
+	bodyqueue_head.owner.owner.owner.owner = bodyqueue_head;
 };
 
 
 // make a body que entry for the given ent so the ent can be
 // respawned elsewhere
-void(entity ent) CopyToBodyQue =
+void(entity ent) CopyToBodyQueue =
 {
-	bodyque_head.angles = ent.angles;
-	bodyque_head.model = ent.model;
-	bodyque_head.modelindex = ent.modelindex;
-	bodyque_head.frame = ent.frame;
-	bodyque_head.colormap = ent.colormap;
-	bodyque_head.movetype = ent.movetype;
-	bodyque_head.velocity = ent.velocity;
-	bodyque_head.flags = 0;
-	setorigin (bodyque_head, ent.origin);
-	setsize (bodyque_head, ent.mins, ent.maxs);
-	bodyque_head = bodyque_head.owner;
+	bodyqueue_head.angles = ent.angles;
+	bodyqueue_head.model = ent.model;
+	bodyqueue_head.modelindex = ent.modelindex;
+	bodyqueue_head.frame = ent.frame;
+	bodyqueue_head.colormap = ent.colormap;
+	bodyqueue_head.movetype = ent.movetype;
+	bodyqueue_head.velocity = ent.velocity;
+	bodyqueue_head.flags = 0;
+	setorigin (bodyqueue_head, ent.origin);
+	setsize (bodyqueue_head, ent.mins, ent.maxs);
+	bodyqueue_head = bodyqueue_head.owner;
 };

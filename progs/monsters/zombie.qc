@@ -1,4 +1,4 @@
-/*  Copyright (C) 1996-1997  Id Software, Inc.
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 /*
 ==============================================================================
 
@@ -108,16 +109,16 @@ void() zombie_walk6		=[	$walk6,		zombie_walk7	] {ai_walk(0);};
 void() zombie_walk7		=[	$walk7,		zombie_walk8	] {ai_walk(0);};
 void() zombie_walk8		=[	$walk8,		zombie_walk9	] {ai_walk(0);};
 void() zombie_walk9		=[	$walk9,		zombie_walk10	] {ai_walk(0);};
-void() zombie_walk10	=[	$walk10,	zombie_walk11	] {ai_walk(0);};
-void() zombie_walk11	=[	$walk11,	zombie_walk12	] {ai_walk(2);};
-void() zombie_walk12	=[	$walk12,	zombie_walk13	] {ai_walk(2);};
-void() zombie_walk13	=[	$walk13,	zombie_walk14	] {ai_walk(1);};
-void() zombie_walk14	=[	$walk14,	zombie_walk15	] {ai_walk(0);};
-void() zombie_walk15	=[	$walk15,	zombie_walk16	] {ai_walk(0);};
-void() zombie_walk16	=[	$walk16,	zombie_walk17	] {ai_walk(0);};
-void() zombie_walk17	=[	$walk17,	zombie_walk18	] {ai_walk(0);};
-void() zombie_walk18	=[	$walk18,	zombie_walk19	] {ai_walk(0);};
-void() zombie_walk19	=[	$walk19,	zombie_walk1	] {
+void() zombie_walk10		=[	$walk10,	zombie_walk11	] {ai_walk(0);};
+void() zombie_walk11		=[	$walk11,	zombie_walk12	] {ai_walk(2);};
+void() zombie_walk12		=[	$walk12,	zombie_walk13	] {ai_walk(2);};
+void() zombie_walk13		=[	$walk13,	zombie_walk14	] {ai_walk(1);};
+void() zombie_walk14		=[	$walk14,	zombie_walk15	] {ai_walk(0);};
+void() zombie_walk15		=[	$walk15,	zombie_walk16	] {ai_walk(0);};
+void() zombie_walk16		=[	$walk16,	zombie_walk17	] {ai_walk(0);};
+void() zombie_walk17		=[	$walk17,	zombie_walk18	] {ai_walk(0);};
+void() zombie_walk18		=[	$walk18,	zombie_walk19	] {ai_walk(0);};
+void() zombie_walk19		=[	$walk19,	zombie_walk1	] {
 ai_walk(0);
 if (random() < 0.2)
 	sound (self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_IDLE);};
@@ -159,6 +160,7 @@ void() ZombieGrenadeTouch =
 {
 	if (other == self.owner)
 		return;		// don't explode on owner
+
 	if (other.takedamage)
 	{
 		T_Damage (other, self, self.owner, 10 );
@@ -166,6 +168,7 @@ void() ZombieGrenadeTouch =
 		remove (self);
 		return;
 	}
+
 	sound (self, CHAN_WEAPON, "zombie/z_miss.wav", 1, ATTN_NORM);	// bounce sound
 	self.velocity = '0 0 0';
 	self.avelocity = '0 0 0';
@@ -179,22 +182,23 @@ ZombieFireGrenade
 */
 void(vector st) ZombieFireGrenade =
 {
-	local	entity missile, mpuff;
+	local	entity missile;
 	local	vector	org;
 
 	sound (self, CHAN_WEAPON, "zombie/z_shot1.wav", 1, ATTN_NORM);
 
 	missile = spawn ();
+	missile.classname = "zombie_grenade";
 	missile.owner = self;
 	missile.movetype = MOVETYPE_BOUNCE;
 	missile.solid = SOLID_BBOX;
 
-// calc org
+	// calc org
 	org = self.origin + st_x * v_forward + st_y * v_right + (st_z - 24) * v_up;
 
-// set missile speed
+	// set missile speed
 
-	makevectors (self.angles);
+	makevectorsfixed(self.angles);
 
 	missile.velocity = normalize(self.enemy.origin - org);
 	missile.velocity = missile.velocity * 600;
@@ -204,7 +208,7 @@ void(vector st) ZombieFireGrenade =
 
 	missile.touch = ZombieGrenadeTouch;
 
-// set missile duration
+	// set missile duration
 	missile.nextthink = time + 2.5;
 	missile.think = SUB_Remove;
 
@@ -223,10 +227,10 @@ void() zombie_atta6		=[	$atta6,		zombie_atta7	] {ai_face();};
 void() zombie_atta7		=[	$atta7,		zombie_atta8	] {ai_face();};
 void() zombie_atta8		=[	$atta8,		zombie_atta9	] {ai_face();};
 void() zombie_atta9		=[	$atta9,		zombie_atta10	] {ai_face();};
-void() zombie_atta10	=[	$atta10,	zombie_atta11	] {ai_face();};
-void() zombie_atta11	=[	$atta11,	zombie_atta12	] {ai_face();};
-void() zombie_atta12	=[	$atta12,	zombie_atta13	] {ai_face();};
-void() zombie_atta13	=[	$atta13,	zombie_run1	] {ai_face();ZombieFireGrenade('-10 -22 30');};
+void() zombie_atta10		=[	$atta10,	zombie_atta11	] {ai_face();};
+void() zombie_atta11		=[	$atta11,	zombie_atta12	] {ai_face();};
+void() zombie_atta12		=[	$atta12,	zombie_atta13	] {ai_face();};
+void() zombie_atta13		=[	$atta13,	zombie_run1	] {ai_face();ZombieFireGrenade('-10 -22 30');};
 
 void() zombie_attb1		=[	$attb1,		zombie_attb2	] {ai_face();};
 void() zombie_attb2		=[	$attb2,		zombie_attb3	] {ai_face();};
@@ -237,11 +241,11 @@ void() zombie_attb6		=[	$attb6,		zombie_attb7	] {ai_face();};
 void() zombie_attb7		=[	$attb7,		zombie_attb8	] {ai_face();};
 void() zombie_attb8		=[	$attb8,		zombie_attb9	] {ai_face();};
 void() zombie_attb9		=[	$attb9,		zombie_attb10	] {ai_face();};
-void() zombie_attb10	=[	$attb10,	zombie_attb11	] {ai_face();};
-void() zombie_attb11	=[	$attb11,	zombie_attb12	] {ai_face();};
-void() zombie_attb12	=[	$attb12,	zombie_attb13	] {ai_face();};
-void() zombie_attb13	=[	$attb13,	zombie_attb14	] {ai_face();};
-void() zombie_attb14	=[	$attb13,	zombie_run1	] {ai_face();ZombieFireGrenade('-10 -24 29');};
+void() zombie_attb10		=[	$attb10,	zombie_attb11	] {ai_face();};
+void() zombie_attb11		=[	$attb11,	zombie_attb12	] {ai_face();};
+void() zombie_attb12		=[	$attb12,	zombie_attb13	] {ai_face();};
+void() zombie_attb13		=[	$attb13,	zombie_attb14	] {ai_face();};
+void() zombie_attb14		=[	$attb13,	zombie_run1	] {ai_face();ZombieFireGrenade('-10 -24 29');};
 
 void() zombie_attc1		=[	$attc1,		zombie_attc2	] {ai_face();};
 void() zombie_attc2		=[	$attc2,		zombie_attc3	] {ai_face();};
@@ -252,9 +256,9 @@ void() zombie_attc6		=[	$attc6,		zombie_attc7	] {ai_face();};
 void() zombie_attc7		=[	$attc7,		zombie_attc8	] {ai_face();};
 void() zombie_attc8		=[	$attc8,		zombie_attc9	] {ai_face();};
 void() zombie_attc9		=[	$attc9,		zombie_attc10	] {ai_face();};
-void() zombie_attc10	=[	$attc10,	zombie_attc11	] {ai_face();};
-void() zombie_attc11	=[	$attc11,	zombie_attc12	] {ai_face();};
-void() zombie_attc12	=[	$attc12,	zombie_run1		] {ai_face();ZombieFireGrenade('-12 -19 29');};
+void() zombie_attc10		=[	$attc10,	zombie_attc11	] {ai_face();};
+void() zombie_attc11		=[	$attc11,	zombie_attc12	] {ai_face();};
+void() zombie_attc12		=[	$attc12,	zombie_run1		] {ai_face();ZombieFireGrenade('-12 -19 29');};
 
 void() zombie_missile =
 {
@@ -358,6 +362,7 @@ void() zombie_paine1	=[	$paine1,	zombie_paine2	] {
 sound (self, CHAN_VOICE, "zombie/z_pain.wav", 1, ATTN_NORM);
 self.health = 60;
 };
+
 void() zombie_paine2	=[	$paine2,	zombie_paine3	] {ai_pain(8);};
 void() zombie_paine3	=[	$paine3,	zombie_paine4	] {ai_pain(5);};
 void() zombie_paine4	=[	$paine4,	zombie_paine5	] {ai_pain(3);};
@@ -371,18 +376,20 @@ sound (self, CHAN_BODY, "zombie/z_fall.wav", 1, ATTN_NORM);
 self.solid = SOLID_NOT;
 };
 void() zombie_paine11	=[	$paine11,	zombie_paine12	] {self.nextthink = self.nextthink + 5;self.health = 60;};
-void() zombie_paine12	=[	$paine12,	zombie_paine13	]{
-// see if ok to stand up
-self.health = 60;
-sound (self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_IDLE);
-self.solid = SOLID_SLIDEBOX;
-if (!walkmove (0, 0))
-{
-	self.think = zombie_paine11;
-	self.solid = SOLID_NOT;
-	return;
-}
+void() zombie_paine12	=[	$paine12,	zombie_paine13	] {
+	// see if ok to stand up
+	self.health = 60;
+	sound (self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_IDLE);
+	self.solid = SOLID_SLIDEBOX;
+
+	if (!walkmove (0, 0))
+	{
+		self.think = zombie_paine11;
+		self.solid = SOLID_NOT;
+		return;
+	}
 };
+
 void() zombie_paine13	=[	$paine13,	zombie_paine14	] {};
 void() zombie_paine14	=[	$paine14,	zombie_paine15	] {};
 void() zombie_paine15	=[	$paine15,	zombie_paine16	] {};
@@ -442,7 +449,7 @@ void(entity attacker, float take) zombie_pain =
 	if (self.inpain == 2)
 		return;			// down on ground, so don't reset any counters
 
-// go down immediately if a big enough hit
+	// go down immediately if a big enough hit
 	if (take >= 25)
 	{
 		self.inpain = 2;
@@ -452,20 +459,20 @@ void(entity attacker, float take) zombie_pain =
 
 	if (self.inpain)
 	{
-// if hit again in next gre seconds while not in pain frames, definately drop
+		// if hit again in next gre seconds while not in pain frames, definately drop
 		self.pain_finished = time + 3;
 		return;			// currently going through an animation, don't change
 	}
 
 	if (self.pain_finished > time)
 	{
-// hit again, so drop down
+		// hit again, so drop down
 		self.inpain = 2;
 		zombie_paine1 ();
 		return;
 	}
 
-// gp into one of the fast pain animations
+	// gp into one of the fast pain animations
 	self.inpain = 1;
 
 	r = random();
@@ -513,8 +520,13 @@ void() monster_zombie =
 
 	setmodel (self, "progs/zombie.mdl");
 
+	self.noise = "zombie/z_idle.wav";
+	self.netname = "$qc_zombie";
+	self.killstring = "$qc_ks_zombie";
+
 	setsize (self, '-16 -16 -24', '16 16 40');
 	self.health = 60;
+	self.max_health = 60;
 
 	self.th_stand = zombie_stand1;
 	self.th_walk = zombie_walk1;
@@ -522,6 +534,8 @@ void() monster_zombie =
 	self.th_pain = zombie_pain;
 	self.th_die = zombie_die;
 	self.th_missile = zombie_missile;
+	self.allowPathFind = TRUE;
+	self.combat_style = CS_RANGED;
 
 	if (self.spawnflags & SPAWN_CRUCIFIED)
 	{

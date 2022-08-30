@@ -1,4 +1,4 @@
-/*  Copyright (C) 1996-1997  Id Software, Inc.
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,12 +18,10 @@
 */
 
 /*
-
 A monster is in fight mode if it thinks it can effectively attack its
 enemy.
 
 When it decides it can't attack, it goes into hunt mode.
-
 */
 
 float(float v) anglemod;
@@ -45,7 +43,7 @@ void(vector dest) ChooseTurn;
 void() ai_face;
 
 
-float	enemy_vis, enemy_infront, enemy_range;
+float	enemy_visible, enemy_infront, enemy_range;
 float	enemy_yaw;
 
 
@@ -53,7 +51,7 @@ void() knight_attack =
 {
 	local float		len;
 
-// decide if now is a good swing time
+	// decide if now is a good swing time
 	len = vlen(self.enemy.origin+self.enemy.view_ofs - (self.origin+self.view_ofs));
 
 	if (len<80)
@@ -80,7 +78,7 @@ float() CheckAttack =
 
 	targ = self.enemy;
 
-// see if any entities are in the way of the shot
+	// see if any entities are in the way of the shot
 	spot1 = self.origin + self.view_ofs;
 	spot2 = targ.origin + targ.view_ofs;
 
@@ -100,6 +98,7 @@ float() CheckAttack =
 				knight_attack ();
 			else
 				self.th_melee ();
+
 			return TRUE;
 		}
 	}
@@ -182,12 +181,11 @@ void() ai_charge_side =
 	local	vector	dtemp;
 	local	float	heading;
 
-// aim to the left of the enemy for a flyby
-
+	// aim to the left of the enemy for a flyby
 	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
 	ChangeYaw ();
 
-	makevectors (self.angles);
+	makevectorsfixed(self.angles);
 	dtemp = self.enemy.origin - 30*v_right;
 	heading = vectoyaw(dtemp - self.origin);
 
@@ -233,8 +231,10 @@ void() ai_melee_side =
 
 	if (vlen(delta) > 60)
 		return;
+
 	if (!CanDamage (self.enemy, self))
 		return;
+
 	ldmg = (random() + random() + random()) * 3;
 	T_Damage (self.enemy, self, self, ldmg);
 };
@@ -258,7 +258,7 @@ float() SoldierCheckAttack =
 
 	targ = self.enemy;
 
-// see if any entities are in the way of the shot
+	// see if any entities are in the way of the shot
 	spot1 = self.origin + self.view_ofs;
 	spot2 = targ.origin + targ.view_ofs;
 
@@ -291,6 +291,7 @@ float() SoldierCheckAttack =
 	{
 		self.th_missile ();
 		SUB_AttackFinished (1 + random());
+
 		if (random() < 0.3)
 			self.lefty = !self.lefty;
 
@@ -313,8 +314,6 @@ float() ShamCheckAttack =
 {
 	local vector	spot1, spot2;
 	local entity	targ;
-	local float		chance;
-	local float		enemy_yaw;
 
 	if (enemy_range == RANGE_MELEE)
 	{
@@ -328,12 +327,12 @@ float() ShamCheckAttack =
 	if (time < self.attack_finished)
 		return FALSE;
 
-	if (!enemy_vis)
+	if (!enemy_visible)
 		return FALSE;
 
 	targ = self.enemy;
 
-// see if any entities are in the way of the shot
+	// see if any entities are in the way of the shot
 	spot1 = self.origin + self.view_ofs;
 	spot2 = targ.origin + targ.view_ofs;
 
@@ -350,7 +349,7 @@ float() ShamCheckAttack =
 		return FALSE;	// don't have a clear shot
 	}
 
-// missile attack
+	// missile attack
 	if (enemy_range == RANGE_FAR)
 		return FALSE;
 
@@ -387,12 +386,12 @@ float() OgreCheckAttack =
 	if (time < self.attack_finished)
 		return FALSE;
 
-	if (!enemy_vis)
+	if (!enemy_visible)
 		return FALSE;
 
 	targ = self.enemy;
 
-// see if any entities are in the way of the shot
+	// see if any entities are in the way of the shot
 	spot1 = self.origin + self.view_ofs;
 	spot2 = targ.origin + targ.view_ofs;
 
@@ -406,7 +405,7 @@ float() OgreCheckAttack =
 		return FALSE;	// don't have a clear shot
 	}
 
-// missile attack
+	// missile attack
 	if (time < self.attack_finished)
 		return FALSE;
 
