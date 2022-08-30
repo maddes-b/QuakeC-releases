@@ -42,19 +42,19 @@ triggers.qc
 plats.qc
 misc.qc
 
-ogre.qc
-demon.qc
-shambler.qc
-knight.qc
-soldier.qc
-wizard.qc
-dog.qc
-zombie.qc
-boss.qc
+monsters/ogre.qc
+monsters/fiend.qc
+monsters/shambler.qc
+monsters/knight.qc
+monsters/grunt.qc
+monsters/scrag.qc
+monsters/rottweiler.qc
+monsters/zombie.qc
+monsters/chthon.qc
 
-tarbaby.qc		// registered
-hknight.qc		// registered
-fish.qc			// registered
-shalrath.qc		// registered
-enforcer.qc		// registered
-oldone.qc		// registered
+monsters/spawn.qc		// registered
+monsters/hellknight.qc	// registered
+monsters/rotfish.qc		// registered
+monsters/vore.qc		// registered
+monsters/enforcer.qc	// registered
+monsters/shub.qc		// registered
