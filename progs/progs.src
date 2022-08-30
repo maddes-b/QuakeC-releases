@@ -19,6 +19,7 @@
 // based on:
 // * compilation of all releases by Maddes, https://github.com/maddes-b/QuakeC-releases/
 // * minor cleanup by Maddes (trim trailing spaces), https://github.com/maddes-b/QuakeC-releases/
+// * 2021 Rerelease Update 4 (QuakeEx v1.0.5224), https://github.com/id-Software/quake-rerelease-qc
 // * 2021 Rerelease Update 3 (QuakeEx v1.0.5039), https://github.com/id-Software/quake-rerelease-qc
 //   (re-created v1.06 release, some parts with errors, some parts better)
 // * v1.01 GPL release by id Software, https://github.com/id-Software/Quake-Tools/tree/master/qcc/v101qc

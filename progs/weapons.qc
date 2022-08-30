@@ -1285,7 +1285,7 @@ void() ServerflagsCommand =
 
 void() QuadCheat =
 {
-	if (deathmatch || coop)
+	if (!cheats_allowed)
 		return;
 
 	self.super_time = 1;

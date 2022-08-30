@@ -362,9 +362,13 @@ float	SVC_INTERMISSION	= 30;
 float	SVC_FINALE			= 31;
 float	SVC_CDTRACK			= 32;
 float	SVC_SELLSCREEN		= 33;
-float 	SVC_SPAWNEDMONSTER	= 39;
+float	SVC_SPAWNEDMONSTER	= 39;
 float	SVC_ACHIEVEMENT		= 52;
-
+float	SVC_CHAT = 53;
+float	SVC_LEVELCOMPLETED = 54;
+float	SVC_BACKTOLOBBY = 55;
+float	SVC_LOCALSOUND = 56;
+float	SVC_PROMPT = 57;
 
 float	TE_SPIKE		= 0;
 float	TE_SUPERSPIKE	= 1;
@@ -378,6 +382,8 @@ float	TE_KNIGHTSPIKE	= 8;
 float	TE_LIGHTNING3	= 9;
 float	TE_LAVASPLASH	= 10;
 float	TE_TELEPORT		= 11;
+float	TE_EXPLOSION2   = 12;
+float	TE_BEAM			= 13;
 
 // sound channels
 // channel 0 never willingly overrides
@@ -416,7 +422,8 @@ float	MSG_ONE			= 1;		// reliable to one (msg_entity)
 float	MSG_ALL			= 2;		// reliable to all
 float	MSG_INIT		= 3;		// write to the init string
 
-// team numbers for Coop
+// team numbers
+float TEAM_NONE			= -1;
 float TEAM_MONSTERS		= 0;
 float TEAM_HUMANS		= 1;
 

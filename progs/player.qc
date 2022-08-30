@@ -520,7 +520,10 @@ void(string gibname, float dm) ThrowGib =
 	setmodel (new, gibname);
 	setsize (new, '0 0 0', '0 0 0');
 	new.velocity = VelocityForDamage (dm);
-	new.movetype = MOVETYPE_GIB;
+	new.movetype = MOVETYPE_BOUNCE;
+	if (cvar("pr_checkextension"))
+		if (checkextension("EX_MOVETYPE_GIB"))
+			new.movetype = MOVETYPE_GIB;
 	new.solid = SOLID_NOT;
 	new.avelocity_x = random()*600;
 	new.avelocity_y = random()*600;
@@ -537,7 +540,10 @@ void(string gibname, float dm) ThrowHead =
 	setmodel (self, gibname);
 	self.frame = 0;
 	self.nextthink = -1;
-	self.movetype = MOVETYPE_GIB;
+	self.movetype = MOVETYPE_BOUNCE;
+	if (cvar("pr_checkextension"))
+		if (checkextension("EX_MOVETYPE_GIB"))
+			self.movetype = MOVETYPE_GIB;
 	self.takedamage = DAMAGE_NO;
 	self.solid = SOLID_NOT;
 	self.view_ofs = '0 0 8';

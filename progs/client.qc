@@ -726,6 +726,7 @@ void() PutClientInServer =
 	self.healthrot_nextcheck = 0;
 	self.fired_weapon = 0; // [NDS] haleyjd
 	self.took_damage = 0;  // [NDS] haleyjd
+	self.team = TEAM_NONE;
 
 	if ( coop ) {
 		self.team = TEAM_HUMANS;
