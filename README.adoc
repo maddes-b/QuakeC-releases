@@ -58,6 +58,19 @@ Additionally re-licensing v1.05 beta and v1.06 to GPLv2 assuming to follow id's 
    No license specified.
 
 
+== hipnotic (Mission Pack #1 "Scourge of Armagon")
+
+The game logic of the first mission pack named "Scourge of Armagon" by Hipnotic Interactive, Inc. The "hipnotic-original" branch just shows the original history of the Quake 1 mission pack game logic. +
+Additionally re-licensing to GPLv2 assuming to follow id's and Hipnotic's intentions and reducing delta.
+
+=== Known Versions (Releases with date and SHA256)
+
+* v1.00
+** 1997-03-14: `53b1e0f9f43cbaafdbb42ccdec93a4bad69ca0bfba92eb188a345912cccee38c *ALL.ZIP` +
+   contains `c12e9f57530e60ced275fd72689794a1cc16426c2ca697c0fa38d3afa7379c1d *QC.ZIP` +
+   No license specified.
+
+
 == Known Bugs in Game Logics
 
 {url-qip}[Quake Info Pool] (short: QIP) has a list of known bugs of the Quake 1 main game logics and maps (based on v1.06), plus engine (based on v1.09).
