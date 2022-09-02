@@ -1,0 +1,54 @@
+= Changelog for hipnotic (mission pack #1 "Scourge of Armagon")
+
+== v1.00
+
+First release.
+
+Logic changes in:
+
+* ai.qc
+* client.qc
+* combat.qc
+* defs.qc
+* enforcer.qc
+* fight.qc
+* fish.qc
+* items.qc
+* misc.qc
+* monsters.qc
+* ogre.qc
+* player.qc
+* progs.src
+* shalrath.qc
+* triggers.qc
+* weapons.qc
+* world.qc
+* zombie.qc
+
+New files:
+
+* hip_brk.qc
+* hip_expl.qc
+* hip_part.qc
+* hip_push.qc
+* hiparma.qc
+* hipclock.qc
+* hipcount.qc
+* hipdecoy.qc
+* hipdefs.qc
+* hipgrem.qc
+* hipholes.qc
+* hipitems.qc
+* hipmisc.qc
+* hipmodel.qc
+* hipquake.qc
+* hiprot.qc
+* hiprubbl.qc
+* hipscrge.qc
+* hipspawn.qc
+* hipspike.qc
+* hipspr.qc
+* hipsubs.qc
+* hiptrain.qc
+* hiptrig.qc
+* hipwater.qc
