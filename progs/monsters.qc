@@ -1,4 +1,5 @@
 /*  Copyright (C) 1996-1997  Id Software, Inc.
+    Copyright (C) 1996-1997  Hipnotic Interactive, Inc.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -142,6 +143,7 @@ void() walkmonster_start =
 // delay drop to floor to make sure all doors have been spawned
 // spread think times so they don't all happen at same time
 	self.nextthink = self.nextthink + random()*0.5;
+   self.flags = self.flags | FL_MONSTER;
 	self.think = walkmonster_start_go;
 	total_monsters = total_monsters + 1;
 };
@@ -195,6 +197,7 @@ void() flymonster_start =
 {
 // spread think times so they don't all happen at same time
 	self.nextthink = self.nextthink + random()*0.5;
+   self.flags = self.flags | FL_MONSTER;
 	self.think = flymonster_start_go;
 	total_monsters = total_monsters + 1;
 };
@@ -209,7 +212,8 @@ void() swimmonster_start_go =
 	}
 
 	self.takedamage = DAMAGE_AIM;
-	total_monsters = total_monsters + 1;
+//MED
+//	total_monsters = total_monsters + 1;
 
 	self.ideal_yaw = self.angles * '0 1 0';
 	if (!self.yaw_speed)
@@ -246,6 +250,7 @@ void() swimmonster_start_go =
 void() swimmonster_start =
 {
 // spread think times so they don't all happen at same time
+   self.flags = self.flags | FL_MONSTER;
 	self.nextthink = self.nextthink + random()*0.5;
 	self.think = swimmonster_start_go;
 	total_monsters = total_monsters + 1;

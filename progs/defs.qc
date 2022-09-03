@@ -1,4 +1,5 @@
 /*  Copyright (C) 1996-1997  Id Software, Inc.
+    Copyright (C) 1996-1997  Hipnotic Interactive, Inc.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -318,7 +319,8 @@ float	IT_CELLS				= 2048;
 float	IT_ARMOR1				= 8192;
 float	IT_ARMOR2				= 16384;
 float	IT_ARMOR3				= 32768;
-float	IT_SUPERHEALTH			= 65536;
+//MED 11/02/96 added new hip weapon removed SUPERHEALTH
+//float	IT_SUPERHEALTH			= 65536;
 
 float	IT_KEY1					= 131072;
 float	IT_KEY2					= 262144;

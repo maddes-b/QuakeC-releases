@@ -1,4 +1,5 @@
 //  Copyright (C) 1996-1997  Id Software, Inc.
+//  Copyright (C) 1996-1997  Hipnotic Interactive, Inc.
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -17,8 +18,9 @@
 //  See file, 'COPYING', for details.
 
 // based on:
-// * re-GPLed versions of v1.06 and v1.05 beta by Maddes (assuming to follow id's intention), https://github.com/maddes-b/QuakeC-releases/
+// * re-GPLed versions of v1.00 mission pack #1, v1.06 and v1.05 beta by Maddes (assuming to follow Hipnotic's and id's intention), https://github.com/maddes-b/QuakeC-releases/
 // * minor cleanup by Maddes (trim trailing spaces), https://github.com/maddes-b/QuakeC-releases/
+// * v1.00 mission pack #1 release by Hipnotic Interactive, Inc., https://www.gamers.org/pub/games/idgames2/more_idstuff/hipnotic/all.zip
 // * v1.06 release by id Software, https://www.quaddicted.com/files/idgames2/idstuff/unsup/progs106.zip
 // * v1.05 beta release by id Software, https://github.com/Jason2Brownlee/QuakeOfficialArchive
 // * v1.01 GPL release by id Software, https://github.com/id-Software/Quake-Tools/tree/master/qcc/v101qc
@@ -26,6 +28,7 @@
 ../progs.dat
 
 defs.qc
+hipdefs.qc   //JIM
 subs.qc
 fight.qc
 ai.qc
@@ -58,3 +61,28 @@ fish.qc			// registered
 shalrath.qc		// registered
 enforcer.qc		// registered
 oldone.qc		// registered
+
+// Hipnotic Quake additions
+
+hipsubs.qc
+hip_brk.qc
+hiptrain.qc
+hip_expl.qc
+hipquake.qc
+hipcount.qc
+hipitems.qc
+hiprubbl.qc
+hip_push.qc
+hip_part.qc
+hipspawn.qc
+hipgrem.qc
+hiparma.qc
+hipspike.qc
+hiprot.qc
+hipscrge.qc
+hipholes.qc
+hipclock.qc
+hiptrig.qc
+hipmisc.qc
+hipwater.qc
+hipdecoy.qc

@@ -1,4 +1,5 @@
 /*  Copyright (C) 1996-1997  Id Software, Inc.
+    Copyright (C) 1996-1997  Hipnotic Interactive, Inc.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -82,6 +83,17 @@ void() multi_trigger =
 		self.nextthink = time + 0.1;
 		self.think = SUB_Remove;
 	}
+//MED 12/01/96 added cnt stuff
+   if (self.cnt > 0)
+      {
+      self.cnt = self.cnt - 1;
+      if (self.cnt == 0)
+         {
+         self.touch = SUB_Null;
+         self.nextthink = time + 0.1;
+         self.think = SUB_Remove;
+         }
+      }
 };
 
 void() multi_killed =
@@ -113,10 +125,12 @@ void() multi_touch =
 	multi_trigger ();
 };
 
+//MED 12/01/96 added count field
 /*QUAKED trigger_multiple (.5 .5 .5) ? notouch
 Variable sized repeatable trigger.  Must be targeted at one or more entities.  If "health" is set, the trigger must be killed to activate each time.
 If "delay" is set, the trigger waits some time after activating before firing.
 "wait" : Seconds between triggerings. (.2 default)
+"cnt" how many times it can be triggered (infinite default)
 If notouch is set, the trigger is only fired by other entities, not by touching.
 NOTOUCH has been obsoleted by trigger_relay!
 sounds
@@ -167,6 +181,9 @@ void() trigger_multiple =
 			self.touch = multi_touch;
 		}
 	}
+//MED 12/01/96 added cnt stuff
+   if (self.cnt == 0)
+      self.cnt = -1;
 };
 
 
@@ -553,6 +570,21 @@ void() trigger_onlyregistered =
 
 //============================================================================
 
+//JIM
+void( entity ent, float amount ) hurt_setdamage =
+   {
+   ent.dmg = amount;
+   if ( !amount )
+      {
+      ent.solid = SOLID_NOT;
+      }
+   else
+      {
+      ent.solid = SOLID_TRIGGER;
+      }
+   ent.nextthink = -1;
+   };
+
 void() hurt_on =
 {
 	self.solid = SOLID_TRIGGER;
@@ -567,15 +599,28 @@ void() hurt_touch =
 		T_Damage (other, self, self, self.dmg);
 		self.think = hurt_on;
 		self.nextthink = time + 1;
+//MED 12/01/96 added count stuff
+      if (self.cnt > 0)
+         {
+         self.cnt = self.cnt - 1;
+         if (self.cnt == 0)
+            {
+            self.touch = SUB_Null;
+            self.nextthink = time + 0.1;
+            self.think = SUB_Remove;
+            }
+         }
 	}
 
 	return;
 };
 
+//MED 12/01/96 added count field
 /*QUAKED trigger_hurt (.5 .5 .5) ?
 Any object touching this will be hurt
 set dmg to damage amount
 defalt dmg = 5
+"cnt" default infinite, how many times to trigger
 */
 void() trigger_hurt =
 {
@@ -583,6 +628,9 @@ void() trigger_hurt =
 	self.touch = hurt_touch;
 	if (!self.dmg)
 		self.dmg = 5;
+//MED 12/01/96 added count stuff
+   if (self.cnt == 0)
+      self.cnt = -1;
 };
 
 //============================================================================
@@ -639,12 +687,25 @@ void() trigger_monsterjump_touch =
 	other.flags = other.flags - FL_ONGROUND;
 
 	other.velocity_z = self.height;
+//MED 12/01/96 added count stuff
+   if (self.cnt>0)
+      {
+      self.cnt = self.cnt - 1;
+      if (self.cnt == 0)
+         {
+         self.touch = SUB_Null;
+         self.nextthink = time + 0.1;
+         self.think = SUB_Remove;
+         }
+      }
 };
 
+//MED 12/01/96 added count field
 /*QUAKED trigger_monsterjump (.5 .5 .5) ?
 Walking monsters that touch this will jump in the direction of the trigger's angle
 "speed" default to 200, the speed thrown forward
 "height" default to 200, the speed thrown upwards
+"cnt" default infinite, how many times to trigger
 */
 void() trigger_monsterjump =
 {
@@ -654,6 +715,9 @@ void() trigger_monsterjump =
 		self.height = 200;
 	if (self.angles == '0 0 0')
 		self.angles = '0 360 0';
+//MED 12/01/96 added count stuff
+   if (self.cnt == 0)
+      self.cnt = -1;
 	InitTrigger ();
 	self.touch = trigger_monsterjump_touch;
 };

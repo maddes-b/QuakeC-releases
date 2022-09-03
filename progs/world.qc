@@ -1,4 +1,5 @@
 /*  Copyright (C) 1996-1997  Id Software, Inc.
+    Copyright (C) 1996-1997  Hipnotic Interactive, Inc.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,6 +19,8 @@
 */
 
 void() InitBodyQue;
+//JIM
+void() InitBulletHoles;
 
 
 void() main =
@@ -122,6 +125,9 @@ void() main =
 	precache_sound ("ambience/water1.wav");
 	precache_sound ("ambience/wind2.wav");
 
+//MED
+//Added Hipnotic Pack
+/*
 // shareware
 	precache_file ("maps/start.bsp");
 
@@ -170,6 +176,28 @@ void() main =
 	precache_file2 ("maps/dm4.bsp");
 	precache_file2 ("maps/dm5.bsp");
 	precache_file2 ("maps/dm6.bsp");
+*/
+   precache_file ("maps/start.bsp");
+
+   precache_file ("maps/hip1m1.bsp");
+   precache_file ("maps/hip1m2.bsp");
+   precache_file ("maps/hip1m3.bsp");
+   precache_file ("maps/hip1m4.bsp");
+   precache_file ("maps/hip1m5.bsp");
+   precache_file ("maps/hip2m1.bsp");
+   precache_file ("maps/hip2m2.bsp");
+   precache_file ("maps/hip2m3.bsp");
+   precache_file ("maps/hip2m4.bsp");
+   precache_file ("maps/hip2m5.bsp");
+   precache_file ("maps/hip2m6.bsp");
+   precache_file ("maps/hip3m1.bsp");
+   precache_file ("maps/hip3m2.bsp");
+   precache_file ("maps/hip3m3.bsp");
+   precache_file ("maps/hip3m4.bsp");
+   precache_file ("maps/hipdm1.bsp");
+   precache_file ("maps/hipend.bsp");
+   precache_file ("maps/zoo.bsp");
+   precache_file ("maps/mark.bsp");
 };
 
 
@@ -191,6 +219,9 @@ void() worldspawn =
 {
 	lastspawn = world;
 	InitBodyQue ();
+
+//JIM
+   InitBulletHoles();
 
 // custom map attributes
 	if (self.model == "maps/e1m8.bsp")
@@ -272,9 +303,24 @@ void() worldspawn =
 	precache_sound ("misc/water1.wav");			// swimming
 	precache_sound ("misc/water2.wav");			// swimming
 
+//MED 10/21/96 added flies sound
+   precache_sound ("misc/flys.wav");
+//MED 01/13/97 added explosion sounds
+   precache_sound ("misc/shortexp.wav");
+   precache_sound ("misc/longexpl.wav");
+   precache_sound ("misc/foot1.wav");
+   precache_sound ("misc/foot2.wav");
+   precache_sound ("misc/foot3.wav");
+   precache_sound ("misc/foot4.wav");
+   precache_sound ("misc/foot5.wav");
+   precache_sound ("misc/foot6.wav");
+   precache_sound ("misc/foot7.wav");
+
 	precache_model ("progs/player.mdl");
 	precache_model ("progs/eyes.mdl");
 	precache_model ("progs/h_player.mdl");
+//MED 12/03/96 added player with hammer
+   precache_model ("progs/playham.mdl");
 	precache_model ("progs/gib1.mdl");
 	precache_model ("progs/gib2.mdl");
 	precache_model ("progs/gib3.mdl");
@@ -289,11 +335,18 @@ void() worldspawn =
 	precache_model ("progs/v_shot2.mdl");
 	precache_model ("progs/v_nail2.mdl");
 	precache_model ("progs/v_rock2.mdl");
+//MED 10/31/96 added precache for hip view models
+   precache_model ("progs/v_laserg.mdl");
+   precache_model ("progs/v_hammer.mdl");
+   precache_model ("progs/v_prox.mdl");
+   precache_model ("progs/proxbomb.mdl");
 
 	precache_model ("progs/bolt.mdl");		// for lightning gun
 	precache_model ("progs/bolt2.mdl");		// for lightning gun
 	precache_model ("progs/bolt3.mdl");		// for boss shock
 	precache_model ("progs/lavaball.mdl");	// for testing
+//MED 10/18/96 added precache for laser cannon
+   precache_model ("progs/lasrspik.mdl");
 
 	precache_model ("progs/missile.mdl");
 	precache_model ("progs/grenade.mdl");
@@ -351,6 +404,14 @@ void() worldspawn =
 
 	// 63 testing
 	lightstyle(63, "a");
+
+//JIM
+	StopEarthQuake();
+//MED
+   if (cvar("crosshair") == 2)
+      footsteps = 1;
+   else
+      footsteps = 0;
 };
 
 void() StartFrame =

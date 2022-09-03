@@ -1,4 +1,5 @@
 /*  Copyright (C) 1996-1997  Id Software, Inc.
+    Copyright (C) 1996-1997  Hipnotic Interactive, Inc.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -86,7 +87,8 @@ float() CheckAttack =
 
 	traceline (spot1, spot2, FALSE, self);
 
-	if (trace_ent != targ)
+//MED 10/17/96 added charmed stuff
+	if ((trace_ent != targ) && (!self.charmed))
 		return FALSE;		// don't have a clear shot
 
 	if (trace_inopen && trace_inwater)

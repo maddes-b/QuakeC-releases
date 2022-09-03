@@ -1,4 +1,5 @@
 /*  Copyright (C) 1996-1997  Id Software, Inc.
+    Copyright (C) 1996-1997  Hipnotic Interactive, Inc.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -251,7 +252,8 @@ void() monster_shalrath =
 	self.th_pain = shalrath_pain;
 	self.th_missile = shal_attack1;
 
-	self.think = walkmonster_start;
+   walkmonster_start();
+//	self.think = walkmonster_start;
 	self.nextthink = time + 0.1 + random ()*0.1;
 
 };

@@ -1,4 +1,5 @@
 /*  Copyright (C) 1996-1997  Id Software, Inc.
+    Copyright (C) 1996-1997  Hipnotic Interactive, Inc.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,7 +26,7 @@ void() player_stand1;
 void (vector org) spawn_tfog;
 void (vector org, entity death_owner) spawn_tdeath;
 
-float	modelindex_eyes, modelindex_player;
+float modelindex_eyes, modelindex_player, modelindex_hammer;
 
 /*
 =============================================================================
@@ -56,9 +57,15 @@ void() SetChangeParms =
 		return;
 	}
 
+//JIM
 // remove items
 	self.items = self.items - (self.items &
 	(IT_KEY1 | IT_KEY2 | IT_INVISIBILITY | IT_INVULNERABILITY | IT_SUIT | IT_QUAD) );
+//MED
+   self.items2 = self.items2 - (self.items2 &
+   (HIP_IT_WETSUIT | HIP_IT_EMPATHY_SHIELDS ) );
+//MED
+   self.gravity = 1.0;
 
 // cap super health
 	if (self.health > 100)
@@ -94,11 +101,15 @@ void() SetNewParms =
 
 void() DecodeLevelParms =
 {
-	if (serverflags)
-	{
-		if (world.model == "maps/start.bsp")
-			SetNewParms ();		// take away all stuff on starting new episode
-	}
+//HIPNOTIC
+   if (world.model == "maps/start.bsp")
+      SetNewParms ();      // take away all stuff on starting new episode
+   if (world.model == "maps/hip1m1.bsp")
+      SetNewParms ();      // take away all stuff on starting new episode
+   if (world.model == "maps/hip2m1.bsp")
+      SetNewParms ();      // take away all stuff on starting new episode
+   if (world.model == "maps/hip3m1.bsp")
+      SetNewParms ();      // take away all stuff on starting new episode
 
 	self.items = parm1;
 	self.health = parm2;
@@ -227,6 +238,110 @@ void() ExitIntermission =
 			return;
 		}
 
+//HIPNOTIC
+      if (world.model == "maps/hip1m4.bsp")
+      {
+			WriteByte (MSG_ALL, SVC_CDTRACK);
+         WriteByte (MSG_ALL, 6);
+			WriteByte (MSG_ALL, 3);
+			WriteByte (MSG_ALL, SVC_FINALE);
+/*
+         **************************************
+         Deep within the bowels of the
+         Research Facility, you discover the
+         passage that the followers of Quake
+         have used to enter our world.
+         The bastards used some type of
+         gigantic teleporter to overload
+         one of our own slipgates!  As long as
+         this portal exists, Earth will never
+         be safe from Quake's cruel minions.
+
+         If you can find the source of the
+         portal's power, you can shut it
+         down--possibly forever!  With only a
+         moment's consideration for your own
+         safety, you re-enter the dark domain,
+         knowing Hell would be a better fate
+         than experiencing the reign of Quake.
+*/
+         WriteString (MSG_ALL, "Deep within the bowels of the\nResearch Facility, you discover the\npassage that the followers of Quake\nhave used to enter our world.\nThe bastards used some type of\ngigantic teleporter to overload\none of our own slipgates!  As long as\nthis portal exists, Earth will never\nbe safe from Quake's cruel minions." );
+         //WriteString (MSG_ALL, "If you can find the source of the\nportal's power, you can shut it\ndown--possibly forever!  With only a\nmoment's consideration for your own\nsafety, you re-enter the dark domain,\nknowing Hell would be a better fate\nthan experiencing the reign of Quake." );
+         return;
+		}
+		else if (world.model == "maps/hip2m5.bsp")
+		{
+/*
+         **************************************
+         After destroying the power generator,
+         you pass beyond the gate of Mortum's
+         Keep.  A wave of nausea suddenly flows
+         over you and you find yourself cast
+         out into a liquid void.  You float
+         lifelessly, yet aware, in a lavender
+         sea of energy.
+
+         After what seems like an eternity,
+         you feel the presence of a diabolical
+         intelligence.  You are held helpless
+         for a moment as your mind is open to
+         that of Armagon--Quake's General and
+         master of this realm.  Recognizing
+         you as the one who foiled his
+         attempt to conquer Earth, a hellish
+         howl fills your mind and blots out
+         all consciousness.  When you awake,
+         you find yourself on the shores of
+         reality, but in a time and place
+         unknown to you.
+*/
+         WriteByte (MSG_ALL, SVC_CDTRACK);
+         WriteByte (MSG_ALL, 6);
+			WriteByte (MSG_ALL, 3);
+
+			WriteByte (MSG_ALL, SVC_FINALE);
+         WriteString (MSG_ALL, "After destroying the power generator,\nyou pass beyond the gate of Mortum's\nKeep.  A wave of nausea suddenly flows\nover you and you find yourself cast\nout into a liquid void.  You float\nlifelessly, yet aware, in a lavender\nsea of energy." );
+         //WriteString (MSG_ALL, "After what seems like an eternity,\nyou feel the presence of a diabolical\nintelligence.  You are held helpless\nfor a moment as your mind is open to\nthat of Armagon--Quake's General and\nmaster of this realm.  Recognizing\nyou as the one who foiled his\nattempts to conquer Earth, a hellish\nhowl fills your mind and blots out\nall consciousness.  When you awake,\nyou find yourself on the shores of\nreality, but in a time and place\nunknown to you." );
+         return;
+		}
+      else if (world.model == "maps/hipend.bsp")
+      {
+/*
+         **************************************
+         After the last echoes of Armagon's
+         death yell fade away, you breathe a
+         heavy sigh of relief.  With the loss
+         of his magic, Armagon's fortress
+         begins to collapse.  The rift he
+         created to send his grisly troops
+         through time slowly closes and seals
+         itself forever.  In the chaos that
+         ensues, a wall collapses, revealing
+         one remaining time portal.  With your
+         chances to escape rapidly growing
+         slim, you race for the portal,
+         mindless of your destination.  In a
+         flash of light, you find yourself
+         back at Command HQ, safe and sound.
+
+         Congratulations!  You are victorious!
+         The minions of Quake have once again
+         fallen before your mighty hand.
+         Is this the last you will see of
+         Quake's hellions?
+
+         Only time will tell...
+*/
+         WriteByte (MSG_ALL, SVC_CDTRACK);
+         WriteByte (MSG_ALL, 2);
+			WriteByte (MSG_ALL, 3);
+
+			WriteByte (MSG_ALL, SVC_FINALE);
+         WriteString (MSG_ALL, "After the last echoes of Armagon's\ndeath yell fade away, you breathe a\nheavy sigh of relief.  With the loss\nof his magic, Armagon's fortress\nbegins to collapse.  The rift he\ncreated to send his grisly troops\nthrough time slowly closes and seals\nitself forever.  In the chaos that\nensues, a wall collapses, revealing\none remaining time portal.  With your\nchances to escape rapidly growing\nslim, you race for the portal,\nmindless of your destination.  In a\nflash of light, you find yourself\nback at Command HQ, safe and sound." );
+         //WriteString (MSG_ALL, "Congratulations!  You are victorious!\nThe minions of Quake have once again\nfallen before your mighty hand.\nIs this the last you will see of\nQuake's hellions?\n\nOnly time will tell..." );
+         //intermission_exittime = time + 10000000;  // never allow exit
+			return;
+		}
 		GotoNextMap();
 	}
 
@@ -245,6 +360,26 @@ void() ExitIntermission =
 			return;
 		}
 
+//HIPNOTIC
+      if (world.model == "maps/hip1m4.bsp")
+      {
+         WriteByte (MSG_ALL, SVC_FINALE);
+         WriteString (MSG_ALL, "If you can find the source of the\nportal's power, you can shut it\ndown--possibly forever!  With only a\nmoment's consideration for your own\nsafety, you re-enter the dark domain,\nknowing Hell would be a better fate\nthan experiencing the reign of Quake." );
+         return;
+		}
+		else if (world.model == "maps/hip2m5.bsp")
+		{
+         WriteByte (MSG_ALL, SVC_FINALE);
+         WriteString (MSG_ALL, "After what seems like an eternity,\nyou feel the presence of a diabolical\nintelligence.  You are held helpless\nfor a moment as your mind is open to\nthat of Armagon--Quake's General and\nmaster of this realm.  Recognizing\nyou as the one who foiled his\nattempt to conquer Earth, a hellish\nhowl fills your mind and blots out\nall consciousness.  When you awake,\nyou find yourself on the shores of\nreality, but in a time and place\nunknown to you." );
+         return;
+		}
+      else if (world.model == "maps/hipend.bsp")
+      {
+         WriteByte (MSG_ALL, SVC_FINALE);
+         WriteString (MSG_ALL, "Congratulations!  You are victorious!\nThe minions of Quake have once again\nfallen before your mighty hand.\nIs this the last you will see of\nQuake's hellions?\n\nOnly time will tell..." );
+         intermission_exittime = time + 10000000;  // never allow exit
+			return;
+		}
 	}
 
 	GotoNextMap();
@@ -281,7 +416,7 @@ void() execute_changelevel =
 		intermission_exittime = time + 2;
 
 	WriteByte (MSG_ALL, SVC_CDTRACK);
-	WriteByte (MSG_ALL, 3);
+	WriteByte (MSG_ALL, 9);
 	WriteByte (MSG_ALL, 3);
 
 	pos = FindIntermission ();
@@ -348,7 +483,7 @@ When the player touches this, he gets sent to the map listed in the "map" variab
 void() trigger_changelevel =
 {
 	if (!self.map)
-		objerror ("changelevel trigger doesn't have map");
+		objerror ("chagnelevel trigger doesn't have map");
 
 	InitTrigger ();
 	self.touch = changelevel_touch;
@@ -516,6 +651,14 @@ void() PutClientInServer =
 	self.invincible_finished = 0;
 	self.effects = 0;
 	self.invincible_time = 0;
+	//JIM
+	self.wetsuit_finished = 0;
+   //MED
+   self.empathy_finished = 0;
+   //MED
+   self.items2 = 0;
+   self.gravity = 1.0;
+
 
 	DecodeLevelParms ();
 
@@ -535,7 +678,15 @@ void() PutClientInServer =
 	self.angles = spot.angles;
 	self.fixangle = TRUE;		// turn this way immediately
 
+   //JIM
+   // Clear out velocity so you're not launched into the air
+   // when you respawn.
+   self.velocity = '0 0 0';
+
 // oh, this is a hack!
+   setmodel (self, "progs/playham.mdl");
+   modelindex_hammer = self.modelindex;
+
 	setmodel (self, "progs/eyes.mdl");
 	modelindex_eyes = self.modelindex;
 
@@ -620,6 +771,9 @@ void() NextLevel =
 {
 	local entity o;
 
+//HIPNOTIC
+//Commented out so that timelimit and fraglimit work on start map
+   /*
 	if (mapname == "start")
 	{
 		if (!cvar("registered"))
@@ -652,6 +806,7 @@ void() NextLevel =
 	}
 	else
 	{
+*/
 		// find a trigger changelevel
 		o = find(world, classname, "trigger_changelevel");
 
@@ -662,7 +817,7 @@ void() NextLevel =
 			o = spawn();
 			o.map = mapname;
 		}
-	}
+//	}
 
 	nextmap = o.map;
 	gameover = TRUE;
@@ -914,6 +1069,8 @@ PlayerPreThink
 Called every frame before physics are run
 ================
 */
+//MED 01/17/97
+void(float num_bubbles) DeathBubbles;
 void() PlayerPreThink =
 {
 	local	float	mspeed, aspeed;
@@ -921,6 +1078,7 @@ void() PlayerPreThink =
 
 	if (intermission_running)
 	{
+      earthquake_prethink();
 		IntermissionThink ();	// otherwise a button could be missed between
 		return;					// the think tics
 	}
@@ -928,10 +1086,74 @@ void() PlayerPreThink =
 	if (self.view_ofs == '0 0 0')
 		return;		// intermission or finale
 
+//JIM
+   // Kill player on Edge of Oblivion
+   if ( ( self.origin_z < -1300 ) && (world.model == "maps/hipdm1.bsp") &&
+      ( self.health > 0 ) )
+      {
+      self.deathtype = "falling";
+
+      if (self.invincible_finished >= time)
+         {
+         self.invincible_finished = 0;
+         self.items = self.items - (self.items & IT_INVULNERABILITY);
+         self.invincible_time = 0;
+			self.invincible_finished = 0;
+         self.effects = self.effects - (self.effects & EF_DIMLIGHT);
+         }
+      T_Damage( self, self, world, self.health + 1000 );
+      }
+
+	//JIM
+//   if (!deathmatch)
+//      {
+      earthquake_prethink();
+//      }
+
 	makevectors (self.v_angle);		// is this still used
 
 	CheckRules ();
 	WaterMove ();
+
+	//JIM
+	//WETSUIT
+	if (self.wetsuit_finished > time)
+		{
+		if (self.waterlevel==2)
+			{
+			self.velocity = self.velocity * 1.25;
+			}
+		if (self.waterlevel==3)
+			{
+			self.velocity = self.velocity * 1.5;
+			}
+      if (self.waterlevel >= 2)
+         {
+         // play scuba sound
+         if (self.swim_flag < time)
+            {
+            self.swim_flag = time + 7;
+            sound (self, CHAN_BODY, "misc/wetsuit.wav", 1, ATTN_NORM);
+            }
+         //MED 01/17/97
+         else
+            {
+            if (fabs(self.swim_flag - time - 6)<0.04)
+               {
+               DeathBubbles(1);
+               }
+            else if (fabs(self.swim_flag - time - 5.5)<0.04)
+               {
+               DeathBubbles(1);
+               }
+            else if (fabs(self.swim_flag - time - 5)<0.04)
+               {
+               DeathBubbles(1);
+               }
+            }
+         }
+
+     }
 
 	if (self.waterlevel == 2)
 		CheckWaterJump ();
@@ -956,7 +1178,7 @@ void() PlayerPreThink =
 	if (time < self.pausetime)
 		self.velocity = '0 0 0';
 
-	if(time > self.attack_finished && self.currentammo == 0 && self.weapon != IT_AXE)
+	if(time > self.attack_finished && self.currentammo == 0 && self.weapon != IT_AXE && self.weapon != IT_MJOLNIR)
 	{
 		self.weapon = W_BestWeapon ();
 		W_SetCurrentAmmo ();
@@ -1014,6 +1236,9 @@ void() CheckPowerups =
 		self.frame = 0;
 		self.modelindex = modelindex_eyes;
 	}
+//MED 12/04/96 added mjolnir stuff
+   else if (self.weapon == IT_MJOLNIR)
+      self.modelindex = modelindex_hammer;   // don't use eyes
 	else
 		self.modelindex = modelindex_player;	// don't use eyes
 
@@ -1116,6 +1341,74 @@ void() CheckPowerups =
 		}
 	}
 
+//JIM
+// wetsuit
+	if (self.wetsuit_finished)
+	{
+	self.air_finished = time + 12;		// don't drown
+
+	// sound and screen flash when items starts to run out
+	if (self.wetsuit_finished < time + 3)
+		{
+			if (self.wetsuit_time == 1)
+			{
+				sprint (self, "Air supply in Wetsuit is running out\n");
+				stuffcmd (self, "bf\n");
+				sound (self, CHAN_AUTO, "items/suit2.wav", 1, ATTN_NORM);
+				self.wetsuit_time = time + 1;
+			}
+
+			if (self.wetsuit_time < time)
+			{
+				self.wetsuit_time = time + 1;
+				stuffcmd (self, "bf\n");
+			}
+		}
+
+		if (self.wetsuit_finished < time)
+		{	// just stopped
+//MED
+         self.items2 = self.items2 - HIP_IT_WETSUIT;
+			self.wetsuit_time = 0;
+			self.wetsuit_finished = 0;
+		}
+	}
+
+//MED
+// empathy shields
+   if (self.empathy_finished)
+	{
+      // sound and screen flash when items starts to run out
+      if (self.empathy_finished < time + 3)
+		{
+         if (self.empathy_time == 1)
+			{
+            sprint (self, "Empathy Shields are running out\n");
+				stuffcmd (self, "bf\n");
+				sound (self, CHAN_AUTO, "items/suit2.wav", 1, ATTN_NORM);
+            self.empathy_time = time + 1;
+			}
+
+         if (self.empathy_time < time)
+			{
+            self.empathy_time = time + 1;
+				stuffcmd (self, "bf\n");
+			}
+		}
+
+      if (self.empathy_finished < time)
+		{	// just stopped
+//MED
+         self.items2 = self.items2 - HIP_IT_EMPATHY_SHIELDS;
+         self.empathy_time = 0;
+         self.empathy_finished = 0;
+		}
+//MED
+      if (self.empathy_finished > time)
+			self.effects = self.effects | EF_DIMLIGHT;
+		else
+			self.effects = self.effects - (self.effects & EF_DIMLIGHT);
+   }
 };
 
 
@@ -1132,7 +1425,31 @@ void() PlayerPostThink =
 	local	float	r;
 
 	if (self.view_ofs == '0 0 0')
+      {
+      earthquake_postthink();
 		return;		// intermission or finale
+      }
+
+	//JIM
+	//WETSUIT
+	if (self.wetsuit_finished > time)
+		{
+		if (self.waterlevel==2)
+			{
+			self.velocity = self.velocity * 0.8;
+			}
+		if (self.waterlevel==3)
+			{
+			self.velocity = self.velocity * 0.66;
+			}
+      }
+
+	//JIM
+//   if (!deathmatch)
+//      {
+      earthquake_postthink();
+//      }
+
 	if (self.deadflag)
 		return;
 
@@ -1256,8 +1573,11 @@ void(entity targ, entity attacker) ClientObituary =
 				}
 				if (targ.weapon == IT_GRENADE_LAUNCHER)
 					bprint (" tries to put the pin back in\n");
-				else
+//JIM
+            else if (rnum > 0.4 )
 					bprint (" becomes bored with life\n");
+				else
+					bprint (" checks if his weapon is loaded\n");
 				return;
 			}
 			else if ( (teamplay == 2) && (targ.team > 0)&&(targ.team == attacker.team) )
@@ -1279,6 +1599,31 @@ void(entity targ, entity attacker) ClientObituary =
 			{
 				attacker.frags = attacker.frags + 1;
 
+//MED 01/19/97
+            if (empathyused == 1)
+               {
+               bprint (targ.netname);
+               if (random()<0.5)
+                  bprint (" shares ");
+               else
+                  bprint (" feels ");
+               bprint (attacker.netname);
+               bprint ("'s pain\n");
+               return;
+               }
+
+//MED 11/18/96
+            if (targ.dmg_inflictor.classname == "proximity_grenade")
+               {
+               bprint (targ.netname);
+               if (random()<0.5)
+                  bprint (" got too friendly with ");
+               else
+                  bprint (" did the rhumba with ");
+               bprint (attacker.netname);
+               bprint ("'s bomb\n");
+               return;
+               }
 				rnum = attacker.weapon;
 				if (rnum == IT_AXE)
 				{
@@ -1333,6 +1678,25 @@ void(entity targ, entity attacker) ClientObituary =
 					else
 						deathstring2 = "'s shaft\n";
 				}
+//MED
+            if (rnum == IT_LASER_CANNON)
+				{
+               if (random()<0.5)
+                  {
+                  deathstring = " was toasted by ";
+                  }
+               else
+                  {
+                  deathstring = " was radiated by ";
+                  }
+               deathstring2 = "'s laser\n";
+				}
+//MED
+            if (rnum == IT_MJOLNIR)
+				{
+               deathstring = " was slammed by ";
+               deathstring2 = "'s hammer\n";
+				}
 				bprint (targ.netname);
 				bprint (deathstring);
 				bprint (attacker.netname);
@@ -1342,10 +1706,50 @@ void(entity targ, entity attacker) ClientObituary =
 		}
 		else
 		{
-			targ.frags = targ.frags - 1;
+			targ.frags = targ.frags - 1;		// killed self
+			rnum = targ.watertype;
+
 			bprint (targ.netname);
 
-			// killed by a montser?
+//JIM
+         if ( attacker.deathtype )
+            {
+            bprint( " " );
+            bprint ( attacker.deathtype );
+            bprint( "\n" );
+            return;
+            }
+
+			if (rnum == -3)
+			{
+				if (random() < 0.5)
+					bprint (" sleeps with the fishes\n");
+				else
+					bprint (" sucks it down\n");
+				return;
+			}
+			else if (rnum == -4)
+			{
+				if (random() < 0.5)
+					bprint (" gulped a load of slime\n");
+				else
+					bprint (" can't exist on slime alone\n");
+				return;
+			}
+			else if (rnum == -5)
+			{
+				if (targ.health < -15)
+				{
+					bprint (" burst into flames\n");
+					return;
+				}
+				if (random() < 0.5)
+					bprint (" turned into hot slag\n");
+				else
+					bprint (" visits the Volcano God\n");
+				return;
+			}
+
 			if (attacker.flags & FL_MONSTER)
 			{
 				if (attacker.classname == "monster_army")
@@ -1380,11 +1784,18 @@ void(entity targ, entity attacker) ClientObituary =
 					bprint (" was scragged by a Scrag\n");
 				if (attacker.classname == "monster_zombie")
 					bprint (" joins the Zombies\n");
+//MED
+            if (attacker.classname == "monster_gremlin")
+               bprint (" was outsmarted by a Gremlin\n");
+//MED
+            if (attacker.classname == "monster_scourge")
+               bprint (" was stung by a Centroid\n");
+//MED
+            if (attacker.classname == "monster_armagon")
+               bprint (" was outgunned by Armagon\n");
 
 				return;
 			}
-
-			// tricks and traps
 			if (attacker.classname == "explo_box")
 			{
 				bprint (" blew up\n");
@@ -1393,6 +1804,12 @@ void(entity targ, entity attacker) ClientObituary =
 			if (attacker.solid == SOLID_BSP && attacker != world)
 			{
 				bprint (" was squished\n");
+				return;
+			}
+			if (targ.deathtype == "falling")
+			{
+				targ.deathtype = "";
+				bprint (" fell to his death\n");
 				return;
 			}
 			if (attacker.classname == "trap_shooter" || attacker.classname == "trap_spikeshooter")
@@ -1411,47 +1828,6 @@ void(entity targ, entity attacker) ClientObituary =
 				return;
 			}
 
-			// in-water deaths
-			rnum = targ.watertype;
-			if (rnum == -3)
-			{
-				if (random() < 0.5)
-					bprint (" sleeps with the fishes\n");
-				else
-					bprint (" sucks it down\n");
-				return;
-			}
-			else if (rnum == -4)
-			{
-				if (random() < 0.5)
-					bprint (" gulped a load of slime\n");
-				else
-					bprint (" can't exist on slime alone\n");
-				return;
-			}
-			else if (rnum == -5)
-			{
-				if (targ.health < -15)
-				{
-					bprint (" burst into flames\n");
-					return;
-				}
-				if (random() < 0.5)
-					bprint (" turned into hot slag\n");
-				else
-					bprint (" visits the Volcano God\n");
-				return;
-			}
-
-			// fell to their death?
-			if (targ.deathtype == "falling")
-			{
-				targ.deathtype = "";
-				bprint (" fell to his death\n");
-				return;
-			}
-
-			// hell if I know; he's just dead!!!
 			bprint (" died\n");
 		}
 	}

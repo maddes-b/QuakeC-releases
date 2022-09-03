@@ -1,4 +1,5 @@
 /*  Copyright (C) 1996-1997  Id Software, Inc.
+    Copyright (C) 1996-1997  Hipnotic Interactive, Inc.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -69,6 +70,8 @@ $frame paine29 paine30
 $frame cruc_1 cruc_2 cruc_3 cruc_4 cruc_5 cruc_6
 
 float	SPAWN_CRUCIFIED	= 1;
+//HIPNOTIC
+float SPAWN_LYINGDOWN   = 4;
 
 //=============================================================================
 
@@ -479,11 +482,33 @@ void(entity attacker, float take) zombie_pain =
 		zombie_paind1 ();
 };
 
+//HIPNOTIC
+void() zombie_lay12   =[ $paine12,   zombie_paine13 ]
+   {self.th_pain = zombie_pain;};
+
+void() zombie_lay   =[ $paine11,   zombie_lay ]
+   {
+   self.th_stand = zombie_stand1;
+   self.th_pain = zombie_lay12;
+
+   self.nextthink = self.nextthink + 0.1;
+   self.health = 60;
+
+   if (FindTarget ())
+      {
+      zombie_lay12();
+      return;
+      }
+   };
+
+//HIPNOTIC
 //============================================================================
 
-/*QUAKED monster_zombie (1 0 0) (-16 -16 -24) (16 16 32) Crucified ambush
+/*QUAKED monster_zombie (1 0 0) (-16 -16 -24) (16 16 32) Crucified ambush lying_down
 
 If crucified, stick the bounding box 12 pixels back into a wall to look right.
+If lying_down, the zombie will be lying down when spawned and will rise up
+when awakened by the player.
 */
 void() monster_zombie =
 {
@@ -516,7 +541,7 @@ void() monster_zombie =
 	setsize (self, '-16 -16 -24', '16 16 40');
 	self.health = 60;
 
-	self.th_stand = zombie_stand1;
+   self.th_stand = zombie_stand1;
 	self.th_walk = zombie_walk1;
 	self.th_run = zombie_run1;
 	self.th_pain = zombie_pain;
@@ -530,4 +555,10 @@ void() monster_zombie =
 	}
 	else
 		walkmonster_start();
+
+   //HIPNOTIC
+   if (self.spawnflags & SPAWN_LYINGDOWN)
+      {
+      self.th_stand = zombie_lay;
+      }
 };
