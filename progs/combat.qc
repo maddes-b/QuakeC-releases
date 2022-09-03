@@ -1,4 +1,5 @@
 /*  Copyright (C) 1996-1997  Id Software, Inc.
+    Copyright (C) 1996-1997  Rogue Entertainment
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,6 +17,9 @@
 
     See file, 'COPYING', for details.
 */
+// combat.qc
+
+float IsExplosionDamage;
 
 void() T_MissileTouch;
 void() info_player_start;
@@ -97,6 +101,14 @@ void(entity targ, entity attacker) Killed =
 		WriteByte (MSG_ALL, SVC_KILLEDMONSTER);
 	}
 
+// PGM - guarantee gib if killed by buzzsaw.
+	if (attacker.classname == "buzzsaw" ||
+		attacker.classname == "Vengeance" ||
+		attacker.classname == "pendulum")
+		self.health = -99;
+
+// PGM - gravity fix!
+	self.gravity = 1.0;
 	ClientObituary(self, attacker);
 
 	self.takedamage = DAMAGE_NO;
@@ -108,6 +120,10 @@ void(entity targ, entity attacker) Killed =
 	self = oself;
 };
 
+// ====
+// Function prototype for shield impact handler.
+// ====
+float(entity targ, entity inflictor, entity attacker, float damage) shield_hit;
 
 /*
 ============
@@ -127,21 +143,46 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage=
 	if (!targ.takedamage)
 		return;
 
+	if (targ.classname == "trigger_explosion")
+	{
+		if ( IsExplosionDamage != 1)
+			return;
+	}
+	IsExplosionDamage = 0;
+
+	if (targ.items2 & IT2_SHIELD)
+	{
+		// Allow some damage to pass through.
+		damage = shield_hit(targ, inflictor, attacker, damage);
+		if (damage == 0)
+			return;
+	}
+
 // used by buttons and triggers to set activator for target firing
 	damage_attacker = attacker;
 
 // check for quad damage powerup on the attacker
 	if (attacker.super_damage_finished > time)
 		damage = damage * 4;
+// rune power up (Black Magic)
+	if (deathmatch)
+		damage = RuneApplyBlack(damage, attacker);
 
 // save damage based on the target's armor level
 
-	save = ceil(targ.armortype*damage);
+//ZOID--
+	if (TeamArmorDam(targ, inflictor, attacker, damage))
+		save = ceil(targ.armortype*damage);
+	else
+		save = 0;
+//--ZOID
+
 	if (save >= targ.armorvalue)
 	{
 		save = targ.armorvalue;
 		targ.armortype = 0;	// lost all armor
-		targ.items = targ.items - (targ.items & (IT_ARMOR1 | IT_ARMOR2 | IT_ARMOR3));
+		targ.items2 = targ.items2 -
+						(targ.items2 & (IT2_ARMOR1 | IT2_ARMOR2 | IT2_ARMOR3));
 	}
 
 	targ.armorvalue = targ.armorvalue - save;
@@ -170,17 +211,25 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage=
 		return;
 	if (targ.invincible_finished >= time)
 	{
-		if (self.invincible_sound < time)
+		if (targ.invincible_sound < time)
 		{
 			sound (targ, CHAN_ITEM, "items/protect3.wav", 1, ATTN_NORM);
-			self.invincible_sound = time + 2;
+			targ.invincible_sound = time + 2;
 		}
 		return;
 	}
 
 // team play damage avoidance
-	if ( (teamplay == 1) && (targ.team > 0)&&(targ.team == attacker.team) )
-		return;
+//	if ( (teamplay == 1) && (targ.team > 0)&&(targ.team == attacker.team) )
+//		return;
+//ZOID--
+	if (!TeamHealthDam(targ, inflictor, attacker, damage))
+		return; // same team
+//--ZOID
+
+// rune power up (Earth Magic)
+	if (deathmatch)
+		take = RuneApplyEarth(take, targ);
 
 // do the damage
 	targ.health = targ.health - take;
@@ -203,10 +252,13 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage=
 			if ( (self.classname != attacker.classname)
 			|| (self.classname == "monster_army" ) )
 			{
-				if (self.enemy.classname == "player")
-					self.oldenemy = self.enemy;
-				self.enemy = attacker;
-				FoundTarget ();
+				if ( self.classname != "monster_dragon")
+				{
+					if (self.enemy.classname == "player")
+						self.oldenemy = self.enemy;
+					self.enemy = attacker;
+					FoundTarget ();
+				}
 			}
 		}
 	}
@@ -224,6 +276,44 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage=
 
 /*
 ============
+T_EELZap
+============
+*/
+void(entity inflictor, entity attacker, float damage) T_EELZap =
+{
+	local	float 	points;
+	local	entity	head;
+	local	vector	org;
+
+	head = findradius(inflictor.origin, damage+40);
+
+	while (head)
+	{
+		if (head.takedamage)
+		{
+			org = head.origin + (head.mins + head.maxs)*0.5;
+			points = 0.5*vlen (inflictor.origin - org);
+			if (points < 0)
+				points = 0;
+			points = damage - points;
+			if (head == attacker)
+				points = points * 0.5;
+			if (points > 0)
+			{
+				if (CanDamage (head, inflictor))
+				{	// eels take no damage from this attack
+					if (head.classname != "monster_eel" &&
+						(head.flags & FL_INWATER))
+						T_Damage (head, inflictor, attacker, points);
+				}
+			}
+		}
+		head = head.chain;
+	}
+};
+
+/*
+============
 T_RadiusDamage
 ============
 */
@@ -232,6 +322,8 @@ void(entity inflictor, entity attacker, float damage, entity ignore) T_RadiusDam
 	local	float 	points;
 	local	entity	head;
 	local	vector	org;
+
+	IsExplosionDamage = 1;
 
 	head = findradius(inflictor.origin, damage+40);
 

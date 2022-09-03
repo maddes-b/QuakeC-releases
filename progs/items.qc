@@ -1,4 +1,5 @@
 /*  Copyright (C) 1996-1997  Id Software, Inc.
+    Copyright (C) 1996-1997  Rogue Entertainment
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -64,7 +65,9 @@ void() PlaceItem =
 	oldz = self.origin_z;
 	if (!droptofloor())
 	{
-		dprint ("Bonus item fell out of level at ");
+		dprint ("Bonus item fell out of level!\n");
+		dprint (self.classname);
+		dprint (" at ");
 		dprint (vtos(self.origin));
 		dprint ("\n");
 		remove(self);
@@ -200,9 +203,9 @@ void() health_touch =
 	self.solid = SOLID_NOT;
 
 	// Megahealth = rot down the player's super health
-	if (self.healtype == 2)
+	if (self.healtype == 2 && !RuneHasElder(other))
 	{
-		other.items = other.items | IT_SUPERHEALTH;
+		other.items2 = other.items2 | IT2_SUPERHEALTH;
 		self.nextthink = time + 5;
 		self.think = item_megahealth_rot;
 		self.owner = other;
@@ -234,7 +237,7 @@ void() item_megahealth_rot =
 
 // it is possible for a player to die and respawn between rots, so don't
 // just blindly subtract the flag off
-	other.items = other.items - (other.items & IT_SUPERHEALTH);
+	other.items2 = other.items2 - (other.items2 & IT2_SUPERHEALTH);
 
 	if (deathmatch == 1)	// deathmatch 2 is silly old rules
 	{
@@ -266,26 +269,26 @@ void() armor_touch =
 	{
 		type = 0.3;
 		value = 100;
-		bit = IT_ARMOR1;
+		bit = IT2_ARMOR1;
 	}
 	if (self.classname == "item_armor2")
 	{
 		type = 0.6;
 		value = 150;
-		bit = IT_ARMOR2;
+		bit = IT2_ARMOR2;
 	}
 	if (self.classname == "item_armorInv")
 	{
 		type = 0.8;
 		value = 200;
-		bit = IT_ARMOR3;
+		bit = IT2_ARMOR3;
 	}
 	if (other.armortype*other.armorvalue >= type*value)
 		return;
 
 	other.armortype = type;
 	other.armorvalue = value;
-	other.items = other.items - (other.items & (IT_ARMOR1 | IT_ARMOR2 | IT_ARMOR3)) + bit;
+	other.items2 = other.items2 - (other.items2 & (IT2_ARMOR1 | IT2_ARMOR2 | IT2_ARMOR3)) + bit;
 
 	self.solid = SOLID_NOT;
 	self.model = string_null;
@@ -352,32 +355,50 @@ WEAPONS
 
 void() bound_other_ammo =
 {
-	if (other.ammo_shells > 100)
-		other.ammo_shells = 100;
-	if (other.ammo_nails > 200)
-		other.ammo_nails = 200;
-	if (other.ammo_rockets > 100)
-		other.ammo_rockets = 100;
-	if (other.ammo_cells > 100)
-		other.ammo_cells = 100;
+	if (other.ammo_shells1 > 100)
+		other.ammo_shells1 = 100;
+	if (other.ammo_nails1 > 200)
+		other.ammo_nails1 = 200;
+	if (other.ammo_rockets1 > 100)
+		other.ammo_rockets1 = 100;
+	if (other.ammo_cells1 > 100)
+		other.ammo_cells1 = 100;
+
+	// PGM addition
+	if (other.ammo_lava_nails > 200)
+		other.ammo_lava_nails = 200;
+	if (other.ammo_multi_rockets > 100)
+		other.ammo_multi_rockets = 100;
+	if (other.ammo_plasma > 100)
+		other.ammo_plasma = 100;
 };
 
 
 float(float w) RankForWeapon =
 {
-	if (w == IT_LIGHTNING)
+	if (w == IT_PLASMA_GUN)
 		return 1;
-	if (w == IT_ROCKET_LAUNCHER)
+	if (w == IT_LIGHTNING)
 		return 2;
-	if (w == IT_SUPER_NAILGUN)
+	if (w == IT_MULTI_ROCKET)
 		return 3;
-	if (w == IT_GRENADE_LAUNCHER)
+	if (w == IT_ROCKET_LAUNCHER)
 		return 4;
-	if (w == IT_SUPER_SHOTGUN)
+	if (w == IT_LAVA_SUPER_NAILGUN)
 		return 5;
-	if (w == IT_NAILGUN)
+	if (w == IT_SUPER_NAILGUN)
 		return 6;
-	return 7;
+	if (w == IT_MULTI_GRENADE)
+		return 7;
+	if (w == IT_GRENADE_LAUNCHER)
+		return 8;
+	if (w == IT_LAVA_NAILGUN)
+		return 9;
+	if (w == IT_SUPER_SHOTGUN)
+		return 10;
+	if (w == IT_NAILGUN)
+		return 11;
+	return 12;
 };
 
 /*
@@ -386,18 +407,76 @@ Deathmatch_Weapon
 
 Deathmatch weapon change rules for picking up a weapon
 
-.float		ammo_shells, ammo_nails, ammo_rockets, ammo_cells;
+.float		ammo_shells1, ammo_nails1, ammo_rockets1, ammo_cells1;
 =============
 */
 void(float old, float new) Deathmatch_Weapon =
 {
 	local float or, nr;
 
+// PGM - fix for changing to weapons when grappling.
+	if (self.weapon == IT_GRAPPLE && self.button0)
+		return;
+
 // change self.weapon if desired
 	or = RankForWeapon (self.weapon);
 	nr = RankForWeapon (new);
 	if ( nr < or )
 		self.weapon = new;
+};
+
+void(entity comboOwner) EnableComboWeapons =
+{
+	if (comboOwner.classname != "player")
+		return;
+
+	if (!(comboOwner.items & IT_LAVA_NAILGUN))
+	{
+		if (comboOwner.ammo_lava_nails > 0 && (comboOwner.items & IT_NAILGUN))
+		{
+			sprint (comboOwner, "Lava Enabled\n");
+			comboOwner.items = comboOwner.items | IT_LAVA_NAILGUN;
+		}
+	}
+
+	if (!(comboOwner.items & IT_LAVA_SUPER_NAILGUN))
+	{
+		if (comboOwner.ammo_lava_nails > 0 &&
+							(comboOwner.items & IT_SUPER_NAILGUN))
+		{
+			sprint (comboOwner, "Super Lava Enabled\n");
+			comboOwner.items = comboOwner.items | IT_LAVA_SUPER_NAILGUN;
+		}
+	}
+
+	if (!(comboOwner.items & IT_MULTI_GRENADE))
+	{
+		if (comboOwner.ammo_multi_rockets > 0 &&
+							(comboOwner.items & IT_GRENADE_LAUNCHER))
+		{
+			sprint (comboOwner, "Multi Grenades Enabled\n");
+			comboOwner.items = comboOwner.items | IT_MULTI_GRENADE;
+		}
+	}
+
+	if (!(comboOwner.items & IT_MULTI_ROCKET))
+	{
+		if (comboOwner.ammo_multi_rockets > 0 &&
+							(comboOwner.items & IT_ROCKET_LAUNCHER))
+		{
+			sprint (comboOwner, "Multi Rockets Enabled\n");
+			comboOwner.items = comboOwner.items | IT_MULTI_ROCKET;
+		}
+	}
+
+	if (!(comboOwner.items & IT_PLASMA_GUN))
+	{
+		if (comboOwner.ammo_plasma > 0 && (comboOwner.items & IT_LIGHTNING))
+		{
+			sprint (comboOwner, "Plasma Gun Enabled\n");
+			comboOwner.items = comboOwner.items | IT_PLASMA_GUN;
+		}
+	}
 };
 
 /*
@@ -431,49 +510,59 @@ void() weapon_touch =
 	{
 		if (leave && (other.items & IT_NAILGUN) )
 			return;
-		hadammo = other.ammo_nails;
+		hadammo = other.ammo_nails1;
 		new = IT_NAILGUN;
-		other.ammo_nails = other.ammo_nails + 30;
+		if (leave)
+			other.ammo_lava_nails = other.ammo_lava_nails + 20;
+		other.ammo_nails1 = other.ammo_nails1 + 30;
 	}
 	else if (self.classname == "weapon_supernailgun")
 	{
 		if (leave && (other.items & IT_SUPER_NAILGUN) )
 			return;
-		hadammo = other.ammo_rockets;
+		hadammo = other.ammo_rockets1;
 		new = IT_SUPER_NAILGUN;
-		other.ammo_nails = other.ammo_nails + 30;
+		if (leave)
+			other.ammo_lava_nails = other.ammo_lava_nails + 20;
+		other.ammo_nails1 = other.ammo_nails1 + 30;
 	}
 	else if (self.classname == "weapon_supershotgun")
 	{
 		if (leave && (other.items & IT_SUPER_SHOTGUN) )
 			return;
-		hadammo = other.ammo_rockets;
+		hadammo = other.ammo_rockets1;
 		new = IT_SUPER_SHOTGUN;
-		other.ammo_shells = other.ammo_shells + 5;
+		other.ammo_shells1 = other.ammo_shells1 + 5;
 	}
 	else if (self.classname == "weapon_rocketlauncher")
 	{
 		if (leave && (other.items & IT_ROCKET_LAUNCHER) )
 			return;
-		hadammo = other.ammo_rockets;
+		hadammo = other.ammo_rockets1;
 		new = IT_ROCKET_LAUNCHER;
-		other.ammo_rockets = other.ammo_rockets + 5;
+		if (leave)
+			other.ammo_multi_rockets = other.ammo_multi_rockets + 3;
+		other.ammo_rockets1 = other.ammo_rockets1 + 5;
 	}
 	else if (self.classname == "weapon_grenadelauncher")
 	{
 		if (leave && (other.items & IT_GRENADE_LAUNCHER) )
 			return;
-		hadammo = other.ammo_rockets;
+		hadammo = other.ammo_rockets1;
 		new = IT_GRENADE_LAUNCHER;
-		other.ammo_rockets = other.ammo_rockets + 5;
+		if (leave)
+			other.ammo_multi_rockets = other.ammo_multi_rockets + 3;
+		other.ammo_rockets1 = other.ammo_rockets1 + 5;
 	}
 	else if (self.classname == "weapon_lightning")
 	{
 		if (leave && (other.items & IT_LIGHTNING) )
 			return;
-		hadammo = other.ammo_rockets;
+		hadammo = other.ammo_rockets1;
 		new = IT_LIGHTNING;
-		other.ammo_cells = other.ammo_cells + 15;
+		if (leave)
+			other.ammo_plasma = other.ammo_plasma + 5;
+		other.ammo_cells1 = other.ammo_cells1 + 15;
 	}
 	else
 		objerror ("weapon_touch: unknown classname");
@@ -491,6 +580,36 @@ void() weapon_touch =
 	old = other.items;
 	other.items = other.items | new;
 
+	EnableComboWeapons ( other );
+
+	// PGM - fake picking up the plasma gun.
+	if (new == IT_LIGHTNING)
+	{
+		if (other.ammo_plasma > 0)
+			new = IT_PLASMA_GUN;
+	}
+	else if (new == IT_ROCKET_LAUNCHER)
+	{
+		if (other.ammo_multi_rockets > 0)
+			new = IT_MULTI_ROCKET;
+	}
+	else if (new == IT_GRENADE_LAUNCHER)
+	{
+		if (other.ammo_multi_rockets > 0)
+			new = IT_MULTI_GRENADE;
+	}
+	else if (new == IT_SUPER_NAILGUN)
+	{
+		if (other.ammo_lava_nails > 1)
+			new = IT_LAVA_SUPER_NAILGUN;
+	}
+	else if (new == IT_NAILGUN)
+	{
+		if (other.ammo_lava_nails > 0)
+			new = IT_LAVA_NAILGUN;
+	}
+
+
 	stemp = self;
 	self = other;
 
@@ -499,6 +618,7 @@ void() weapon_touch =
 	else
 		Deathmatch_Weapon (old, new);
 
+	UpdateAmmoCounts ( self );
 	W_SetCurrentAmmo();
 
 	self = stemp;
@@ -628,38 +748,66 @@ local float		best;
 	best = W_BestWeapon();
 	self = stemp;
 
+// by this point, other is the player and self is the ammo pack. - PGM
 
 // shotgun
 	if (self.weapon == 1)
 	{
-		if (other.ammo_shells >= 100)
+		if (other.ammo_shells1 >= 100)
 			return;
-		other.ammo_shells = other.ammo_shells + self.aflag;
+		other.ammo_shells1 = other.ammo_shells1 + self.aflag;
 	}
 
 // spikes
 	if (self.weapon == 2)
 	{
-		if (other.ammo_nails >= 200)
+		if (other.ammo_nails1 >= 200)
 			return;
-		other.ammo_nails = other.ammo_nails + self.aflag;
+		other.ammo_nails1 = other.ammo_nails1 + self.aflag;
 	}
 
 //	rockets
 	if (self.weapon == 3)
 	{
-		if (other.ammo_rockets >= 100)
+		if (other.ammo_rockets1 >= 100)
 			return;
-		other.ammo_rockets = other.ammo_rockets + self.aflag;
+		other.ammo_rockets1 = other.ammo_rockets1 + self.aflag;
 	}
 
 //	cells
 	if (self.weapon == 4)
 	{
-		if (other.ammo_cells >= 100)
+		if (other.ammo_cells1 >= 100)
 			return;
-		other.ammo_cells = other.ammo_cells + self.aflag;
+		other.ammo_cells1 = other.ammo_cells1 + self.aflag;
 	}
+
+//	lava spikes
+	if (self.weapon == 5)
+	{
+		if(other.ammo_lava_nails >= 200)
+			return;
+		other.ammo_lava_nails = other.ammo_lava_nails + self.aflag;
+	}
+
+//	multi grenades
+	if (self.weapon == 6)
+	{
+        if(other.ammo_multi_rockets >= 100)
+			return;
+		other.ammo_multi_rockets = other.ammo_multi_rockets + self.aflag;
+	}
+
+//	plasma
+	if (self.weapon == 7)
+	{
+		if(other.ammo_plasma >= 100)
+			return;
+		other.ammo_plasma = other.ammo_plasma + self.aflag;
+	}
+
+	EnableComboWeapons ( other );
+	UpdateAmmoCounts ( other );
 
 	bound_other_ammo ();
 
@@ -704,6 +852,7 @@ local float		best;
 float WEAPON_BIG2 = 1;
 
 /*QUAKED item_shells (0 .5 .8) (0 0 0) (32 32 32) big
+Small box is 20, Big box is 40.
 */
 
 void() item_shells =
@@ -729,6 +878,7 @@ void() item_shells =
 };
 
 /*QUAKED item_spikes (0 .5 .8) (0 0 0) (32 32 32) big
+Small box is 25, Big box is 50.
 */
 
 void() item_spikes =
@@ -753,7 +903,34 @@ void() item_spikes =
 	StartItem ();
 };
 
+/*QUAKED item_lava_spikes (0 .5 .8) (0 0 0) (32 32 32) big
+Small box is 25, Big box is 50.
+*/
+
+void() item_lava_spikes =
+{
+	self.touch = ammo_touch;
+
+	if (self.spawnflags & WEAPON_BIG2)
+	{
+		precache_model ("maps/b_lnail1.bsp");
+		setmodel (self, "maps/b_lnail1.bsp");
+		self.aflag = 50;
+	}
+	else
+	{
+		precache_model ("maps/b_lnail0.bsp");
+		setmodel (self, "maps/b_lnail0.bsp");
+		self.aflag = 25;
+	}
+	self.weapon = 5;
+	self.netname = "lava nails";
+	setsize (self, '0 0 0', '32 32 56');
+	StartItem ();
+};
+
 /*QUAKED item_rockets (0 .5 .8) (0 0 0) (32 32 32) big
+Small box is 5, Big box is 10.
 */
 
 void() item_rockets =
@@ -778,8 +955,35 @@ void() item_rockets =
 	StartItem ();
 };
 
+/*QUAKED item_multi_rockets (0 .5 .8) (0 0 0) (32 32 32) big
+Small box is 5, Big box is 10.
+*/
+
+void() item_multi_rockets =
+{
+	self.touch = ammo_touch;
+
+	if (self.spawnflags & WEAPON_BIG2)
+	{
+		precache_model ("maps/b_mrock1.bsp");
+		setmodel (self, "maps/b_mrock1.bsp");
+		self.aflag = 10;
+	}
+	else
+	{
+		precache_model ("maps/b_mrock0.bsp");
+		setmodel (self, "maps/b_mrock0.bsp");
+		self.aflag = 5;
+	}
+	self.weapon = 6;
+	self.netname = "multi rockets";
+	setsize (self, '0 0 0', '32 32 56');
+	StartItem ();
+};
+
 
 /*QUAKED item_cells (0 .5 .8) (0 0 0) (32 32 32) big
+Small box is 6, Big box is 12.
 */
 
 void() item_cells =
@@ -800,6 +1004,31 @@ void() item_cells =
 	}
 	self.weapon = 4;
 	self.netname = "cells";
+	setsize (self, '0 0 0', '32 32 56');
+	StartItem ();
+};
+
+/*QUAKED item_plasma (0 .5 .8) (0 0 0) (32 32 32) big
+Small box is 6, Big box is 12.
+*/
+void() item_plasma =
+{
+	self.touch = ammo_touch;
+
+	if (self.spawnflags & WEAPON_BIG2)
+	{
+		precache_model ("maps/b_plas1.bsp");
+		setmodel (self, "maps/b_plas1.bsp");
+		self.aflag = 12;
+	}
+	else
+	{
+		precache_model ("maps/b_plas0.bsp");
+		setmodel (self, "maps/b_plas0.bsp");
+		self.aflag = 6;
+	}
+	self.weapon = 7;
+	self.netname = "plasma";
 	setsize (self, '0 0 0', '32 32 56');
 	StartItem ();
 };
@@ -1091,7 +1320,7 @@ POWERUPS
 */
 
 void() powerup_touch;
-
+void() random_regen;
 
 void() powerup_touch =
 {
@@ -1111,13 +1340,21 @@ local float		best;
 	{
 		self.mdl = self.model;
 
-		if ((self.classname == "item_artifact_invulnerability") ||
-			(self.classname == "item_artifact_invisibility"))
-			self.nextthink = time + 60*5;
+		if (self.classname == "item_random_powerup")
+		{
+			self.nextthink = time + 30;
+			self.think = random_regen;
+		}
 		else
-			self.nextthink = time + 60;
+		{
+			if ((self.classname == "item_artifact_invulnerability") ||
+				(self.classname == "item_artifact_invisibility"))
+				self.nextthink = time + 60*5;
+			else
+				self.nextthink = time + 60;
 
-		self.think = SUB_regen;
+			self.think = SUB_regen;
+		}
 	}
 
 	sound (other, CHAN_VOICE, self.noise, 1, ATTN_NORM);
@@ -1127,25 +1364,29 @@ local float		best;
 	self.model = string_null;
 
 // do the apropriate action
-	if (self.classname == "item_artifact_envirosuit")
+//	if (self.classname == "item_artifact_envirosuit")
+	if (self.netname == "Biosuit")
 	{
 		other.rad_time = 1;
 		other.radsuit_finished = time + 30;
 	}
 
-	if (self.classname == "item_artifact_invulnerability")
+//	if (self.classname == "item_artifact_invulnerability")
+	if (self.netname == "Pentagram of Protection")
 	{
 		other.invincible_time = 1;
 		other.invincible_finished = time + 30;
 	}
 
-	if (self.classname == "item_artifact_invisibility")
+//	if (self.classname == "item_artifact_invisibility")
+	if (self.netname == "Ring of Shadows")
 	{
 		other.invisible_time = 1;
 		other.invisible_finished = time + 30;
 	}
 
-	if (self.classname == "item_artifact_super_damage")
+//	if (self.classname == "item_artifact_super_damage")
+	if (self.netname == "Quad Damage")
 	{
 		other.super_time = 1;
 		other.super_damage_finished = time + 30;
@@ -1256,6 +1497,12 @@ void() BackpackTouch =
 	if (other.health <= 0)
 		return;
 
+//ZOID--
+	// Don't let the owner pick up his own backpack for a second.
+	if ((other == self.owner) && ((self.nextthink - time) > 119))
+		return;
+//--ZOID
+
 	acount = 0;
 	sprint (other, "You get ");
 
@@ -1274,10 +1521,15 @@ void() BackpackTouch =
 	self = stemp;
 
 // change weapons
-	other.ammo_shells = other.ammo_shells + self.ammo_shells;
-	other.ammo_nails = other.ammo_nails + self.ammo_nails;
-	other.ammo_rockets = other.ammo_rockets + self.ammo_rockets;
-	other.ammo_cells = other.ammo_cells + self.ammo_cells;
+	other.ammo_shells1 = other.ammo_shells1 + self.ammo_shells1;
+	other.ammo_nails1 = other.ammo_nails1 + self.ammo_nails1;
+	other.ammo_rockets1 = other.ammo_rockets1 + self.ammo_rockets1;
+	other.ammo_cells1 = other.ammo_cells1 + self.ammo_cells1;
+
+	other.ammo_lava_nails = other.ammo_lava_nails + self.ammo_lava_nails;
+	other.ammo_multi_rockets = other.ammo_multi_rockets +
+									self.ammo_multi_rockets;
+	other.ammo_plasma = other.ammo_plasma + self.ammo_plasma;
 
 	new = self.items;
 	if (!new)
@@ -1286,41 +1538,69 @@ void() BackpackTouch =
 	other.items = other.items | new;
 
 	bound_other_ammo ();
-	if (self.ammo_shells)
+
+	if (self.ammo_shells1)
 	{
 		if (acount)
 			sprint(other, ", ");
 		acount = 1;
-		s = ftos(self.ammo_shells);
+		s = ftos(self.ammo_shells1);
 		sprint (other, s);
 		sprint (other, " shells");
 	}
-	if (self.ammo_nails)
+	if (self.ammo_nails1)
 	{
 		if (acount)
 			sprint(other, ", ");
 		acount = 1;
-		s = ftos(self.ammo_nails);
+		s = ftos(self.ammo_nails1);
 		sprint (other, s);
 		sprint (other, " nails");
 	}
-	if (self.ammo_rockets)
+	if (self.ammo_rockets1)
 	{
 		if (acount)
 			sprint(other, ", ");
 		acount = 1;
-		s = ftos(self.ammo_rockets);
+		s = ftos(self.ammo_rockets1);
 		sprint (other, s);
 		sprint (other, " rockets");
 	}
-	if (self.ammo_cells)
+	if (self.ammo_cells1)
 	{
 		if (acount)
 			sprint(other, ", ");
 		acount = 1;
-		s = ftos(self.ammo_cells);
+		s = ftos(self.ammo_cells1);
 		sprint (other, s);
 		sprint (other, " cells");
+	}
+	if (self.ammo_lava_nails)
+	{
+		if (acount)
+			sprint(other, ", ");
+		acount = 1;
+		s = ftos(self.ammo_lava_nails);
+		sprint (other, s);
+		sprint (other, " lava nails");
+	}
+	if (self.ammo_multi_rockets)
+	{
+		if (acount)
+			sprint(other, ", ");
+		acount = 1;
+		s = ftos(self.ammo_multi_rockets);
+		sprint (other, s);
+		sprint (other, " multi rockets");
+	}
+	if (self.ammo_plasma)
+	{
+		if (acount)
+			sprint(other, ", ");
+		acount = 1;
+		s = ftos(self.ammo_plasma);
+		sprint (other, s);
+		sprint (other, " plasma balls");
 	}
 
 	sprint (other, "\n");
@@ -1332,11 +1612,17 @@ void() BackpackTouch =
 	remove(self);
 	self = other;
 
+// fixme -- move this to after weapon choice if problematic.
+	EnableComboWeapons ( self );
+
 // change to the weapon
 	if (!deathmatch)
 		self.weapon = new;
 	else
 		Deathmatch_Weapon (old, new);
+
+//	EnableComboWeapons ( self );
+	UpdateAmmoCounts (self);
 
 	W_SetCurrentAmmo ();
 };
@@ -1350,7 +1636,18 @@ void() DropBackpack =
 {
 	local entity	item;
 
-	if (!(self.ammo_shells + self.ammo_nails + self.ammo_rockets + self.ammo_cells))
+	// this is to compensate for the new way we're hacking the ammo
+	// counts. If they're monsters, just copy shells->shells1 etc.
+	if (self.flags & FL_MONSTER)
+	{
+		self.ammo_shells1 = self.ammo_shells;
+		self.ammo_nails1 = self.ammo_nails;
+		self.ammo_rockets1 = self.ammo_rockets;
+		self.ammo_cells1 = self.ammo_cells;
+	}
+
+	if (!(self.ammo_shells1 + self.ammo_nails1 + self.ammo_rockets1 +
+			self.ammo_cells1 + self.ammo_lava_nails + self.ammo_multi_rockets))
 		return;	// nothing in it
 
 	item = spawn();
@@ -1373,13 +1670,41 @@ void() DropBackpack =
 		item.netname = "Rocket Launcher";
 	else if (item.items == IT_LIGHTNING)
 		item.netname = "Thunderbolt";
+	else if (item.items == IT_LAVA_NAILGUN)
+	{
+		item.netname = "Lava Nail Gun";
+		item.items = IT_NAILGUN;
+	}
+	else if (item.items == IT_LAVA_SUPER_NAILGUN)
+	{
+		item.netname = "Super Lava Nail Gun";
+		item.items = IT_SUPER_NAILGUN;
+	}
+	else if (item.items == IT_MULTI_GRENADE)
+	{
+		item.netname = "Multi Grenade Launcher";
+		item.items = IT_GRENADE_LAUNCHER;
+	}
+	else if (item.items == IT_MULTI_ROCKET)
+	{
+		item.netname = "Multi Rocket Launcher";
+		item.items = IT_ROCKET_LAUNCHER;
+	}
+	else if (item.items == IT_PLASMA_GUN)
+	{
+		item.netname = "Plasma Gun";
+		item.items = IT_LIGHTNING;
+	}
 	else
 		item.netname = "";
 
-	item.ammo_shells = self.ammo_shells;
-	item.ammo_nails = self.ammo_nails;
-	item.ammo_rockets = self.ammo_rockets;
-	item.ammo_cells = self.ammo_cells;
+	item.ammo_shells1 = self.ammo_shells1;
+	item.ammo_nails1 = self.ammo_nails1;
+	item.ammo_rockets1 = self.ammo_rockets1;
+	item.ammo_cells1 = self.ammo_cells1;
+	item.ammo_lava_nails = self.ammo_lava_nails;
+	item.ammo_multi_rockets = self.ammo_multi_rockets;
+	item.ammo_plasma = self.ammo_plasma;
 
 	item.velocity_z = 300;
 	item.velocity_x = -100 + (random() * 200);

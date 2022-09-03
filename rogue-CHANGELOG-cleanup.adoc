@@ -1,0 +1,10 @@
+= Cleanup Branch
+
+== Intention
+
+Only do white space clean-up, fix typos and align code style.
+No logic changes.
+
+== Tasks
+
+* [x] remove trailing white spaces (VSCode: Trim Trailing Spaces)

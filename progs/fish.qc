@@ -1,4 +1,5 @@
 /*  Copyright (C) 1996-1997  Id Software, Inc.
+    Copyright (C) 1996-1997  Rogue Entertainment
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -168,8 +169,8 @@ void(entity attacker, float damage)	fish_pain =
 };
 
 
-
-/*QUAKED monster_fish (1 0 0) (-16 -16 -24) (16 16 24) Ambush
+//(-16 -16 -24) (16 16 24)
+/*QUAKED monster_fish (1 0 0) (-16 -16 -24) (16 16 32) Ambush
 */
 void() monster_fish =
 {
@@ -189,7 +190,8 @@ void() monster_fish =
 
 	setmodel (self, "progs/fish.mdl");
 
-	setsize (self, '-16 -16 -24', '16 16 24');
+//	setsize (self, '-16 -16 -24', '16 16 24');
+	setsize (self, VEC_HULL_MIN, VEC_HULL_MAX);
 	self.health = 25;
 
 	self.th_stand = f_stand1;

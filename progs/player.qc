@@ -1,4 +1,5 @@
 /*  Copyright (C) 1996-1997  Id Software, Inc.
+    Copyright (C) 1996-1997  Rogue Entertainment
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -185,7 +186,50 @@ void()	player_axed2 =	[$axattd2, player_axed3	] {self.weaponframe=6;};
 void()	player_axed3 =	[$axattd3, player_axed4	] {self.weaponframe=7;W_FireAxe();};
 void()	player_axed4 =	[$axattd4, player_run	] {self.weaponframe=8;};
 
+//============================================================================
+//ZOID--
+void() player_grapple3;
+void() player_grapple4;
+void() player_grapple5;
 
+void()  player_grapple1 =  [$axattd1, player_grapple2 ]
+	{ self.weaponframe=1; W_FireGrapple(); };
+//	{ self.weaponframe=2; W_FireGrapple(); };
+void()  player_grapple2 =  [$axattd2, player_grapple3 ]
+	{ self.weaponframe=2; };
+//	{ self.weaponframe=3; };
+void()  player_grapple3 =  [$axattd3, player_grapple3 ]
+	{
+//		self.weaponframe=3;
+		self.weaponframe=2;
+		if (!self.hook_out) {
+				player_grapple5();
+				return;
+		}
+		if (vlen(self.hook.origin - self.origin) >= 50) {
+			if (self.on_hook) {
+				player_grapple4();
+				return;
+			}
+		}
+	};
+void() player_grapple4 =  [$deathc4, player_grapple4 ]
+	{
+//		self.weaponframe=4;
+		self.weaponframe=2;
+		if (!self.hook_out) {
+			player_grapple5();
+			return;
+		}
+		if (vlen(self.hook.origin - self.origin) < 50 || !self.on_hook) {
+			player_grapple3();
+			return;
+		}
+	};
+void()  player_grapple5 =  [$axattd4, player_run    ]
+//	{self.weaponframe=5;};
+	{self.weaponframe=1;};
+//--ZOID
 //============================================================================
 
 void() player_nail1   =[$nailatt1, player_nail2  ]
@@ -217,6 +261,38 @@ void() player_nail2   =[$nailatt2, player_nail1  ]
 
 //============================================================================
 
+void(float ox) W_FireLavaSpikes;
+
+void() player_lava_nail1   =[$nailatt1, player_lava_nail2  ]
+{
+	self.effects = self.effects | EF_MUZZLEFLASH;
+
+	if (!self.button0)
+		{player_run ();return;}
+	self.weaponframe = self.weaponframe + 1;
+	if (self.weaponframe == 9)
+		self.weaponframe = 1;
+	SuperDamageSound();
+	W_FireLavaSpikes (4);
+	self.attack_finished = time + 0.2;
+};
+void() player_lava_nail2   =[$nailatt2, player_lava_nail1  ]
+{
+	self.effects = self.effects | EF_MUZZLEFLASH;
+
+	if (!self.button0)
+		{player_run ();return;}
+	self.weaponframe = self.weaponframe + 1;
+	if (self.weaponframe == 9)
+		self.weaponframe = 1;
+	SuperDamageSound();
+	W_FireLavaSpikes (-4);
+	self.attack_finished = time + 0.2;
+};
+
+//============================================================================
+void() W_FirePlasma;
+
 void() player_light1   =[$light1, player_light2  ]
 {
 	self.effects = self.effects | EF_MUZZLEFLASH;
@@ -227,8 +303,18 @@ void() player_light1   =[$light1, player_light2  ]
 	if (self.weaponframe == 5)
 		self.weaponframe = 1;
 	SuperDamageSound();
-	W_FireLightning();
-	self.attack_finished = time + 0.2;
+
+	if (self.weapon == IT_LIGHTNING)
+	{
+		W_FireLightning();
+		self.attack_finished = time + 0.2;
+	}
+	else if (self.weapon == IT_PLASMA_GUN)
+	{
+		W_FirePlasma();
+		player_run();
+		return;
+	}
 };
 void() player_light2   =[$light2, player_light1  ]
 {
@@ -240,8 +326,12 @@ void() player_light2   =[$light2, player_light1  ]
 	if (self.weaponframe == 5)
 		self.weaponframe = 1;
 	SuperDamageSound();
-	W_FireLightning();
-	self.attack_finished = time + 0.2;
+
+	if (self.weapon == IT_LIGHTNING)
+	{
+		W_FireLightning();
+		self.attack_finished = time + 0.2;
+	}
 };
 
 //============================================================================
@@ -550,8 +640,23 @@ void() PlayerDie =
 	self.radsuit_finished = 0;
 	self.modelindex = modelindex_player;	// don't use eyes
 
+	self.gravity = 1.0;
+	self.shield_finished = 0;
+	self.antigrav_finished = 0;
+
+//ZOID--
 	if (deathmatch || coop)
+	{
 		DropBackpack();
+		TeamDropFlagOfPlayer(self);
+		DropRune();
+	}
+
+	if (self.ctf_killed == 2)
+		self.ctf_killed = 0;
+	else
+		self.ctf_killed = 1;
+//--ZOID
 
 	self.weaponmodel="";
 	self.view_ofs = '0 0 -8';
@@ -675,3 +780,57 @@ void()	player_die_ax6	=	[	$axdeth6,	player_die_ax7	] {};
 void()	player_die_ax7	=	[	$axdeth7,	player_die_ax8	] {};
 void()	player_die_ax8	=	[	$axdeth8,	player_die_ax9	] {};
 void()	player_die_ax9	=	[	$axdeth9,	player_die_ax9	] {PlayerDead();};
+
+void(entity shieldOwner, vector dir) shield_spawn;
+
+void() player_touch =
+{
+	local vector	vec;
+	local float		dot;
+	local float		doDamage;
+
+	if ( self.items2 & IT2_SHIELD)
+	{
+		if ( other.classname == "player")
+		{
+			makevectors ( self.angles );
+			vec = normalize (other.origin - self.origin);
+			dot = vec * v_forward;
+        	if (dot < 0.3)
+				return;
+
+			makevectors ( self.angles );
+		    other.velocity = v_forward * 500;
+			other.velocity_z = 250;
+
+			doDamage = FALSE;
+			if (TeamArmorDam(other, self, self, 15))
+			{
+				if(self.shield_death_time < time)
+					doDamage = TRUE;
+			}
+
+			// if shield has timed out, respawn it.
+			// don't do particles more than twice a second.
+			if ( self.shield_death_time < time)
+			{
+    	        sound(self,CHAN_WEAPON,"enforcer/enfstop.wav", 1, ATTN_NORM);
+
+				WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+				WriteByte (MSG_BROADCAST, TE_EXPLOSION2);
+				WriteCoord (MSG_BROADCAST, other.origin_x);
+				WriteCoord (MSG_BROADCAST, other.origin_y);
+				WriteCoord (MSG_BROADCAST, other.origin_z);
+				WriteByte (MSG_BROADCAST, 230);
+				WriteByte (MSG_BROADCAST, 5);
+
+				shield_spawn ( self, v_forward );
+			}
+
+			if (doDamage)
+				T_Damage (other, self.shield_entity, self.shield_entity, 15);
+
+//			self.shield_death_time = time + 0.5;
+		}
+	}
+};

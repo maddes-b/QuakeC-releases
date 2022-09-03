@@ -1,4 +1,5 @@
 /*  Copyright (C) 1996-1997  Id Software, Inc.
+    Copyright (C) 1996-1997  Rogue Entertainment
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -130,16 +131,17 @@ void() FireAmbient =
 	ambientsound (self.origin, "ambience/fire1.wav", 0.5, ATTN_STATIC);
 };
 
-/*QUAKED light_torch_small_walltorch (0 .5 0) (-10 -10 -20) (10 10 20)
+/*QUAKED light_torch_small_walltorch (0 .5 0) (-10 -10 -20) (10 10 20) Quiet
 Short wall torch
-Default light value is 200
+Default light value is 300
 Default style is 0
 */
 void() light_torch_small_walltorch =
 {
 	precache_model ("progs/flame.mdl");
 	setmodel (self, "progs/flame.mdl");
-	FireAmbient ();
+	if (!(self.spawnflags & 1))
+		FireAmbient ();
 	makestatic (self);
 };
 
@@ -310,23 +312,43 @@ void() misc_explobox2 =
 
 float SPAWNFLAG_SUPERSPIKE	= 1;
 float SPAWNFLAG_LASER = 2;
+float SPAWNFLAG_LAVASPIKE = 4;
+float SPAWNFLAG_SUPERLAVA = 8;
+float SPAWNFLAG_LAVASKILL = 16;
+float SPAWNFLAG_FIREBALL = 32;
 
 void(vector org, vector vec) LaunchLaser;
+void(vector org, vector dir) launch_lava_spike;
+void(vector org, vector dir) launch_fireball;
 
 void() spikeshooter_use =
 {
-	if (self.spawnflags & SPAWNFLAG_LASER)
-	{
-		sound (self, CHAN_VOICE, "enforcer/enfire.wav", 1, ATTN_NORM);
-		LaunchLaser (self.origin, self.movedir);
-	}
-	else
+	if (self.spawnflags & SPAWNFLAG_SUPERSPIKE || !(self.spawnflags))
 	{
 		sound (self, CHAN_VOICE, "weapons/spike2.wav", 1, ATTN_NORM);
 		launch_spike (self.origin, self.movedir);
 		newmis.velocity = self.movedir * 500;
 		if (self.spawnflags & SPAWNFLAG_SUPERSPIKE)
 			newmis.touch = superspike_touch;
+	}
+	else if (self.spawnflags & SPAWNFLAG_LASER)
+	{
+		sound (self, CHAN_VOICE, "enforcer/enfire.wav", 1, ATTN_NORM);
+		LaunchLaser (self.origin, self.movedir);
+	}
+    else if (self.spawnflags & SPAWNFLAG_FIREBALL)
+    {
+        launch_fireball (self.origin, self.movedir);
+    }
+	else
+	{
+		sound (self, CHAN_VOICE, "weapons/spike2.wav", 1, ATTN_NORM);
+		launch_lava_spike (self.origin, self.movedir);
+		newmis.velocity = self.movedir * 500;
+		if (self.spawnflags & SPAWNFLAG_SUPERLAVA)
+			newmis.touch = superlavaspike_touch;
+        else if((self.spawnflags & SPAWNFLAG_LAVASKILL) && (skill > 1))
+			newmis.touch = superlavaspike_touch;
 	}
 };
 
@@ -338,9 +360,9 @@ void() shooter_think =
 };
 
 
-/*QUAKED trap_spikeshooter (0 .5 .8) (-8 -8 -8) (8 8 8) superspike laser
+/*QUAKED trap_spikeshooter (0 .5 .8) (-8 -8 -8) (8 8 8) superspike laser lava superlava skilllava fireball
 When triggered, fires a spike in the direction set in QuakeEd.
-Laser is only for REGISTERED.
+Laser, Lava and SuperLava are only for REGISTERED.
 */
 
 void() trap_spikeshooter =
@@ -354,6 +376,29 @@ void() trap_spikeshooter =
 		precache_sound2 ("enforcer/enfire.wav");
 		precache_sound2 ("enforcer/enfstop.wav");
 	}
+	else if (self.spawnflags & SPAWNFLAG_LAVASPIKE)
+	{
+		precache_model2 ("progs/lspike.mdl");
+		precache_sound2 ("lavagun/snail.wav");		// lava nail gun cooldown
+		precache_sound2 ("weapons/rocket1i.wav");
+	}
+	else if (self.spawnflags & SPAWNFLAG_SUPERLAVA)
+	{
+		precache_model2 ("progs/lspike.mdl");
+		precache_sound2 ("lavagun/snail.wav");		// lava nail gun cooldown
+		precache_sound2 ("weapons/spike2.wav");
+	}
+    else if (self.spawnflags & SPAWNFLAG_LAVASKILL)
+    {
+		precache_model2 ("progs/lspike.mdl");
+		precache_sound2 ("lavagun/snail.wav");		// lava nail gun cooldown
+		precache_sound2 ("weapons/rocket1i.wav");
+		precache_sound2 ("weapons/spike2.wav");
+    }
+    else if (self.spawnflags & SPAWNFLAG_FIREBALL)
+    {
+        precache_model ("progs/fireball.mdl");
+    }
 	else
 		precache_sound ("weapons/spike2.wav");
 };
@@ -463,6 +508,17 @@ void() bubble_bob =
 {
 local float		rnd1, rnd2, rnd3;
 local vector	vtmp1, modi;
+
+	// PGM fix - 02/25/97 so bubbles won't go through walls
+	rnd1 = pointcontents(self.origin);
+	if (rnd1 == CONTENT_SOLID)
+		remove(self);
+	// PGM fix - 02/25/97 so bubbles pop 2 seconds after leaving water
+	else if (rnd1 == CONTENT_EMPTY)
+	{
+		if (self.cnt < 16)
+			self.cnt = 16;
+	}
 
 	self.cnt = self.cnt + 1;
 	if (self.cnt == 4)

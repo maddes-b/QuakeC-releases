@@ -1,4 +1,5 @@
 /*  Copyright (C) 1996-1997  Id Software, Inc.
+    Copyright (C) 1996-1997  Rogue Entertainment
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -94,7 +95,9 @@ local entity	etemp;
 
 	if (!walkmove(0,0))
 	{
-		dprint ("walkmonster in wall at: ");
+		dprint ("walkmonster in wall!\n");
+		dprint (self.classname);
+		dprint (" at ");
 		dprint (vtos(self.origin));
 		dprint ("\n");
 	}
@@ -163,7 +166,9 @@ void() flymonster_start_go =
 
 	if (!walkmove(0,0))
 	{
-		dprint ("flymonster in wall at: ");
+		dprint ("flymonster in wall!\n");
+		dprint (self.classname);
+		dprint (" at ");
 		dprint (vtos(self.origin));
 		dprint ("\n");
 	}
@@ -248,5 +253,8 @@ void() swimmonster_start =
 // spread think times so they don't all happen at same time
 	self.nextthink = self.nextthink + random()*0.5;
 	self.think = swimmonster_start_go;
-	total_monsters = total_monsters + 1;
+
+//	Don't count here. swimmonster_start_go already increments
+//  the monster count!!!
+//	total_monsters = total_monsters + 1;
 };

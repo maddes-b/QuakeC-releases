@@ -1,4 +1,5 @@
 /*  Copyright (C) 1996-1997  Id Software, Inc.
+    Copyright (C) 1996-1997  Rogue Entertainment
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -301,7 +302,10 @@ local float	rsnd;
 	if (self.classname == "monster_ogre")
 		sound (self, CHAN_VOICE, "ogre/ogwake.wav", 1, ATTN_NORM);
 	else if (self.classname == "monster_knight")
-		sound (self, CHAN_VOICE, "knight/ksight.wav", 1, ATTN_NORM);
+    {
+        if (self.skin == 0)
+            sound (self, CHAN_VOICE, "knight/ksight.wav", 1, ATTN_NORM);
+    }
 	else if (self.classname == "monster_shambler")
 		sound (self, CHAN_VOICE, "shambler/ssight.wav", 1, ATTN_NORM);
 	else if (self.classname == "monster_demon1")
@@ -313,11 +317,18 @@ local float	rsnd;
 	else if (self.classname == "monster_dog")
 		sound (self, CHAN_VOICE, "dog/dsight.wav", 1, ATTN_NORM);
 	else if (self.classname == "monster_hell_knight")
-		sound (self, CHAN_VOICE, "hknight/sight1.wav", 1, ATTN_NORM);
+    {
+        if (self.skin == 0)
+            sound (self, CHAN_VOICE, "hknight/sight1.wav", 1, ATTN_NORM);
+    }
 	else if (self.classname == "monster_tarbaby")
 		sound (self, CHAN_VOICE, "blob/sight1.wav", 1, ATTN_NORM);
 	else if (self.classname == "monster_vomit")
 		sound (self, CHAN_VOICE, "vomitus/v_sight1.wav", 1, ATTN_NORM);
+	else if (self.classname == "monster_eel")
+		sound (self, CHAN_VOICE, "eel/eelc5.wav", 1, ATTN_NORM);
+	else if (self.classname == "monster_wrath")
+		sound (self, CHAN_VOICE, "wrath/wsee.wav", 1, ATTN_NORM);
 	else if (self.classname == "monster_enforcer")
 	{
 		rsnd = rint(random() * 3);
@@ -334,6 +345,8 @@ local float	rsnd;
 		sound (self, CHAN_VOICE, "soldier/sight1.wav", 1, ATTN_NORM);
 	else if (self.classname == "monster_shalrath")
 		sound (self, CHAN_VOICE, "shalrath/sight.wav", 1, ATTN_NORM);
+	else if (self.classname == "monster_dragon")
+		sound (self, CHAN_VOICE, "dragon/see.wav", 1, ATTN_NORM);
 };
 
 void() FoundTarget =
@@ -431,7 +444,9 @@ float() FindTarget =
 		}
 	}
 
-	FoundTarget ();
+// PGM hack
+	if (self.classname != "dragon")
+		FoundTarget ();
 
 	return TRUE;
 };
@@ -495,11 +510,14 @@ void(float dist) ai_walk =
 
 	movedist = dist;
 
+/* Dragon movement handled in dragon.qc.... this is legacy.
 	if (self.classname == "monster_dragon")
 	{
 		movetogoal (dist);
 		return;
 	}
+*/
+
 	// check for noticing a player
 	if (FindTarget ())
 		return;

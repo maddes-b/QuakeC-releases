@@ -1,4 +1,5 @@
 //  Copyright (C) 1996-1997  Id Software, Inc.
+//  Copyright (C) 1996-1997  Rogue Entertainment
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -17,8 +18,9 @@
 //  See file, 'COPYING', for details.
 
 // based on:
-// * re-GPLed versions of v1.06 and v1.05 beta by Maddes (assuming to follow id's intention), https://github.com/maddes-b/QuakeC-releases/
+// * re-GPLed versions of v1.00 mission pack #2, v1.06 and v1.05 beta by Maddes (assuming to follow Rogue's and id's intention), https://github.com/maddes-b/QuakeC-releases/
 // * minor cleanup by Maddes (trim trailing spaces), https://github.com/maddes-b/QuakeC-releases/
+// * v1.00 mission pack #2 release by Rogue Entertainment, https://www.gamers.org/pub/games/idgames2/more_idstuff/doe_qc.zip
 // * v1.06 release by id Software, https://www.quaddicted.com/files/idgames2/idstuff/unsup/progs106.zip
 // * v1.05 beta release by id Software, https://github.com/Jason2Brownlee/QuakeOfficialArchive
 // * v1.01 GPL release by id Software, https://github.com/id-Software/Quake-Tools/tree/master/qcc/v101qc
@@ -26,11 +28,15 @@
 ../progs.dat
 
 defs.qc
+teamplay.qc		// ZOID - teamplay stuff
+runes.qc
+motd.qc
 subs.qc
 fight.qc
 ai.qc
 combat.qc
 items.qc
+grapple.qc		// ZOID - grappling hook
 weapons.qc
 world.qc
 client.qc
@@ -58,3 +64,30 @@ fish.qc			// registered
 shalrath.qc		// registered
 enforcer.qc		// registered
 oldone.qc		// registered
+
+new_ai.qc
+eel.qc
+invis_sw.qc
+newitems.qc
+newplats.qc
+newmisc.qc
+elevatr.qc
+pendulum.qc
+lightnin.qc
+wrath.qc
+shield.qc
+lava_wpn.qc
+mult_wpn.qc
+dragon.qc
+s_wrath.qc
+random.qc
+earthq.qc
+lavaman.qc
+sphere.qc
+buzzsaw.qc
+dmatch.qc
+morph.qc
+
+ending.qc
+mummy.qc
+timemach.qc

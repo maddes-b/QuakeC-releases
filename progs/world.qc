@@ -1,4 +1,5 @@
 /*  Copyright (C) 1996-1997  Id Software, Inc.
+    Copyright (C) 1996-1997  Rogue Entertainment
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -202,6 +203,7 @@ void() worldspawn =
 
 // player precaches
 	W_Precache ();			// get weapon precaches
+	RunePrecache();			// precache the runes
 
 // sounds used from C physics code
 	precache_sound ("demon/dland2.wav");		// landing thud
@@ -272,6 +274,15 @@ void() worldspawn =
 	precache_sound ("misc/water1.wav");			// swimming
 	precache_sound ("misc/water2.wav");			// swimming
 
+// PGM Addition Sounds
+    precache_sound ("enforcer/enfstop.wav");    // shield impact
+	precache_sound ("plasma/explode.wav");
+	precache_sound ("plasma/flight.wav");
+	precache_sound ("plasma/fire.wav");
+	precache_sound ("shield/hit.wav");
+	precache_sound ("belt/use.wav");
+	precache_sound ("items/damage2.wav");
+
 	precache_model ("progs/player.mdl");
 	precache_model ("progs/eyes.mdl");
 	precache_model ("progs/h_player.mdl");
@@ -290,6 +301,12 @@ void() worldspawn =
 	precache_model ("progs/v_nail2.mdl");
 	precache_model ("progs/v_rock2.mdl");
 
+	// Lava Gun models - pgm change
+	precache_model ("progs/v_lava.mdl");
+	precache_model ("progs/v_lava2.mdl");
+	precache_model ("progs/v_multi.mdl");
+	precache_model ("progs/v_multi2.mdl");
+
 	precache_model ("progs/bolt.mdl");		// for lightning gun
 	precache_model ("progs/bolt2.mdl");		// for lightning gun
 	precache_model ("progs/bolt3.mdl");		// for boss shock
@@ -300,12 +317,29 @@ void() worldspawn =
 	precache_model ("progs/spike.mdl");
 	precache_model ("progs/s_spike.mdl");
 
+	// PGM addition
+	precache_model ("progs/mervup.mdl");
+	precache_model ("progs/rockup.mdl");
+	precache_model ("progs/rockup_d.mdl");
+	precache_model ("progs/lspike.mdl");
+	precache_model ("progs/shield.mdl");
+	precache_model ("progs/p_shield.mdl");
+
 	precache_model ("progs/backpack.mdl");
 
 	precache_model ("progs/zom_gib.mdl");
 
 	precache_model ("progs/v_light.mdl");
 
+	precache_model ("progs/plasma.mdl");
+	precache_model ("progs/v_plasma.mdl");
+
+//ZOID--
+	// hook for CTF
+	precache_model ("progs/hook.mdl");
+	precache_model ("progs/v_grpple.mdl");
+//	precache_model ("progs/bit.mdl");
+//--ZOID
 
 //
 // Setup light animation tables. 'a' is total darkness, 'z' is maxbright.
@@ -395,6 +429,9 @@ void() InitBodyQue =
 // respawned elsewhere
 void(entity ent) CopyToBodyQue =
 {
+	// PGM - support for new deathmatch skins on corpses too!
+	bodyque_head.skin = ent.skin;
+
 	bodyque_head.angles = ent.angles;
 	bodyque_head.model = ent.model;
 	bodyque_head.modelindex = ent.modelindex;
