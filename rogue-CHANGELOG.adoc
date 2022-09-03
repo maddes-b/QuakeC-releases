@@ -1,0 +1,66 @@
+= Changelog for rogue (mission pack #2 "Dissolution of Eternity")
+
+== v1.00
+
+First release.
+
+Logic changes in:
+
+* ai.qc
+* client.qc
+* combat.qc
+* defs.qc
+* doors.qc
+* enforcer.qc
+* fish.qc
+* hknight.qc
+* items.qc
+* knight.qc
+* misc.qc
+* monsters.qc
+* ogre.qc
+* player.qc
+* progs.src
+* tarbaby.qc
+* triggers.qc
+* weapons.qc
+* world.qc
+* zombie.qc
+
+New files:
+
+* buzzsaw.qc
+* dmatch.qc
+* dragon.qc
+* earthq.qc
+* eel.qc
+* elevatr.qc
+* ending.qc
+* grapple.qc
+* invis_sw.qc
+* lava_wpn.qc
+* lavaman.qc
+* lightnin.qc
+* morph.qc
+* motd.qc
+* mult_wpn.qc
+* mummy.qc
+* new_ai.qc
+* newitems.qc
+* newmisc.qc
+* newplats.qc
+* pendulum.qc
+* random.qc
+* runes.qc
+* s_wrath.qc
+* shield.qc
+* sphere.qc
+* teamplay.qc
+* timemach.qc
+* wrath.qc
+
+Deleted files:
+* amtest.qc
+* flag.qc
+* jctest.qc
+* models.qc
