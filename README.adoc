@@ -63,6 +63,18 @@ Additionally re-licensing to GPLv2 assuming to follow id's and Hipnotic's intent
    No license specified.
 
 
+== rogue (Mission Pack #2 "Dissolution of Eternity")
+
+The game logic of the second mission pack named "Dissolution of Eternity" by Rogue Entertainment. The "rogue-original" branch just shows the original history of the Quake 1 mission pack game logic. +
+Additionally re-licensing to GPLv2 assuming to follow id's and Rogue's intentions and reducing delta.
+
+=== Known Versions (Releases with date and SHA256)
+
+* v1.00
+** 1997-04-30: `b29c9d92594afe5d66ba3b59b7e1a4387b041061e8be5e814754b3b7c310361e *DOE_QC.ZIP` +
+   No license specified.
+
+
 == Known Bugs in Game Logics
 
 {url-qip}[Quake Info Pool] (short: QIP) has a list of known bugs of the Quake 1 main game logics and maps (based on v1.06), plus engine (based on v1.09).
