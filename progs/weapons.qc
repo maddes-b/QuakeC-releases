@@ -1,5 +1,4 @@
-/*  Copyright (C) 1996-1997  Id Software, Inc.
-    Copyright (C) 1996-1997  Hipnotic Interactive, Inc.
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 /*
 */
 //JIM
@@ -596,8 +596,8 @@ void() W_FireAxe =
 	local	vector	source;
 	local	vector	org;
 
-	makevectors (self.v_angle);
-	source = self.origin + '0 0 16';
+   makevectors (self.v_angle);
+   source = self.origin + '0 0 16';
 	traceline (source, source + v_forward*64, FALSE, self);
 	if (trace_fraction == 1.0)
 		return;
@@ -1542,7 +1542,7 @@ void() W_SetCurrentAmmo =
 		self.weaponframe = 0;
 		self.items = self.items | IT_CELLS;
 	}
-	else if (self.weapon == IT_GRENADE_LAUNCHER)
+   else if (self.weapon == IT_GRENADE_LAUNCHER)
 	{
 		self.currentammo = self.ammo_rockets;
 		self.weaponmodel = "progs/v_rock.mdl";
@@ -1579,7 +1579,7 @@ void() W_SetCurrentAmmo =
 		self.weaponframe = 0;
       self.items = self.items | IT_ROCKETS;
 	}
-	else
+   else
 	{
 		self.currentammo = 0;
 		self.weaponmodel = "";
@@ -1593,12 +1593,12 @@ float() W_BestWeapon =
 
 	it = self.items;
 
-	if (self.waterlevel <= 1 && self.ammo_cells >= 1 && (it & IT_LIGHTNING) )
-			return IT_LIGHTNING;
+   if (self.waterlevel <= 1 && self.ammo_cells >= 1 && (it & IT_LIGHTNING) )
+      return IT_LIGHTNING;
 //MED
    else if(self.ammo_cells >= 1 && (it & IT_LASER_CANNON) )
       return IT_LASER_CANNON;
-	else if(self.ammo_nails >= 2 && (it & IT_SUPER_NAILGUN) )
+   else if(self.ammo_nails >= 2 && (it & IT_SUPER_NAILGUN) )
 		return IT_SUPER_NAILGUN;
 	else if(self.ammo_shells >= 2 && (it & IT_SUPER_SHOTGUN) )
 		return IT_SUPER_SHOTGUN;
@@ -1621,6 +1621,22 @@ float() W_BestWeapon =
 	return IT_AXE;
 };
 
+float(entity playerEnt, float old, float new) W_WantsToChangeWeapon =
+{
+	float playerFlags = CheckPlayerEXFlags(playerEnt);
+	if((playerFlags & PEF_CHANGENEVER) != 0)
+	{
+		return 0;
+	}
+
+	if(((playerFlags & PEF_CHANGEONLYNEW) != 0) && old == new)
+	{
+		return 0;
+	}
+
+	return 1;
+};
+
 float() W_CheckNoAmmo =
 {
 	if (self.currentammo > 0)
@@ -1635,7 +1651,7 @@ float() W_CheckNoAmmo =
       return TRUE;
       }
 
-	self.weapon = W_BestWeapon ();
+   self.weapon = W_BestWeapon ();
 
 	W_SetCurrentAmmo ();
 
@@ -1767,8 +1783,8 @@ void() W_ChangeWeapon =
 //MED
 	if (self.impulse == 1)
 	{
-		fl = IT_AXE;
-	}
+      fl = IT_AXE;
+   }
 	else if (self.impulse == 2)
 	{
 		fl = IT_SHOTGUN;
@@ -1790,9 +1806,10 @@ void() W_ChangeWeapon =
 //MED
 	else if (self.impulse == 5)
 	{
-		fl = IT_SUPER_NAILGUN;
-		if (self.ammo_nails < 2)
-			am = 1;
+      fl = IT_SUPER_NAILGUN;
+      if (self.ammo_nails < 2)
+         am = 1;
+
 	}
 //MED
 	else if (self.impulse == 6)
@@ -1803,7 +1820,7 @@ void() W_ChangeWeapon =
          }
       else
          {
-		fl = IT_GRENADE_LAUNCHER;
+         fl = IT_GRENADE_LAUNCHER;
          }
 		if (self.ammo_rockets < 1)
 			am = 1;
@@ -1817,10 +1834,10 @@ void() W_ChangeWeapon =
 //MED
 	else if (self.impulse == 8)
 	{
-		fl = IT_LIGHTNING;
-		if (self.ammo_cells < 1)
-			am = 1;
-	}
+      fl = IT_LIGHTNING;
+      if (self.ammo_cells < 1)
+         am = 1;
+   }
    else if (self.impulse == 225)
 	{
       fl = IT_LASER_CANNON;
@@ -1830,6 +1847,18 @@ void() W_ChangeWeapon =
    else if (self.impulse == 226)
 	{
       fl = IT_MJOLNIR;
+   }
+   else if (self.impulse == 227)
+   {
+      fl = IT_PROXIMITY_GUN;
+      if (self.ammo_rockets < 1)
+         am = 1;
+   }
+   else if (self.impulse == 228)
+   {
+      fl = IT_GRENADE_LAUNCHER;
+      if (self.ammo_rockets < 1)
+         am = 1;
    }
 
 //MED
@@ -1844,7 +1873,7 @@ void() W_ChangeWeapon =
          fl = IT_PROXIMITY_GUN;
          if (!(self.items & fl))
             {
-            sprint (self, "no weapon.\n");
+            sprint (self, "$qc_no_weapon");
             return;
             }
          if (self.ammo_rockets < 1)
@@ -1853,22 +1882,22 @@ void() W_ChangeWeapon =
             am = 0;
          }
       else
-	{
-		sprint (self, "no weapon.\n");
-		return;
-	}
+         {
+         sprint (self, "$qc_no_weapon");
+         return;
+         }
       }
 
 	if (am)
 	{	// don't have the ammo
-		sprint (self, "not enough ammo.\n");
+		sprint (self, "$qc_not_enough_ammo");
 		return;
 	}
 
 //
 // set weapon, set ammo
 //
-	self.weapon = fl;
+   self.weapon = fl;
 	W_SetCurrentAmmo ();
 };
 
@@ -1879,8 +1908,9 @@ CheatCommand
 */
 void() CheatCommand =
 {
-	if (deathmatch || coop)
+	if ( ( deathmatch || coop ) && cheats_allowed == 0 ) { // mal: allow impulse 9 IF cheats allowed
 		return;
+	}
 
 	self.ammo_rockets = 100;
 	self.ammo_nails = 200;
@@ -1932,11 +1962,11 @@ void() CycleWeaponCommand =
 		}
 		else if (self.weapon == IT_AXE)
 		{
-			self.weapon = IT_SHOTGUN;
-			if (self.ammo_shells < 1)
+         self.weapon = IT_SHOTGUN;
+         if (self.ammo_shells < 1)
 				am = 1;
-		}
-		else if (self.weapon == IT_SHOTGUN)
+      }
+      else if (self.weapon == IT_SHOTGUN)
 		{
 			self.weapon = IT_SUPER_SHOTGUN;
 			if (self.ammo_shells < 2)
@@ -1956,12 +1986,12 @@ void() CycleWeaponCommand =
 		}
 		else if (self.weapon == IT_SUPER_NAILGUN)
 		{
-			self.weapon = IT_GRENADE_LAUNCHER;
+         self.weapon = IT_GRENADE_LAUNCHER;
 			if (self.ammo_rockets < 1)
 				am = 1;
 		}
 //MED
-		else if (self.weapon == IT_GRENADE_LAUNCHER)
+      else if (self.weapon == IT_GRENADE_LAUNCHER)
 		{
          self.weapon = IT_PROXIMITY_GUN;
 			if (self.ammo_rockets < 1)
@@ -1974,7 +2004,7 @@ void() CycleWeaponCommand =
 			if (self.ammo_rockets < 1)
 				am = 1;
 		}
-		else if (self.weapon == IT_ROCKET_LAUNCHER)
+      else if (self.weapon == IT_ROCKET_LAUNCHER)
 		{
 			self.weapon = IT_LIGHTNING;
 			if (self.ammo_cells < 1)
@@ -2032,13 +2062,13 @@ void() CycleWeaponReverseCommand =
          if (self.ammo_cells < 1)
 				am = 1;
 		}
-		else if (self.weapon == IT_LIGHTNING)
+      else if (self.weapon == IT_LIGHTNING)
 		{
 			self.weapon = IT_ROCKET_LAUNCHER;
 			if (self.ammo_rockets < 1)
 				am = 1;
 		}
-		else if (self.weapon == IT_ROCKET_LAUNCHER)
+      else if (self.weapon == IT_ROCKET_LAUNCHER)
 		{
          self.weapon = IT_PROXIMITY_GUN;
 			if (self.ammo_rockets < 1)
@@ -2050,13 +2080,13 @@ void() CycleWeaponReverseCommand =
 			if (self.ammo_rockets < 1)
 				am = 1;
 		}
-		else if (self.weapon == IT_GRENADE_LAUNCHER)
+      else if (self.weapon == IT_GRENADE_LAUNCHER)
 		{
 			self.weapon = IT_SUPER_NAILGUN;
 			if (self.ammo_nails < 2)
 				am = 1;
 		}
-		else if (self.weapon == IT_SUPER_NAILGUN)
+      else if (self.weapon == IT_SUPER_NAILGUN)
 		{
 			self.weapon = IT_NAILGUN;
 			if (self.ammo_nails < 1)
@@ -2111,7 +2141,7 @@ void() QuadCheat =
 	self.super_time = 1;
 	self.super_damage_finished = time + 30;
 	self.items = self.items | IT_QUAD;
-   bprint ("quad cheat\n");
+   bprint ("$qc_quad_cheat");
 };
 
 //MED
@@ -2122,7 +2152,7 @@ void() WetsuitCheat =
    self.items2 = self.items2 | HIP_IT_WETSUIT;
 	self.wetsuit_time = 1;
 	self.wetsuit_finished = time + 30;
-   bprint( "wetsuit cheat\n" );
+   bprint( "$qc_wetsuit_cheat" );
 	};
 
 //MED
@@ -2133,7 +2163,7 @@ void() EmpathyShieldsCheat =
    self.items2 = self.items2 | HIP_IT_EMPATHY_SHIELDS;
    self.empathy_time = 1;
    self.empathy_finished = time + 30;
-   bprint( "empathy shields cheat\n" );
+   bprint( "$qc_empathy_cheat" );
 	};
 
 void() DumpEntities =
@@ -2184,7 +2214,7 @@ void() Genocide =
 
    if (deathmatch || coop)
 		return;
-   bprint("Genocide!\n");
+   bprint("$qc_genocide_cheat");
    head = nextent(world);
    while (head!=world)
       {
@@ -2201,7 +2231,7 @@ void () ToggleDump =
    {
    dump_coord = 1 - dump_coord;
    if (dump_coord == 1)
-      bprint("Dumping Player Location\n");
+      bprint("$qc_dump_player_loc");
    };
 void () DumpCoordinates =
    {
@@ -2225,12 +2255,12 @@ void() ImpulseCommands =
 	if (self.impulse >= 1 && self.impulse <= 8)
 		W_ChangeWeapon ();
 
-   if (self.impulse >= 225 && self.impulse <= 226)
+   if (self.impulse >= 225 && self.impulse <= 228)
 		W_ChangeWeapon ();
 
 	if (self.impulse == 9)
 		CheatCommand ();
-	if (self.impulse == 10)
+   if (self.impulse == 10)
 		CycleWeaponCommand ();
 	if (self.impulse == 11)
 		ServerflagsCommand ();
@@ -2250,7 +2280,7 @@ void() ImpulseCommands =
       DumpEntities();
    if ( self.impulse == 203 )
       DumpLiveEntities();
-	if (self.impulse == 255)
+   if (self.impulse == 255)
 		QuadCheat ();
    if (dump_coord == 1)
       DumpCoordinates();

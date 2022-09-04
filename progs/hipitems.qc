@@ -1,4 +1,4 @@
-/*  Copyright (C) 1996-1997  Hipnotic Interactive, Inc.
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,11 +16,9 @@
 
     See file, 'COPYING', for details.
 */
+
 /* Items QuickC program
    By Jim Dose'  9/13/96
-   Copyright (c)1996 Hipnotic Interactive, Inc.
-   All rights reserved.
-   Do not distribute.
 */
 
 float UNDERWATER = 2;
@@ -45,9 +43,7 @@ local float		best;
 	if (other.health <= 0)
 		return;
 
-	sprint (other, "You got the ");
-	sprint (other, self.netname);
-	sprint (other,"\n");
+   sprint(other, "$qc_got_item", self.netname);
 
 	if (deathmatch)
 	{
@@ -98,7 +94,7 @@ void() item_artifact_wetsuit =
    precache_sound ("items/suit2.wav");
    self.noise = "misc/weton.wav";
    setmodel (self, "progs/wetsuit.mdl");
-	self.netname = "Wetsuit";
+	self.netname = "$qc_wetsuit";
    self.items2 = HIP_IT_WETSUIT;
    setsize (self, '-16 -16 -24', '16 16 32');
 
@@ -132,7 +128,7 @@ void() horn_touch =
 
 	self.solid = SOLID_NOT;
 	self.model = string_null;
-   sprint (other, "You got the Horn of Conjuring\n");
+   sprint (other, "$qc_got_horn");
    sound (other, CHAN_VOICE, self.noise, 1, ATTN_NONE);
 	stuffcmd (other, "bf\n");
    activator = other;
@@ -172,7 +168,7 @@ void() item_artifact_empathy_shields =
    precache_sound ("items/suit2.wav");
    setmodel(self, "progs/empathy.mdl");
    self.noise = "hipitems/empathy.wav";
-   self.netname = "Empathy Shields";
+   self.netname = "$qc_empathy_shields";
    self.items2 = HIP_IT_EMPATHY_SHIELDS;
    setsize (self, '-16 -16 0', '16 16 32');
 	StartItem ();
@@ -193,7 +189,7 @@ void() weapon_mjolnir =
    precache_model ("progs/g_hammer.mdl");
    setmodel (self, "progs/g_hammer.mdl");
 	self.weapon = 3;
-   self.netname = "Mjolnir";
+   self.netname = "$qc_mjolnir";
    self.items = IT_MJOLNIR;
 	self.touch = weapon_touch;
 	setsize (self, '-16 -16 0', '16 16 56');
@@ -208,7 +204,7 @@ void() weapon_laser_gun =
    precache_model ("progs/g_laserg.mdl");
    setmodel (self, "progs/g_laserg.mdl");
 	self.weapon = 3;
-   self.netname = "Laser Cannon";
+   self.netname = "$qc_laser_cannon";
    self.items = IT_LASER_CANNON;
    self.touch = weapon_touch;
 	setsize (self, '-16 -16 0', '16 16 56');
@@ -223,7 +219,7 @@ void() weapon_proximity_gun =
    precache_model ("progs/g_prox.mdl");
    setmodel (self, "progs/g_prox.mdl");
 	self.weapon = 3;
-   self.netname = "Proximity Gun";
+   self.netname = "$qc_prox_gun";
    self.items = IT_PROXIMITY_GUN;
    self.touch = weapon_touch;
 	setsize (self, '-16 -16 0', '16 16 56');
@@ -388,7 +384,7 @@ void() trap_spike_mine =
    self.nextthink = time + 0.2;
    total_monsters = total_monsters + 1;
    self.flags = self.flags | FL_MONSTER;
-   self.deathtype = "was blasted by a spike mine";
+   self.deathtype = "$qc_suicide_mine";
    };
 
 //============================================================================
@@ -572,7 +568,7 @@ void() trap_lightning_triggered =
    self.huntingcharmer = self.nextthink;
    self.think = lightning_firstthink;
    self.nextthink = time + 0.25;
-   self.deathtype = "is electrocuted";
+   self.deathtype = "$qc_suicide_electrocuted";
    };
 
 
@@ -792,7 +788,7 @@ void() trap_tesla_coil =
    self.lastvictim = world;
    tesla_numtargets = 0;
    self.attack_state = 0;
-   self.deathtype = "is electrocuted";
+   self.deathtype = "$qc_suicide_electrocuted";
    };
 
 void() trap_gods_wrath_use =
@@ -822,7 +818,7 @@ void() trap_gods_wrath =
    self.wait = 0;
    self.state = 1;
    self.nextthink = -1;
-   self.deathtype = "suffers the wrath of God";
+   self.deathtype = "$qc_suicide_wrath";
 //   self.attack_state = 1;
    self.use = trap_gods_wrath_use;
    };

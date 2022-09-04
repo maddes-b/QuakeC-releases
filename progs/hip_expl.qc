@@ -1,4 +1,4 @@
-/*  Copyright (C) 1996-1997  Hipnotic Interactive, Inc.
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,11 +16,10 @@
 
     See file, 'COPYING', for details.
 */
+
 /* Exploder QuickC program
    By Jim Dose'  9/13/96
-   Copyright (c)1996 Hipnotic Interactive, Inc.
-   All rights reserved.
-   Do not distribute.
+
 */
 
 float USE_PARTICLES = 1;

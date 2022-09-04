@@ -1,4 +1,4 @@
-/*  Copyright (C) 1996-1997  Hipnotic Interactive, Inc.
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,11 +16,9 @@
 
     See file, 'COPYING', for details.
 */
+
 /* Trigger QuickC program
    By Jim Dose'  12/2/96
-   Copyright (c)1996 Hipnotic Interactive, Inc.
-   All rights reserved.
-   Do not distribute.
 */
 
 float USE_GOLD_KEY = 1;
@@ -47,30 +45,30 @@ void() keytrigger_use =
             {
             if (world.worldtype == 2)
                {
-               centerprint (activator, "You need the silver keycard");
+               centerprint (activator, "$qc_need_silver_keycard");
                }
             else if (world.worldtype == 1)
                {
-               centerprint (activator, "You need the silver runekey");
+               centerprint (activator, "$qc_need_silver_runekey");
                }
             else if (world.worldtype == 0)
                {
-               centerprint (activator, "You need the silver key");
+               centerprint (activator, "$qc_need_silver_key");
                }
             }
          else
             {
             if (world.worldtype == 2)
                {
-               centerprint (activator, "You need the gold keycard");
+               centerprint (activator, "$qc_need_gold_keycard");
                }
             else if (world.worldtype == 1)
                {
-               centerprint (activator, "You need the gold runekey");
+               centerprint (activator, "$qc_need_gold_runekey");
                }
             else if (world.worldtype == 0)
                {
-               centerprint (activator, "You need the gold key");
+               centerprint (activator, "$qc_need_gold_key");
                }
             }
          }

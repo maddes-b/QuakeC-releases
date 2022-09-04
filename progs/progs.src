@@ -1,5 +1,4 @@
-//  Copyright (C) 1996-1997  Id Software, Inc.
-//  Copyright (C) 1996-1997  Hipnotic Interactive, Inc.
+//  Copyright (C) 1996-2022 id Software LLC
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -18,8 +17,9 @@
 //  See file, 'COPYING', for details.
 
 // based on:
-// * re-GPLed versions of v1.00 mission pack #1, v1.06 and v1.05 beta by Maddes (assuming to follow Hipnotic's and id's intention), https://github.com/maddes-b/QuakeC-releases/
+// * compilation of all releases by Maddes, https://github.com/maddes-b/QuakeC-releases/
 // * minor cleanup by Maddes (trim trailing spaces), https://github.com/maddes-b/QuakeC-releases/
+// * 2021 Rerelease Update 3 (QuakeEx v1.0.5039), https://github.com/id-Software/quake-rerelease-qc
 // * v1.00 mission pack #1 release by Hipnotic Interactive, Inc., https://www.gamers.org/pub/games/idgames2/more_idstuff/hipnotic/all.zip
 // * v1.06 release by id Software, https://www.quaddicted.com/files/idgames2/idstuff/unsup/progs106.zip
 // * v1.05 beta release by id Software, https://github.com/Jason2Brownlee/QuakeOfficialArchive
@@ -86,3 +86,5 @@ hiptrig.qc
 hipmisc.qc
 hipwater.qc
 hipdecoy.qc
+
+bots/bot.qc				// bot support

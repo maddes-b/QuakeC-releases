@@ -1,5 +1,4 @@
-/*  Copyright (C) 1996-1997  Id Software, Inc.
-    Copyright (C) 1996-1997  Hipnotic Interactive, Inc.
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 
 void() InitBodyQue;
 //JIM
@@ -215,9 +215,10 @@ World Types:
 2: base
 */
 //=======================
+
 void() worldspawn =
 {
-	lastspawn = world;
+   lastspawn = world;
 	InitBodyQue ();
 
 //JIM
@@ -316,12 +317,12 @@ void() worldspawn =
    precache_sound ("misc/foot6.wav");
    precache_sound ("misc/foot7.wav");
 
-	precache_model ("progs/player.mdl");
+   precache_model ("progs/player.mdl");
 	precache_model ("progs/eyes.mdl");
 	precache_model ("progs/h_player.mdl");
 //MED 12/03/96 added player with hammer
    precache_model ("progs/playham.mdl");
-	precache_model ("progs/gib1.mdl");
+   precache_model ("progs/gib1.mdl");
 	precache_model ("progs/gib2.mdl");
 	precache_model ("progs/gib3.mdl");
 
@@ -412,12 +413,22 @@ void() worldspawn =
       footsteps = 1;
    else
       footsteps = 0;
-};
+   };
 
 void() StartFrame =
 {
 	teamplay = cvar("teamplay");
 	skill = cvar("skill");
+	cheats_allowed = cvar("sv_cheats");
+
+    // save off a global here so it gets included in savegames
+    if (!campaign_valid) {
+        campaign_valid = TRUE;
+        campaign = cvar("campaign");
+    } else {
+        cvar_set("campaign", ftos(campaign));
+    }
+
 	framecount = framecount + 1;
 };
 

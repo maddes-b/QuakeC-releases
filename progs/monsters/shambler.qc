@@ -1,4 +1,4 @@
-/*  Copyright (C) 1996-1997  Id Software, Inc.
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 /*
 ==============================================================================
 
@@ -233,6 +234,9 @@ void() CastLightning =
 	WriteCoord (MSG_BROADCAST, trace_endpos_y);
 	WriteCoord (MSG_BROADCAST, trace_endpos_z);
 
+    // overload the frags field which is unused on enemies
+    self.frags += 1;
+
 	LightningDamage (org, trace_endpos, self, 10);
 };
 
@@ -273,11 +277,7 @@ void() sham_magic9     =[      $magic9,       sham_magic10   ]
 {CastLightning();};
 void() sham_magic10    =[      $magic10,      sham_magic11   ]
 {CastLightning();};
-void() sham_magic11    =[      $magic11,      sham_magic12   ]
-{
-if (skill == 3)
-	CastLightning();
-};
+void() sham_magic11    =[      $magic11,      sham_magic12   ] {};
 void() sham_magic12    =[      $magic12,      sham_run1	   ] {};
 
 
@@ -292,6 +292,21 @@ void() sham_pain6       =[      $pain6, sham_run1      ] {};
 void(entity attacker, float damage)	sham_pain =
 {
 	sound (self, CHAN_VOICE, "shambler/shurt2.wav", 1, ATTN_NORM);
+
+	if (damage >= self.health && attacker.classname == "player" && attacker.weapon == IT_AXE)
+	{
+		msg_entity = attacker;
+		WriteByte (MSG_ONE, SVC_ACHIEVEMENT);
+		WriteString(MSG_ONE, "ACH_CLOSE_SHAVE");
+	}
+
+    // overload frags field for shambler dance achievement
+    if (damage >= self.health && attacker.classname == "player" && self.frags == 0)
+    {
+    	msg_entity = attacker;
+        WriteByte (MSG_ONE, SVC_ACHIEVEMENT);
+        WriteString(MSG_ONE, "ACH_SHAMBLER_DANCE");
+    }
 
 	if (self.health <= 0)
 		return;		// allready dying, don't go into pain frame
@@ -380,6 +395,9 @@ void() monster_shambler =
 	self.th_melee = sham_melee;
 	self.th_missile = sham_magic1;
 	self.th_pain = sham_pain;
+
+    // overload frags for lightning attack counts
+    self.frags = 0;
 
 	walkmonster_start();
 };

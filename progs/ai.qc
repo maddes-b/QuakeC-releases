@@ -1,5 +1,4 @@
-/*  Copyright (C) 1996-1997  Id Software, Inc.
-    Copyright (C) 1996-1997  Hipnotic Interactive, Inc.
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 void() movetarget_f;
 void() t_movetarget;
 void() knight_walk1;
@@ -143,14 +143,14 @@ local entity	temp;
 //MED
    if (other.target)
       {
-	self.goalentity = self.movetarget = find (world, targetname, other.target);
-	self.ideal_yaw = vectoyaw(self.goalentity.origin - self.origin);
-	if (!self.movetarget)
-	{
-		self.pausetime = time + 999999;
-		self.th_stand ();
-		return;
-	}
+      self.goalentity = self.movetarget = find (world, targetname, other.target);
+      self.ideal_yaw = vectoyaw(self.goalentity.origin - self.origin);
+      if (!self.movetarget)
+         {
+         self.pausetime = time + 999999;
+         self.th_stand ();
+         return;
+         }
    //MED 01/20/97
       else if (other.delay)
          {
@@ -215,15 +215,6 @@ void() t_followtarget =
 	other = temp;
 
 	self.goalentity = self.movetarget = find (world, targetname, other.target);
-/*
-   bprint("target ");
-   bprint(other.target);
-   bprint(" targetname ");
-   bprint(self.goalentity.targetname);
-   bprint(" origin ");
-   bprint(vtos(self.goalentity.origin));
-   bprint("\n");
-*/
    self.ideal_yaw = vectoyaw(self.goalentity.origin - self.origin);
    self.wetsuit_time = time + 2;
 	if (!self.movetarget)
@@ -328,7 +319,7 @@ float (entity targ) visible =
 
 	spot1 = self.origin + self.view_ofs;
 	spot2 = targ.origin + targ.view_ofs;
-	traceline (spot1, spot2, TRUE, self);	// see through other monsters
+   traceline (spot1, spot2, TRUE, self);  // see through other monsters
 
 	if (trace_inopen && trace_inwater)
 		return FALSE;			// sight line crossed contents
@@ -337,7 +328,7 @@ float (entity targ) visible =
 	if (trace_fraction == 1)
       {
       visible_distance = vlen(spot2-spot1);
-		return TRUE;
+      return TRUE;
       }
 	return FALSE;
 };
@@ -561,7 +552,7 @@ void() FoundTarget =
 {
 //MED
 	if (self.enemy.classname == "player")
-	{
+      {
       if (self.charmed)
          {
          if ((self.charmer == self.enemy) || (self.charmer == self.enemy.charmer))
@@ -570,10 +561,10 @@ void() FoundTarget =
             return;
             }
          }
-// let other monsters see this monster for a while
+      // let other monsters see this monster for a while
 		sight_entity = self;
 		sight_entity_time = time;
-	}
+      }
    else if (self.charmed)
       {
       if ((self.charmer == self.enemy.charmer))
@@ -652,12 +643,12 @@ float() FindTarget =
          return FALSE;
          }
       }
-	if (sight_entity_time >= time - 0.1 && !(self.spawnflags & 3) && !(self.charmed) )
-	{
+   if (sight_entity_time >= time - 0.1 && !(self.spawnflags & 3) && !(self.charmed) )
+      {
 		client = sight_entity;
 		if (client.enemy == self.enemy)
 			return;
-	}
+      }
 //MED 10/17/96 added charmed clause
    else if (self.charmed)
       {
@@ -688,10 +679,10 @@ float() FindTarget =
 
       client = selected;
       }
-	else
+   else
 	{
 		client = checkclient ();
-		if (!client)
+      if (!client)
 			return FALSE;	// current check entity isn't in PVS
 	}
 
@@ -701,11 +692,11 @@ float() FindTarget =
    //MED 10/17/96 added charmed stuff
    if (!self.charmed)
       {
-	if (client.flags & FL_NOTARGET)
-		return FALSE;
+      if (client.flags & FL_NOTARGET)
+         return FALSE;
       }
-	if (client.items & IT_INVISIBILITY)
-		return FALSE;
+   if (client.items & IT_INVISIBILITY)
+      return FALSE;
 
 	r = range (client);
 	if (r == RANGE_FAR)
@@ -717,16 +708,16 @@ float() FindTarget =
    //MED 10/17/96 added charmed stuff
    if (!self.charmed)
       {
-	if (r == RANGE_NEAR)
-	{
-		if (client.show_hostile < time && !infront (client))
-			return FALSE;
-	}
-	else if (r == RANGE_MID)
-	{
-		if ( /* client.show_hostile < time || */ !infront (client))
-			return FALSE;
-	}
+      if (r == RANGE_NEAR)
+         {
+         if (client.show_hostile < time && !infront (client))
+            return FALSE;
+         }
+      else if (r == RANGE_MID)
+         {
+         if ( /* client.show_hostile < time || */ !infront (client))
+            return FALSE;
+         }
       }
 
 //
@@ -737,15 +728,15 @@ float() FindTarget =
 //MED 10/17/96 added charmed stuff
    if ((!self.charmed) && (!self.enemy.charmed))
       {
-	if (self.enemy.classname != "player")
-	{
-		self.enemy = self.enemy.enemy;
-		if (self.enemy.classname != "player")
-		{
-			self.enemy = world;
-			return FALSE;
-		}
-	}
+      if (self.enemy.classname != "player")
+         {
+         self.enemy = self.enemy.enemy;
+         if (self.enemy.classname != "player")
+            {
+            self.enemy = world;
+            return FALSE;
+            }
+         }
       }
 
 	FoundTarget ();
@@ -814,18 +805,18 @@ void(float dist) ai_walk =
 
 //MED 01/20/97
 	// check for noticing a player
-	if (FindTarget ())
-		return;
+   if (FindTarget ())
+      return;
 
 //MED 11/02/96
    if (self.huntingcharmer)
       {
 //      movetogoal (dist*2);
-		movetogoal (dist);
+      movetogoal (dist);
       self.nextthink = time + ((self.nextthink - time)/2);
       }
    else
-	movetogoal (dist);
+      movetogoal (dist);
 };
 
 
@@ -838,8 +829,8 @@ The monster is staying in one place for a while, with slight angle turns
 */
 void() ai_stand =
 {
-	if (FindTarget ())
-		return;
+   if (FindTarget ())
+      return;
 
 	if (time > self.pausetime)
 	{
@@ -954,11 +945,11 @@ float() CheckAnyAttack =
 {
 	if (!enemy_vis)
 		return;
-	if (self.classname == "monster_army")
+   if (self.classname == "monster_army")
 		return SoldierCheckAttack ();
-	if (self.classname == "monster_ogre")
+   if (self.classname == "monster_ogre")
 		return OgreCheckAttack ();
-	if (self.classname == "monster_shambler")
+   if (self.classname == "monster_shambler")
 		return ShamCheckAttack ();
 	if (self.classname == "monster_demon1")
 		return DemonCheckAttack ();
@@ -972,7 +963,7 @@ float() CheckAnyAttack =
       return ScourgeCheckAttack ();
    if (self.classname == "monster_armagon")
       return ArmagonCheckAttack ();
-	return CheckAttack ();
+   return CheckAttack ();
 };
 
 
@@ -1112,7 +1103,7 @@ void(float dist) ai_run =
 
 	movedist = dist;
 // see if the enemy is dead
-	if (self.enemy.health <= 0 || (self.charmed && (self.charmer == self.enemy)))
+   if (self.enemy.health <= 0 || (self.charmed && (self.charmer == self.enemy)))
 	{
 		self.enemy = world;
 //MED 10/30/96 added charmed stuff
@@ -1146,12 +1137,11 @@ void(float dist) ai_run =
 
 // look for other coop players
 //MED 10/17/96 added charmed stuff
-	if (coop && self.search_time < time && !self.charmed)
+   if (coop && self.search_time < time && !self.charmed)
 	{
 		if (FindTarget ())
 			return;
 	}
-
 	enemy_infront = infront(self.enemy);
 	enemy_range = range(self.enemy);
 	enemy_yaw = vectoyaw(self.enemy.origin - self.origin);
@@ -1184,7 +1174,7 @@ void(float dist) ai_run =
 
 	if (CheckAnyAttack ())
       {
-		return;					// beginning an attack
+      return;              // beginning an attack
       }
 
 	if (self.attack_state == AS_SLIDING)
@@ -1214,7 +1204,7 @@ void(float dist) ai_run =
       }
    else
       {
-// head straight in
-	movetogoal (dist);		// done in C code...
+      // head straight in
+      movetogoal (dist);      // done in C code...
       }
 };

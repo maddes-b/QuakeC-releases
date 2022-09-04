@@ -1,5 +1,4 @@
-/*  Copyright (C) 1996-1997  Id Software, Inc.
-    Copyright (C) 1996-1997  Hipnotic Interactive, Inc.
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 
 /*
 ==============================================================================
@@ -102,7 +102,6 @@ void()		SetNewParms;			// called when a client first connects to
 
 void()		SetChangeParms;			// call to set parms for self so they can
 									// be saved for a level transition
-
 
 //================================================
 void		end_sys_globals;		// flag for structure dumping
@@ -249,16 +248,21 @@ float 	TRUE					= 1;
 // edict.flags
 float	FL_FLY					= 1;
 float	FL_SWIM					= 2;
-float	FL_CLIENT				= 8;	// set for all client edicts
-float	FL_INWATER				= 16;	// for enter / leave water splash
+float	FL_CLIENT				= 8;		// set for all client edicts
+float	FL_INWATER				= 16;		// for enter / leave water splash
 float	FL_MONSTER				= 32;
-float	FL_GODMODE				= 64;	// player cheat
-float	FL_NOTARGET				= 128;	// player cheat
-float	FL_ITEM					= 256;	// extra wide size for bonus items
-float	FL_ONGROUND				= 512;	// standing on something
-float	FL_PARTIALGROUND		= 1024;	// not all corners are valid
-float	FL_WATERJUMP			= 2048;	// player jumping out of water
-float	FL_JUMPRELEASED			= 4096;	// for jump debouncing
+float	FL_GODMODE				= 64;		// player cheat
+float	FL_NOTARGET				= 128;		// player cheat
+float	FL_ITEM					= 256;		// extra wide size for bonus items
+float	FL_ONGROUND				= 512;		// standing on something
+float	FL_PARTIALGROUND		= 1024;		// not all corners are valid
+float	FL_WATERJUMP			= 2048;		// player jumping out of water
+float	FL_JUMPRELEASED			= 4096;		// for jump debouncing
+float 	FL_ISBOT     			= 8192; 	// mal: this will be set on bot players
+float 	FL_NO_PLAYERS			= 16384;	// mal: used by the spawn point editor
+float 	FL_NO_MONSTERS			= 32768;	// mal: used by the spawn point editor
+float   FL_NO_BOTS				= 65536;	// mal: any item marked with this will be ignored by bots.
+float 	FL_OBJECTIVE			= 131072; 	// mal: any item marked with this is an objective of some kind.
 
 // edict.movetype values
 float	MOVETYPE_NONE			= 0;	// never moves
@@ -316,11 +320,11 @@ float	IT_NAILS				= 512;
 float	IT_ROCKETS				= 1024;
 float	IT_CELLS				= 2048;
 
-float	IT_ARMOR1				= 8192;
+float IT_ARMOR1            = 8192;
 float	IT_ARMOR2				= 16384;
 float	IT_ARMOR3				= 32768;
 //MED 11/02/96 added new hip weapon removed SUPERHEALTH
-//float	IT_SUPERHEALTH			= 65536;
+//float IT_SUPERHEALTH       = 65536;
 
 float	IT_KEY1					= 131072;
 float	IT_KEY2					= 262144;
@@ -360,6 +364,7 @@ float	SVC_FINALE			= 31;
 float	SVC_CDTRACK			= 32;
 float	SVC_SELLSCREEN		= 33;
 
+float	SVC_ACHIEVEMENT		= 52;
 
 float	TE_SPIKE		= 0;
 float	TE_SUPERSPIKE	= 1;
@@ -401,6 +406,9 @@ float	EF_BRIGHTFIELD	= 1;
 float	EF_MUZZLEFLASH 	= 2;
 float	EF_BRIGHTLIGHT 	= 4;
 float	EF_DIMLIGHT 	= 8;
+float 	EF_QUADLIGHT    = 16;
+float 	EF_PENTALIGHT   = 32;
+float	EF_CANDLELIGHT	= 64;
 
 
 // messages
@@ -408,6 +416,33 @@ float	MSG_BROADCAST	= 0;		// unreliable to all
 float	MSG_ONE			= 1;		// reliable to one (msg_entity)
 float	MSG_ALL			= 2;		// reliable to all
 float	MSG_INIT		= 3;		// write to the init string
+
+// team numbers for Coop
+float TEAM_MONSTERS		= 0;
+float TEAM_HUMANS		= 1;
+
+// mal: basic colors - based on the Quake color palette.
+float COLOR_RED			= 251;
+float COLOR_GREEN		= 184;
+float COLOR_BLUE		= 208;
+float COLOR_YELLOW		= 192;
+float COLOR_WHITE		= 254;
+float COLOR_BLACK		= 0;
+float COLOR_CYAN		= 244;
+float COLOR_ORANGE		= 95;
+
+float DRAW_AI_SINGLE_FRAME		= .1; // mal: use for AI that think every 10th of a second
+float DRAW_GAME_SINGLE_FRAME	= -1; // mal: use in game code that updates every frame.
+
+// player expanded settings flags
+float PEF_CHANGEONLYNEW	= 1;
+float PEF_CHANGENEVER   = 2;
+
+enum class BotGoalReturnCode : int {
+	Error = 0,
+	Success,
+	InProgress
+};
 
 //================================================
 
@@ -428,6 +463,10 @@ entity	damage_attacker;	// set by T_Damage
 float	framecount;
 
 float		skill;
+float	campaign_valid;
+float	campaign;
+
+float	cheats_allowed;		// mal: let's us run cheat commands in DM/Coop games.
 
 //================================================
 
@@ -569,7 +608,10 @@ float	AS_MISSILE		= 4;
 .float		distance;
 .float		volume;
 
-
+//
+// new to ex
+//
+.float    spawn_deferred;
 
 
 //===========================================================================
@@ -608,8 +650,8 @@ string(string s) precache_sound		= #19;
 string(string s) precache_model		= #20;
 void(entity client, string s)stuffcmd = #21;
 entity(vector org, float rad) findradius = #22;
-void(string s) bprint				= #23;
-void(entity client, string s) sprint = #24;
+void(string s, ...) bprint				= #0:ex_bprint;
+void(entity client, string s, ...) sprint = #0:ex_sprint;
 void(string s) dprint				= #25;
 string(float f) ftos				= #26;
 string(vector v) vtos				= #27;
@@ -674,7 +716,7 @@ void(string s) changelevel = #70;
 
 void(string var, string val) cvar_set = #72;	// sets cvar.value
 
-void(entity client, string s) centerprint = #73;	// sprint, but in middle
+void(entity client, string s, ...) centerprint = #0:ex_centerprint;	// sprint, but in middle
 
 void(vector pos, string samp, float vol, float atten) ambientsound = #74;
 
@@ -685,6 +727,34 @@ string(string s) precache_file2		= #77;		// registered version only
 void(entity e) setspawnparms		= #78;		// set parm1... to the
 												// values at level start
 												// for coop respawn
+
+float() finaleFinished = #0:ex_finaleFinished;
+
+// Plays a sound that only "client" can hear. Useful for announcers...
+void localsound( entity client, string sample ) = #0:ex_localsound;
+
+// Debug rendering functions.
+void draw_point( vector point, float colormap, float lifetime, float depthtest ) = #0:ex_draw_point;
+void draw_line( vector start, vector end, float colormap, float lifetime, float depthtest ) = #0:ex_draw_line;
+void draw_arrow( vector start, vector end, float colormap, float size, float lifetime, float depthtest ) = #0:ex_draw_arrow;
+void draw_ray( vector start, vector direction, float length, float colormap, float size, float lifetime, float depthtest ) = #0:ex_draw_ray;
+void draw_circle( vector origin, float radius, float colormap, float lifetime, float depthtest ) = #0:ex_draw_circle;
+void draw_bounds( vector min, vector max, float colormap, float lifetime, float depthtest ) = #0:ex_draw_bounds;
+void draw_worldtext( string s, vector origin, float size, float lifetime, float depthtest ) = #0:ex_draw_worldtext;
+void draw_sphere( vector origin, float radius, float colormap, float lifetime, float depthtest ) = #0:ex_draw_sphere;
+void draw_cylinder( vector origin, float halfHeight, float radius, float colormap, float lifetime, float depthtest ) = #0:ex_draw_cylinder;
+
+// Bot functions that return a value based on "BOT_GOAL_<X>", depending on the status of the goal.
+float bot_movetopoint( entity bot, vector point ) = #0:ex_bot_movetopoint;
+float bot_followentity( entity bot, entity goal ) = #0:ex_bot_followentity;
+
+// Function for checking new player configured flags, such as weapon swap behaviour
+float CheckPlayerEXFlags( entity playerEnt ) = #0:ex_CheckPlayerEXFlags;
+
+// Path monsters to the goal using any available nav nodes on the map
+float walkpathtogoal( float movedist, vector goal ) = #0:ex_walkpathtogoal;
+
+float checkextension( string s ) = #99;
 
 //============================================================================
 

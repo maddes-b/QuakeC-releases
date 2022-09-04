@@ -1,5 +1,4 @@
-/*  Copyright (C) 1996-1997  Id Software, Inc.
-    Copyright (C) 1996-1997  Hipnotic Interactive, Inc.
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 
 /*
 
@@ -39,7 +39,7 @@ void() sham_swingr1;
 void() sham_swingl1;
 
 float()	DemonCheckAttack;
-void(float side)	Demon_Melee;
+void(float side)  Demon_Melee;
 
 void(vector dest) ChooseTurn;
 
@@ -88,8 +88,8 @@ float() CheckAttack =
 	traceline (spot1, spot2, FALSE, self);
 
 //MED 10/17/96 added charmed stuff
-	if ((trace_ent != targ) && (!self.charmed))
-		return FALSE;		// don't have a clear shot
+   if ((trace_ent != targ) && (!self.charmed))
+      return FALSE;     // don't have a clear shot
 
 	if (trace_inopen && trace_inwater)
 		return FALSE;			// sight line crossed contents

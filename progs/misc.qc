@@ -1,5 +1,4 @@
-/*  Copyright (C) 1996-1997  Id Software, Inc.
-    Copyright (C) 1996-1997  Hipnotic Interactive, Inc.
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 
 /*QUAKED info_null (0 0.5 0) (-4 -4 -4) (4 4 4)
 Used as a positional target for spotlights, etc.
@@ -319,7 +319,7 @@ void() spikeshooter_use =
 	if (self.spawnflags & SPAWNFLAG_LASER)
 	{
       if (!self.spawnflags & SPAWNFLAG_SILENT)
-			sound (self, CHAN_VOICE, "enforcer/enfire.wav", 1, ATTN_NORM);
+         sound (self, CHAN_VOICE, "enforcer/enfire.wav", 1, ATTN_NORM);
 		LaunchLaser (self.origin, self.movedir);
       newmis.spawnflags = self.spawnflags;
 	}
@@ -352,10 +352,10 @@ void() spikeshooter_use =
       newmis.angles = vectoangles(newmis.velocity);
       setorigin (newmis, self.origin + self.movedir*8);
    }
-	else
+   else
 	{
       if (!self.spawnflags & SPAWNFLAG_SILENT)
-			sound (self, CHAN_VOICE, "weapons/spike2.wav", 1, ATTN_NORM);
+         sound (self, CHAN_VOICE, "weapons/spike2.wav", 1, ATTN_NORM);
 		launch_spike (self.origin, self.movedir);
 		newmis.velocity = self.movedir * 500;
 		if (self.spawnflags & SPAWNFLAG_SUPERSPIKE)
@@ -368,9 +368,9 @@ void() shooter_think =
 {
    if (self.state)
       {
-		spikeshooter_use ();
+      spikeshooter_use ();
       }
-	self.nextthink = time + self.wait;
+   self.nextthink = time + self.wait;
 };
 
 
@@ -382,7 +382,7 @@ Laser is only for REGISTERED.
 //MED 11/01/96 commented out setmovedir
 void() trap_spikeshooter =
 {
-	SetMovedir ();
+   SetMovedir ();
 	self.use = spikeshooter_use;
 	if (self.spawnflags & SPAWNFLAG_LASER)
 	{
@@ -402,7 +402,7 @@ void() trap_spikeshooter =
       precache_model ("progs/missile.mdl");
       precache_sound ("weapons/sgun1.wav");
    }
-	else
+   else
 		precache_sound ("weapons/spike2.wav");
 };
 

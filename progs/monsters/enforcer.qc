@@ -1,5 +1,4 @@
-/*  Copyright (C) 1996-1997  Id Software, Inc.
-    Copyright (C) 1996-1997  Hipnotic Interactive, Inc.
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 /*
 ==============================================================================
 
@@ -73,7 +73,7 @@ void() Laser_Touch =
 //MED 01/16/97 added silent command
 
    if (!(self.spawnflags & SPAWNFLAG_SILENT))
-		sound (self, CHAN_WEAPON, "enforcer/enfstop.wav", 1, ATTN_STATIC);
+      sound (self, CHAN_WEAPON, "enforcer/enfstop.wav", 1, ATTN_STATIC);
 	org = self.origin - 8*normalize(self.velocity);
 
 	if (other.health)
@@ -275,7 +275,7 @@ void(entity attacker, float damage)	enf_pain =
 
 
 
-void()	enf_die1	=[	$death1,	enf_die2	] {};
+void()   enf_die1 =[ $death1, enf_die2 ] {};
 void()	enf_die2	=[	$death2,	enf_die3	] {};
 void()	enf_die3	=[	$death3,	enf_die4	]
 {self.solid = SOLID_NOT;self.ammo_cells = 5;DropBackpack();};
@@ -289,11 +289,11 @@ void()	enf_die10	=[	$death10,	enf_die11	] {ai_forward(5);};
 void()	enf_die11	=[	$death11,	enf_die12	] {ai_forward(5);};
 void()	enf_die12	=[	$death12,	enf_die13	] {ai_forward(5);};
 void()	enf_die13	=[	$death13,	enf_die14	] {};
-void()	enf_die14	=[	$death14,	enf_die14	] {};
+void()   enf_die14   =[ $death14,   enf_die14   ]
+   {
+   };
 
-void()	enf_fdie1	=[	$fdeath1,	enf_fdie2	] {
-
-};
+void()   enf_fdie1   =[ $fdeath1,   enf_fdie2   ] {};
 void()	enf_fdie2	=[	$fdeath2,	enf_fdie3	] {};
 void()	enf_fdie3	=[	$fdeath3,	enf_fdie4	]
 {self.solid = SOLID_NOT;self.ammo_cells = 5;DropBackpack();};
@@ -304,7 +304,9 @@ void()	enf_fdie7	=[	$fdeath7,	enf_fdie8	] {};
 void()	enf_fdie8	=[	$fdeath8,	enf_fdie9	] {};
 void()	enf_fdie9	=[	$fdeath9,	enf_fdie10	] {};
 void()	enf_fdie10	=[	$fdeath10,	enf_fdie11	] {};
-void()	enf_fdie11	=[	$fdeath11,	enf_fdie11	] {};
+void()   enf_fdie11  =[ $fdeath11,  enf_fdie11  ]
+   {
+   };
 
 
 void() enf_die =
@@ -322,7 +324,7 @@ void() enf_die =
 
 // regular death
 	sound (self, CHAN_VOICE, "enforcer/death1.wav", 1, ATTN_NORM);
-	if (random() > 0.5)
+   if (random() > 0.5)
 		enf_die1 ();
 	else
 		enf_fdie1 ();

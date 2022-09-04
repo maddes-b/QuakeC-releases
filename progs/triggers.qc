@@ -1,5 +1,4 @@
-/*  Copyright (C) 1996-1997  Id Software, Inc.
-    Copyright (C) 1996-1997  Hipnotic Interactive, Inc.
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 
 entity stemp, otemp, s, old;
 
@@ -59,6 +59,17 @@ void() multi_trigger =
 			return;
 		found_secrets = found_secrets + 1;
 		WriteByte (MSG_ALL, SVC_FOUNDSECRET);
+
+		msg_entity = self.enemy;
+		WriteByte (MSG_ONE, SVC_ACHIEVEMENT);
+		WriteString(MSG_ONE, "ACH_FIND_SECRET");
+	}
+
+	if (self.enemy.classname == "player" && world.model == "maps/hip3m1.bsp" && self.message == "$map_not_supposed_be_here")
+	{
+		msg_entity = self.enemy;
+		WriteByte (MSG_ONE, SVC_ACHIEVEMENT);
+		WriteString(MSG_ONE, "ACH_FIND_SUPPOSED_BE_HERE");
 	}
 
 	if (self.noise)
@@ -233,7 +244,7 @@ void() trigger_secret =
 	total_secrets = total_secrets + 1;
 	self.wait = -1;
 	if (!self.message)
-		self.message = "You found a secret area!";
+		self.message = "$qc_found_secret";
 	if (!self.sounds)
 		self.sounds = 1;
 
@@ -268,20 +279,20 @@ void() counter_use =
 		&& (self.spawnflags & SPAWNFLAG_NOMESSAGE) == 0)
 		{
 			if (self.count >= 4)
-				centerprint (activator, "There are more to go...");
+				centerprint (activator, "$qc_more_go");
 			else if (self.count == 3)
-				centerprint (activator, "Only 3 more to go...");
+				centerprint (activator, "$qc_three_more");
 			else if (self.count == 2)
-				centerprint (activator, "Only 2 more to go...");
+				centerprint (activator, "$qc_two_more");
 			else
-				centerprint (activator, "Only 1 more to go...");
+				centerprint (activator, "$qc_one_more");
 		}
 		return;
 	}
 
 	if (activator.classname == "player"
 	&& (self.spawnflags & SPAWNFLAG_NOMESSAGE) == 0)
-		centerprint(activator, "Sequence completed!");
+		centerprint(activator, "$qc_sequence_completed");
 	self.enemy = activator;
 	multi_trigger ();
 };
@@ -610,7 +621,7 @@ void() hurt_touch =
             self.think = SUB_Remove;
             }
          }
-	}
+   }
 
 	return;
 };

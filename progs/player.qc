@@ -1,5 +1,4 @@
-/*  Copyright (C) 1996-1997  Id Software, Inc.
-    Copyright (C) 1996-1997  Hipnotic Interactive, Inc.
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 
 void() bubble_bob;
 
@@ -129,7 +129,7 @@ void()	player_stand1 =[	$axstnd1,	player_stand1	]
 			self.walkframe = 0;
       self.frame = 6 + self.walkframe;
 	}
-	else
+   else
 	{
 		if (self.walkframe >= 5)
 			self.walkframe = 0;
@@ -138,7 +138,7 @@ void()	player_stand1 =[	$axstnd1,	player_stand1	]
 	self.walkframe = self.walkframe + 1;
 };
 
-void()	player_run =[	$rockrun1,	player_run	]
+void()   player_run =[  $rockrun1,  player_run  ]
 {
 	self.weaponframe=0;
 	if (!self.velocity_x && !self.velocity_y)
@@ -160,7 +160,7 @@ void()	player_run =[	$rockrun1,	player_run	]
 			self.walkframe = 0;
       self.frame = self.walkframe;
 	}
-	else
+   else
 	{
 		if (self.walkframe == 6)
 			self.walkframe = 0;
@@ -199,7 +199,7 @@ void()	player_run =[	$rockrun1,	player_run	]
             }
          }
       }
-	self.walkframe = self.walkframe + 1;
+   self.walkframe = self.walkframe + 1;
 };
 
 
@@ -447,7 +447,7 @@ void() player_pain =
 		player_axpain1 ();
    else if (self.weapon == IT_MJOLNIR)
       player_hampain1 ();
-	else
+   else
 		player_pain1 ();
 };
 
@@ -551,24 +551,23 @@ vector(float dm) VelocityForDamage =
       }
    else
       {
-	v_x = 100 * crandom();
-	v_y = 100 * crandom();
-	v_z = 200 + 100 * random();
+      v_x = 100 * crandom();
+      v_y = 100 * crandom();
+      v_z = 200 + 100 * random();
       }
-	if (dm > -50)
-	{
-//		dprint ("level 1\n");
-		v = v * 0.7;
-	}
-	else if (dm > -200)
-	{
-//		dprint ("level 3\n");
-		v = v * 2;
-	}
-	else
-		v = v * 10;
-
-	return v;
+   if (dm > -50)
+   {
+//    dprint ("level 1\n");
+      v = v * 0.7;
+   }
+   else if (dm > -200)
+   {
+//    dprint ("level 3\n");
+      v = v * 2;
+   }
+   else
+      v = v * 10;
+   return v;
 };
 
 void(string gibname, float dm) ThrowGib =
@@ -607,7 +606,7 @@ void(string gibname, float dm) ThrowHead =
 {
 	setmodel (self, gibname);
 	self.frame = 0;
-//	self.nextthink = -1;
+//   self.nextthink = -1;
 //MED
    self.nextthink = time + 1.5;
 	self.movetype = MOVETYPE_BOUNCE;
@@ -656,14 +655,14 @@ void() PlayerDie =
 {
 	local	float	i;
 
-	self.items = self.items - (self.items & IT_INVISIBILITY);
+   self.items = self.items - (self.items & IT_INVISIBILITY);
 	self.invisible_finished = 0;	// don't die as eyes
 	self.invincible_finished = 0;
 	self.super_damage_finished = 0;
 	self.radsuit_finished = 0;
 	//JIM
 	self.wetsuit_finished = 0;
-	self.modelindex = modelindex_player;	// don't use eyes
+   self.modelindex = modelindex_player;   // don't use eyes
    //JIM
    self.empathy_finished = 0;
    self.items2 = self.items2 - (self.items2 & HIP_IT_EMPATHY_SHIELDS);

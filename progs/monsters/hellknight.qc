@@ -1,4 +1,4 @@
-/*  Copyright (C) 1996-1997  Id Software, Inc.
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 /*
 ==============================================================================
 
@@ -95,6 +96,7 @@ void(float offset) hknight_shot =
 	setmodel (newmis, "progs/k_spike.mdl");
 	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
 	newmis.velocity = vec*300;
+	newmis.effects = newmis.effects | EF_CANDLELIGHT; // give the projectiles a weak glow
 	sound (self, CHAN_WEAPON, "hknight/attack1.wav", 1, ATTN_NORM);
 };
 

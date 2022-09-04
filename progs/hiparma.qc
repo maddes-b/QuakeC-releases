@@ -1,4 +1,4 @@
-/*  Copyright (C) 1996-1997  Hipnotic Interactive, Inc.
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 /*
 ==============================================================================
 
@@ -208,6 +209,11 @@ void() armagon_think =
             sound (self, CHAN_VOICE, "armagon/idle4.wav", 1, ATTN_ARMAGON);
          }
       }
+
+      if(vlen(self.trigger_field.oldorigin - self.trigger_field.origin) > 50)
+      {
+        self.trigger_field.movetype = MOVETYPE_STEP;
+      }
    };
 
 void() armagon_walkthink =
@@ -216,6 +222,7 @@ void() armagon_walkthink =
    local float angdelta;
    local entity client;
    setorigin (self.trigger_field, self.origin);
+   self.trigger_field.movetype = MOVETYPE_STEP;
    self.trigger_field.angles = self.angles;
    self.trigger_field.frame = self.frame;
    self.trigger_field.angles_y = self.trigger_field.angles_y + self.fixangle;
@@ -924,13 +931,14 @@ void() monster_armagon =
    body = spawn();
    body.origin = self.origin;
    body.origin = body.origin - '0 0 64';
+   body.oldorigin = self.origin;
 //  SUB_CopyEntity(self,body);
 
    self.solid = SOLID_SLIDEBOX;
    self.fixangle = 0;
 	self.movetype = MOVETYPE_STEP;
    body.solid = SOLID_NOT;
-   body.movetype = MOVETYPE_STEP;
+   //body.movetype = MOVETYPE_STEP;
    self.trigger_field = body;
    body.trigger_field = self;
 

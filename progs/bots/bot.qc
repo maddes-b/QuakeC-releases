@@ -17,18 +17,36 @@
     See file, 'COPYING', for details.
 */
 
-/* Sprites QuickC program
-   By Jim Dose'  11/20/96
+/*
+========================
+Bot_PreThink
+
+Called by the engine every frame before running the bots update in C++
+
+Example usages of this function:
+
+	1. Telling bots what to do or where to go.
+	2. Modifying properties on the bot player ( or other players in-game ) that the bots can see/use doing their update.
+========================
 */
+void Bot_PreThink() {
 
-// Bullethole
-$spritename s_bullet
-$type oriented
-$load h:/quake/hipwork/gfx/sprites/blood.lbm
-$frame   96 16 8 8
 
-// Blood Splat
-$spritename s_blood1
-$type oriented
-$load h:/quake/hipwork/gfx/sprites/blood.lbm
-$frame   32 32 56 56
+};
+
+/*
+========================
+Bot_PostThink
+
+Called by the engine every frame after running the bots update in C++
+
+Example usages of this function:
+
+	1. Overriding/modifying bot user cmds.
+	2. Overriding/modifying bot player properties.
+========================
+*/
+void Bot_PostThink() {
+
+
+};

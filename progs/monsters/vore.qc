@@ -1,5 +1,4 @@
-/*  Copyright (C) 1996-1997  Id Software, Inc.
-    Copyright (C) 1996-1997  Hipnotic Interactive, Inc.
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 /*
 ==============================================================================
 
@@ -185,10 +185,7 @@ void() ShalHome =
 		return;
 	}
 	dir = normalize(vtemp - self.origin);
-	if (skill == 3)
-		self.velocity = dir * 350;
-	else
-		self.velocity = dir * 250;
+	self.velocity = dir * 250;
 	self.nextthink = time + 0.2;
 	self.think = ShalHome;
 };
@@ -253,7 +250,7 @@ void() monster_shalrath =
 	self.th_missile = shal_attack1;
 
    walkmonster_start();
-//	self.think = walkmonster_start;
+//   self.think = walkmonster_start;
 	self.nextthink = time + 0.1 + random ()*0.1;
 
 };

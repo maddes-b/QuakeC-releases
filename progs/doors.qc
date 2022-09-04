@@ -1,4 +1,4 @@
-/*  Copyright (C) 1996-1997  Id Software, Inc.
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 
 float DOOR_START_OPEN = 1;
 float DOOR_DONT_LINK = 4;
@@ -237,17 +238,17 @@ void() door_touch =
 		{
 			if (world.worldtype == 2)
 			{
-				centerprint (other, "You need the silver keycard");
+				centerprint (other, "$qc_need_silver_keycard");
 				sound (self, CHAN_VOICE, self.noise3, 1, ATTN_NORM);
 			}
 			else if (world.worldtype == 1)
 			{
-				centerprint (other, "You need the silver runekey");
+				centerprint (other, "$qc_need_silver_runekey");
 				sound (self, CHAN_VOICE, self.noise3, 1, ATTN_NORM);
 			}
 			else if (world.worldtype == 0)
 			{
-				centerprint (other, "You need the silver key");
+				centerprint (other, "$qc_need_silver_key");
 				sound (self, CHAN_VOICE, self.noise3, 1, ATTN_NORM);
 			}
 		}
@@ -255,17 +256,17 @@ void() door_touch =
 		{
 			if (world.worldtype == 2)
 			{
-				centerprint (other, "You need the gold keycard");
+				centerprint (other, "$qc_need_gold_keycard");
 				sound (self, CHAN_VOICE, self.noise3, 1, ATTN_NORM);
 			}
 			else if (world.worldtype == 1)
 			{
-				centerprint (other, "You need the gold runekey");
+				centerprint (other, "$qc_need_gold_runekey");
 				sound (self, CHAN_VOICE, self.noise3, 1, ATTN_NORM);
 			}
 			else if (world.worldtype == 0)
 			{
-				centerprint (other, "You need the gold key");
+				centerprint (other, "$qc_need_gold_key");
 				sound (self, CHAN_VOICE, self.noise3, 1, ATTN_NORM);
 			}
 		}
@@ -527,7 +528,8 @@ void() func_door =
 		self.dmg = 2;
 
 	self.pos1 = self.origin;
-	self.pos2 = self.pos1 + self.movedir*(fabs(self.movedir*self.size) - self.lip);
+	vector movedir_fabs = { fabs(self.movedir[0]), fabs(self.movedir[1]), fabs(self.movedir[2]) };
+	self.pos2 = self.pos1 + ((movedir_fabs * self.size) - self.lip) * self.movedir;
 
 // DOOR_START_OPEN is to allow an entity to be lighted in the closed position
 // but spawn in the open position

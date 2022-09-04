@@ -1,4 +1,4 @@
-/*  Copyright (C) 1996-1997  Id Software, Inc.
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 /*QUAKED item_deathball (.3 .3 1) (0 0 0) (32 32 32)
 */
 void() deathball_touch;

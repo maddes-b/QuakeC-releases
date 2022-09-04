@@ -1,5 +1,4 @@
-/*  Copyright (C) 1996-1997  Id Software, Inc.
-    Copyright (C) 1996-1997  Hipnotic Interactive, Inc.
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 $cd id1/models/fish
 $origin 0 0 24
 $base base
@@ -219,9 +219,9 @@ void() monster_fish =
 	self.th_walk = f_walk1;
 	self.th_run = f_run1;
 //MED 01/15/97 added fish death
-//	self.th_die = f_death1;
+//   self.th_die = f_death1;
    self.th_die = fish_die;
-	self.th_pain = fish_pain;
+   self.th_pain = fish_pain;
 	self.th_melee = f_attack1;
 
 	swimmonster_start ();

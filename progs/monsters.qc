@@ -1,5 +1,4 @@
-/*  Copyright (C) 1996-1997  Id Software, Inc.
-    Copyright (C) 1996-1997  Hipnotic Interactive, Inc.
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 /* ALL MONSTERS SHOULD BE 1 0 0 IN COLOR */
 
 // name =[framenum,	nexttime, nextthink] {code}
@@ -90,7 +90,7 @@ void() walkmonster_start_go =
 local string	stemp;
 local entity	etemp;
 
-	self.origin_z = self.origin_z + 1;	// raise off floor a bit
+   self.origin_z = self.origin_z + 1;  // raise off floor a bit
 	droptofloor();
 
 	if (!walkmove(0,0))
@@ -107,6 +107,7 @@ local entity	etemp;
 		self.yaw_speed = 20;
 	self.view_ofs = '0 0 25';
 	self.use = monster_use;
+	self.team = TEAM_MONSTERS;
 
 	self.flags = self.flags | FL_MONSTER;
 
@@ -144,7 +145,7 @@ void() walkmonster_start =
 // spread think times so they don't all happen at same time
 	self.nextthink = self.nextthink + random()*0.5;
    self.flags = self.flags | FL_MONSTER;
-	self.think = walkmonster_start_go;
+   self.think = walkmonster_start_go;
 	total_monsters = total_monsters + 1;
 };
 
@@ -159,6 +160,7 @@ void() flymonster_start_go =
 		self.yaw_speed = 10;
 	self.view_ofs = '0 0 25';
 	self.use = monster_use;
+	self.team = TEAM_MONSTERS;
 
 	self.flags = self.flags | FL_FLY;
 	self.flags = self.flags | FL_MONSTER;
@@ -198,7 +200,7 @@ void() flymonster_start =
 // spread think times so they don't all happen at same time
 	self.nextthink = self.nextthink + random()*0.5;
    self.flags = self.flags | FL_MONSTER;
-	self.think = flymonster_start_go;
+   self.think = flymonster_start_go;
 	total_monsters = total_monsters + 1;
 };
 
@@ -213,13 +215,14 @@ void() swimmonster_start_go =
 
 	self.takedamage = DAMAGE_AIM;
 //MED
-//	total_monsters = total_monsters + 1;
+//   total_monsters = total_monsters + 1;
 
 	self.ideal_yaw = self.angles * '0 1 0';
 	if (!self.yaw_speed)
 		self.yaw_speed = 10;
 	self.view_ofs = '0 0 10';
 	self.use = monster_use;
+	self.team = TEAM_MONSTERS;
 
 	self.flags = self.flags | FL_SWIM;
 	self.flags = self.flags | FL_MONSTER;
@@ -251,7 +254,7 @@ void() swimmonster_start =
 {
 // spread think times so they don't all happen at same time
    self.flags = self.flags | FL_MONSTER;
-	self.nextthink = self.nextthink + random()*0.5;
+   self.nextthink = self.nextthink + random()*0.5;
 	self.think = swimmonster_start_go;
 	total_monsters = total_monsters + 1;
 };

@@ -1,4 +1,4 @@
-/*  Copyright (C) 1996-1997  Hipnotic Interactive, Inc.
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 /*
 ==============================================================================
 
@@ -140,7 +141,7 @@ float() GremlinAttemptWeaponSteal =
       self.ammo_shells = self.ammo_shells + amount;
 		self.items = self.items | IT_SHELLS;
       self.currentammo = self.ammo_shells;
-      sprint (victim, "Gremlin stole your Super Shotgun\n");
+      sprint (victim, "$qc_gremlin_ssg");
       }
    else if (best == IT_NAILGUN)
       {
@@ -151,7 +152,7 @@ float() GremlinAttemptWeaponSteal =
       self.ammo_nails = self.ammo_nails + amount;
       self.items = self.items | IT_NAILS;
       self.currentammo = self.ammo_nails;
-      sprint (victim, "Gremlin stole your Nailgun\n");
+      sprint (victim, "$qc_gremlin_ng");
       }
    else if (best == IT_SUPER_NAILGUN)
       {
@@ -162,7 +163,7 @@ float() GremlinAttemptWeaponSteal =
       self.ammo_nails = self.ammo_nails + amount;
       self.items = self.items | IT_NAILS;
       self.currentammo = self.ammo_nails;
-      sprint (victim, "Gremlin stole your Super Nailgun\n");
+      sprint (victim, "$qc_gremlin_sng");
       }
    else if (best == IT_GRENADE_LAUNCHER)
       {
@@ -173,7 +174,7 @@ float() GremlinAttemptWeaponSteal =
       self.ammo_rockets = self.ammo_rockets + amount;
       self.items = self.items | IT_ROCKETS;
       self.currentammo = self.ammo_rockets;
-      sprint (victim, "Gremlin stole your Grenade Launcher\n");
+      sprint (victim, "$qc_gremlin_gl");
       }
    else if (best == IT_ROCKET_LAUNCHER)
       {
@@ -184,7 +185,7 @@ float() GremlinAttemptWeaponSteal =
       self.ammo_rockets = self.ammo_rockets + amount;
       self.items = self.items | IT_ROCKETS;
       self.currentammo = self.ammo_rockets;
-      sprint (victim, "Gremlin stole your Rocket Launcher\n");
+      sprint (victim, "$qc_gremlin_rl");
       }
    else if (best == IT_LIGHTNING)
       {
@@ -195,7 +196,7 @@ float() GremlinAttemptWeaponSteal =
       self.ammo_cells = self.ammo_cells + amount;
       self.items = self.items | IT_CELLS;
       self.currentammo = self.ammo_cells;
-      sprint (victim, "Gremlin stole your Lightning Gun\n");
+      sprint (victim, "$qc_gremlin_lg");
       }
    else if (best == IT_LASER_CANNON)
       {
@@ -206,7 +207,7 @@ float() GremlinAttemptWeaponSteal =
       self.ammo_cells = self.ammo_cells + amount;
       self.items = self.items | IT_CELLS;
       self.currentammo = self.ammo_cells;
-      sprint (victim, "Gremlin stole your Laser Cannon\n");
+      sprint (victim, "$qc_gremlin_lc");
       }
    else if (best == IT_PROXIMITY_GUN)
       {
@@ -217,7 +218,7 @@ float() GremlinAttemptWeaponSteal =
       self.ammo_rockets = self.ammo_rockets + amount;
       self.items = self.items | IT_ROCKETS;
       self.currentammo = self.ammo_rockets;
-      sprint (victim, "Gremlin stole your Proximity Gun\n");
+      sprint (victim, "$qc_gremlin_prox");
       }
    tempself = self;
    self = victim;
@@ -931,27 +932,27 @@ void() GremlinDropBackpack =
    item.items = self.items;
 
    if (item.items & IT_AXE)
-		item.netname = "Axe";
+		item.netname = "$qc_axe";
    else if (item.items & IT_SHOTGUN)
-		item.netname = "Shotgun";
+		item.netname = "$qc_shotgun";
    else if (item.items & IT_SUPER_SHOTGUN)
-		item.netname = "Double-barrelled Shotgun";
+		item.netname = "$qc_double_shotgun";
    else if (item.items & IT_NAILGUN)
-		item.netname = "Nailgun";
+		item.netname = "$qc_nailgun";
    else if (item.items & IT_SUPER_NAILGUN)
-		item.netname = "Super Nailgun";
+		item.netname = "$qc_super_nailgun";
    else if (item.items & IT_GRENADE_LAUNCHER)
-		item.netname = "Grenade Launcher";
+		item.netname = "$qc_grenade_launcher";
    else if (item.items & IT_ROCKET_LAUNCHER)
-		item.netname = "Rocket Launcher";
+		item.netname = "$qc_rocket_launcher";
    else if (item.items & IT_LIGHTNING)
-		item.netname = "Thunderbolt";
+		item.netname = "$qc_thunderbolt";
    else if (item.items & IT_LASER_CANNON)
-      item.netname = "Laser Cannon";
+      item.netname = "$qc_laser_cannon";
    else if (item.items & IT_PROXIMITY_GUN)
-      item.netname = "Proximity Gun";
+      item.netname = "$qc_prox_gun";
    else if (item.items & IT_MJOLNIR)
-      item.netname = "Mjolnir";
+      item.netname = "$qc_mjolnir";
    else
 		item.netname = "";
 

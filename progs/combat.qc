@@ -1,5 +1,4 @@
-/*  Copyright (C) 1996-1997  Id Software, Inc.
-    Copyright (C) 1996-1997  Hipnotic Interactive, Inc.
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 
 void() T_MissileTouch;
 void() info_player_start;
@@ -102,6 +102,16 @@ void(entity targ, entity attacker) Killed =
 	{
 		killed_monsters = killed_monsters + 1;
 		WriteByte (MSG_ALL, SVC_KILLEDMONSTER);
+		if (attacker.classname == "player")
+		{
+			attacker.frags = attacker.frags + 1;
+		}
+
+		if (attacker != self && attacker.flags & FL_MONSTER)
+		{
+			WriteByte (MSG_ALL, SVC_ACHIEVEMENT);
+			WriteString(MSG_ALL, "ACH_FRIENDLY_FIRE");
+		}
 	}
 
 	ClientObituary(self, attacker);
@@ -135,6 +145,14 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage=
 
 	if (!targ.takedamage)
 		return;
+
+	// mal: in Coop, don't let bots hurt human teammates - that would be REALLY annoying...
+	if ( coop && targ != attacker && targ.classname == "player" && attacker.classname == "player" ) {
+		if ( attacker.flags & FL_ISBOT && !( targ.flags & FL_ISBOT ) ) {
+			return;
+		}
+	}
+
 
    if (discharged && targ.wetsuit_finished )
       return;
@@ -177,8 +195,8 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage=
 	{
 		save = targ.armorvalue;
 		targ.armortype = 0;	// lost all armor
-		targ.items = targ.items - (targ.items & (IT_ARMOR1 | IT_ARMOR2 | IT_ARMOR3));
-	}
+      targ.items = targ.items - (targ.items & (IT_ARMOR1 | IT_ARMOR2 | IT_ARMOR3));
+   }
 
 	targ.armorvalue = targ.armorvalue - save;
 	take = ceil(damage-save);
@@ -224,7 +242,7 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage=
 	}
 
 // team play damage avoidance
-	if ( (teamplay == 1) && (targ.team > 0)&&(targ.team == attacker.team) )
+	if ( (teamplay == 1 && targ != attacker) && (targ.team > 0)&&(targ.team == attacker.team) )
 		return;
 
 // do the damage
@@ -244,10 +262,10 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage=
 	if ( (self.flags & FL_MONSTER) && attacker != world)
 	{
 	// get mad unless of the same class (except for soldiers)
-		if (self != attacker && attacker != self.enemy && (self.charmer!=attacker))
+      if (self != attacker && attacker != self.enemy && (self.charmer!=attacker))
 		{
 			if ( (self.classname != attacker.classname)
-			|| (self.classname == "monster_army" ) || (self.classname == "monster_armagon" ) )
+         || (self.classname == "monster_army" ) || (self.classname == "monster_armagon" ) )
 			{
 				if (self.enemy.classname == "player")
 					self.oldenemy = self.enemy;
