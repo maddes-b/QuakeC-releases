@@ -137,6 +137,10 @@ void() OgreFireGrenade =
 
 	missile.touch = OgreGrenadeTouch;
 
+	if (cvar("pr_checkextension"))
+		if (checkextension("EX_EXTENDED_EF"))
+			missile.effects = missile.effects | EF_CANDLELIGHT; // give the projectiles a weak glow
+
 // set missile duration
 	missile.nextthink = time + 2.5;
 	missile.think = OgreGrenadeExplode;
