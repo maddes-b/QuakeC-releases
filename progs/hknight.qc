@@ -97,7 +97,9 @@ void(float offset) hknight_shot =
 	setmodel (newmis, "progs/k_spike.mdl");
 	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
 	newmis.velocity = vec*300;
-	newmis.effects = newmis.effects | EF_CANDLELIGHT; // give the projectiles a weak glow
+	if (cvar("pr_checkextension"))
+		if (checkextension("EX_EXTENDED_EF"))
+			newmis.effects = newmis.effects | EF_CANDLELIGHT; // give the projectiles a weak glow
 	sound (self, CHAN_WEAPON, "hknight/attack1.wav", 1, ATTN_NORM);
 };
 
