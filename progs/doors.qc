@@ -1,5 +1,4 @@
-/*  Copyright (C) 1996-1997  Id Software, Inc.
-    Copyright (C) 1996-1997  Rogue Entertainment
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 // updated to quake 1.06 - 10/8/96
 
 float DOOR_START_OPEN = 1;
@@ -239,17 +239,17 @@ void() door_touch =
 		{
 			if (world.worldtype == 2)
 			{
-				centerprint (other, "You need the silver keycard");
+				centerprint (other, "$qc_need_silver_keycard");
 				sound (self, CHAN_VOICE, self.noise3, 1, ATTN_NORM);
 			}
 			else if (world.worldtype == 1)
 			{
-				centerprint (other, "You need the silver runekey");
+				centerprint (other, "$qc_need_silver_runekey");
 				sound (self, CHAN_VOICE, self.noise3, 1, ATTN_NORM);
 			}
 			else if (world.worldtype == 0)
 			{
-				centerprint (other, "You need the silver key");
+				centerprint (other, "$qc_need_silver_key");
 				sound (self, CHAN_VOICE, self.noise3, 1, ATTN_NORM);
 			}
 		}
@@ -257,17 +257,17 @@ void() door_touch =
 		{
 			if (world.worldtype == 2)
 			{
-				centerprint (other, "You need the gold keycard");
+				centerprint (other, "$qc_need_gold_keycard");
 				sound (self, CHAN_VOICE, self.noise3, 1, ATTN_NORM);
 			}
 			else if (world.worldtype == 1)
 			{
-				centerprint (other, "You need the gold runekey");
+				centerprint (other, "$qc_need_gold_runekey");
 				sound (self, CHAN_VOICE, self.noise3, 1, ATTN_NORM);
 			}
 			else if (world.worldtype == 0)
 			{
-				centerprint (other, "You need the gold key");
+				centerprint (other, "$qc_need_gold_key");
 				sound (self, CHAN_VOICE, self.noise3, 1, ATTN_NORM);
 			}
 		}
@@ -530,7 +530,7 @@ local vector tempVect;
 	if (!self.dmg)
 		self.dmg = 2;
 
-	self.pos1 = self.origin;
+	self.pos1=self.origin;
 //	self.pos2 = self.pos1 + self.movedir*(fabs(self.movedir*self.size) - self.lip);
 
 // PGM fix for cameron's door problem - 02/19/97
@@ -543,7 +543,8 @@ local vector tempVect;
 //	if (tempVect_z < 0)
 //		tempVect_z = 0 - tempVect_z;
 //	self.pos2 = self.pos1 + self.movedir*(tempVect*self.size - self.lip);
-	self.pos2 = self.pos1 + self.movedir*(fabs(tempVect*self.size) - self.lip);
+	vector movedir_fabs = { fabs(self.movedir[0]), fabs(self.movedir[1]), fabs(self.movedir[2]) };
+	self.pos2 = self.pos1 + ((movedir_fabs * self.size) - self.lip) * self.movedir;
 
 // DOOR_START_OPEN is to allow an entity to be lighted in the closed position
 // but spawn in the open position

@@ -1,4 +1,4 @@
-/*  Copyright (C) 1996-1997  Id Software, Inc.
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 
 
 void() SUB_Null = {};
@@ -309,13 +310,13 @@ void() SUB_UseTargets =
 
 in nightmare mode, all attack_finished times become 0
 some monsters refire twice automatically
-
+update: not anymore! it makes nightmare too easy
 */
 
 void(float normal) SUB_AttackFinished =
 {
 	self.cnt = 0;		// refire count for nightmare
-	if (skill != 3)
+	//if (skill != 3)
 		self.attack_finished = time + normal;
 };
 

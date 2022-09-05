@@ -1,4 +1,4 @@
-/*  Copyright (C) 1996-1997  Rogue Entertainment
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 // New Items
 //
 // Items added for the Rogue XPACK.
@@ -52,9 +53,7 @@ void() newitems_touch =
 		if (other.items2 & IT2_V_SPHERE)
 			return;
 
-	sprint (other, "You got the ");
-	sprint (other, self.netname);
-	sprint (other,"\n");
+	sprint(other, "$qc_got_item", self.netname);
 
 	if (deathmatch)
 	{
@@ -85,12 +84,12 @@ void() newitems_touch =
 	self.model = string_null;
 
 // do the apropriate action
-	if (self.netname == "Power Shield")
+	if (self.netname == "$qc_power_shield")
 	{
 		other.shield_time = 1;
 		other.shield_finished = time + 30;
 	}
-	else if (self.netname == "Anti-Grav Belt")
+	else if (self.netname == "$qc_anti_grav_belt")
 	{
 		other.antigrav_time = 1;
 		other.antigrav_finished = time + 45;
@@ -121,7 +120,7 @@ void() item_powerup_shield =
 	precache_sound ("shield/fadeout.wav");
 	self.noise = "shield/pickup.wav";
 	setmodel (self, "progs/shield.mdl");
-	self.netname = "Power Shield";
+	self.netname = "$qc_power_shield";
 	self.items2 = IT2_SHIELD;
 	setsize (self, '-16 -16 -24', '16 16 32');
 	StartItem ();
@@ -140,7 +139,7 @@ void() item_powerup_belt =
 	precache_sound ("belt/fadeout.wav");
 	self.noise = "belt/pickup.wav";
 	setmodel (self, "progs/beltup.mdl");
-	self.netname = "Anti-Grav Belt";
+	self.netname = "$qc_anti_grav_belt";
 	self.items2 = IT2_ANTIGRAV;
 	setsize (self, '-16 -16 -24', '16 16 32');
 	StartItem ();

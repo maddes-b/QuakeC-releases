@@ -1,5 +1,4 @@
-/*  Copyright (C) 1996-1997  Id Software, Inc.
-    Copyright (C) 1996-1997  Rogue Entertainment
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 /*
 ==============================================================================
 
@@ -25,7 +25,7 @@ SOLDIER / PLAYER
 ==============================================================================
 */
 
-$cd id1/models/enforcer
+$cd /raid/quake/id1/models/enforcer
 $origin 0 -6 24
 $base base
 $skin skin
@@ -55,7 +55,6 @@ $frame painc1 painc2 painc3 painc4 painc5 painc6 painc7 painc8
 $frame paind1 paind2 paind3 paind4 paind5 paind6 paind7 paind8
 $frame paind9 paind10 paind11 paind12 paind13 paind14 paind15 paind16
 $frame paind17 paind18 paind19
-
 
 void() Laser_Touch =
 {

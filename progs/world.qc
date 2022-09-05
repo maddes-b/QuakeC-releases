@@ -1,5 +1,4 @@
-/*  Copyright (C) 1996-1997  Id Software, Inc.
-    Copyright (C) 1996-1997  Rogue Entertainment
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 
 void() InitBodyQue;
 
@@ -391,6 +391,16 @@ void() StartFrame =
 {
 	teamplay = cvar("teamplay");
 	skill = cvar("skill");
+	cheats_allowed = cvar("sv_cheats");
+
+    // save off a global here so it gets included in savegames
+    if (!campaign_valid) {
+        campaign_valid = TRUE;
+        campaign = cvar("campaign");
+    } else {
+        cvar_set("campaign", ftos(campaign));
+    }
+
 	framecount = framecount + 1;
 };
 

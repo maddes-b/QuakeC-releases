@@ -1,4 +1,4 @@
-/*  Copyright (C) 1996-1997  Rogue Entertainment
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 // overlord.qc
 
 $skin s_wrtrst
@@ -44,13 +45,11 @@ $frame s_wtba06 s_wtba07 s_wtba08 s_wtba09 s_wtba10 s_wtba11 s_wtba12
 
 // pain
 $frame s_wtpa01 s_wtpa02 s_wtpa03 s_wtpa04 s_wtpa05
-$frame s_wtpa06 s_wtpa07
-s_wtpa08 s_wtpa09 s_wtpa10
+$frame s_wtpa06 s_wtpa07 s_wtpa08 s_wtpa09 s_wtpa10
 $frame s_wtpa11 s_wtpa12 s_wtpa13 s_wtpa14
 
 $frame s_wtpb01 s_wtpb02 s_wtpb03 s_wtpb04 s_wtpb05
-$frame s_wtpb06 s_wtpb07
-s_wtpb08 s_wtpb09 s_wtpb10
+$frame s_wtpb06 s_wtpb07 s_wtpb08 s_wtpb09 s_wtpb10
 $frame s_wtpb11
 
 // death

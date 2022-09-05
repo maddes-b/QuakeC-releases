@@ -1,5 +1,4 @@
-/*  Copyright (C) 1996-1997  Id Software, Inc.
-    Copyright (C) 1996-1997  Rogue Entertainment
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 /*
 ==============================================================================
 
@@ -25,7 +25,7 @@ KNIGHT
 ==============================================================================
 */
 
-$cd id1/models/knight2
+$cd /raid/quake/id1/models/knight2
 $origin 0 0 24
 $base base
 $skin skin
@@ -97,6 +97,7 @@ void(float offset) hknight_shot =
 	setmodel (newmis, "progs/k_spike.mdl");
 	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
 	newmis.velocity = vec*300;
+	newmis.effects = newmis.effects | EF_CANDLELIGHT; // give the projectiles a weak glow
 	sound (self, CHAN_WEAPON, "hknight/attack1.wav", 1, ATTN_NORM);
 };
 
@@ -231,7 +232,7 @@ void() hknight_die =
 		sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
 		ThrowHead ("progs/h_hellkn.mdl", self.health);
 
-		if (self.spawnflags & 2) // statue
+	if (self.spawnflags & 2) // statue
 		{
 			ThrowGib ( "progs/statgib1.mdl", self.health);
 			ThrowGib ( "progs/statgib2.mdl", self.health);
@@ -247,10 +248,12 @@ void() hknight_die =
 	}
 
 // regular death
+
 	if (self.spawnflags & 2) // statue
 		sound (self, CHAN_VOICE, "statue/death.wav", 1, ATTN_NORM);
 	else
 		sound (self, CHAN_VOICE, "hknight/death1.wav", 1, ATTN_NORM);
+
 	if (random() > 0.5)
 		hknight_die1 ();
 	else

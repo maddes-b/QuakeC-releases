@@ -1,5 +1,4 @@
-/*  Copyright (C) 1996-1997  Id Software, Inc.
-    Copyright (C) 1996-1997  Rogue Entertainment
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 /*
 ==============================================================================
 
@@ -25,7 +25,7 @@ KNIGHT
 ==============================================================================
 */
 
-$cd id1/models/knight
+$cd /raid/quake/id1/models/knight
 $origin 0 0 24
 $base base
 $skin badass3
@@ -86,9 +86,8 @@ void() kn_idle_sound =
 	}
 };
 
-void()	knight_walk1	=[	$walk1,		knight_walk2	] {
-kn_idle_sound();
-ai_walk(3);};
+void()	knight_walk1	=[	$walk1,		knight_walk2	]
+	{ kn_idle_sound();	ai_walk(3);};
 void()	knight_walk2	=[	$walk2,		knight_walk3	] {ai_walk(2);};
 void()	knight_walk3	=[	$walk3,		knight_walk4	] {ai_walk(3);};
 void()	knight_walk4	=[	$walk4,		knight_walk5	] {ai_walk(4);};
@@ -104,9 +103,8 @@ void()	knight_walk13	=[	$walk13,	knight_walk14	] {ai_walk(4);};
 void()	knight_walk14	=[	$walk14,	knight_walk1	] {ai_walk(3);};
 
 
-void()	knight_run1	=[	$runb1,		knight_run2	] {
-kn_idle_sound();
-ai_run(16);};
+void()	knight_run1	=[	$runb1,		knight_run2	]
+	{ kn_idle_sound(); ai_run(16); };
 void()	knight_run2	=[	$runb2,		knight_run3	] {ai_run(20);};
 void()	knight_run3	=[	$runb3,		knight_run4	] {ai_run(13);};
 void()	knight_run4	=[	$runb4,		knight_run5	] {ai_run(7);};

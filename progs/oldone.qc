@@ -1,4 +1,4 @@
-/*  Copyright (C) 1996-1997  Id Software, Inc.
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 /*
 ==============================================================================
 
@@ -33,7 +34,8 @@ void() finale_1;
 void() finale_2;
 void() finale_3;
 void() finale_4;
-
+void() finale_5;
+void() finale_6;
 
 entity	shub;
 
@@ -236,7 +238,7 @@ void() finale_4 =
 	}
 	// start the end text
 	WriteByte (MSG_ALL, SVC_FINALE);
-	WriteString (MSG_ALL, "Congratulations and well done! You have\nbeaten the hideous Shub-Niggurath, and\nher hundreds of ugly changelings and\nmonsters. You have proven that your\nskill and your cunning are greater than\nall the powers of Quake. You are the\nmaster now. Id Software salutes you.");
+	WriteString (MSG_ALL, "$qc_finale_end");
 
 // put a player model down
 	n = spawn();
@@ -253,8 +255,32 @@ void() finale_4 =
 	WriteByte (MSG_ALL, 3);
 	WriteByte (MSG_ALL, 3);
 	lightstyle(0, "m");
+
+	// instead of sitting here forever, run the quake ex credits and send the user back to start
+	local entity timer = spawn();
+	timer.nextthink = time + 1;
+	timer.think = finale_5;
 };
 
+void() finale_5 =
+{
+	if (finaleFinished()) {
+		self.nextthink = time + 5;
+		self.think = finale_6;
+	} else {
+		self.nextthink = time + 0.1;
+	}
+}
+
+void() finale_6 =
+{
+	if (!coop) {
+		localcmd("menu_credits\n");
+		localcmd("disconnect\n");
+	} else {
+		changelevel("start");
+	}
+}
 //============================================================================
 
 void () nopain =

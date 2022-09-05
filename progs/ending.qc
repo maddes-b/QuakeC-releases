@@ -1,4 +1,4 @@
-/*  Copyright (C) 1996-1997  Rogue Entertainment
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 // ending.qc
 //    code to handle big ending of Xpack.
 // ------------------------------------------------
@@ -67,7 +68,7 @@ void() ending_remove_stuff;
 
 void() ending_for_coop =
 {
-	intermission_exittime = time + 10000000;	// never allow exit
+	intermission_exittime = time + 3;
 	intermission_running = 1;
 
 	self.model = "";
@@ -80,7 +81,7 @@ void() ending_for_coop =
 	setorigin (self, self.origin + '0 0 48');
 
 	WriteByte (MSG_ALL, SVC_FINALE);
-	WriteString (MSG_ALL, "You have destroyed Quake's\nTemporal Teleporter. His assault\non Time has been defeated.");
+	WriteString (MSG_ALL, "$qc_finale_coop");
 
 	ending_remove_stuff();
 
@@ -229,6 +230,26 @@ void() actor_run =
 	self.nextthink = time + 0.1;
 };
 
+void() finale_transition =
+{
+	if (!coop) {
+		localcmd("menu_credits\n");
+		localcmd("disconnect\n");
+	} else {
+		changelevel("start");
+	}
+}
+
+void() finale_check =
+{
+	if (finaleFinished()) {
+		self.nextthink = time + 5;
+		self.think = finale_transition;
+	} else {
+		self.nextthink = time + 0.1;
+	}
+}
+
 void() actor_fire1 =[$rockatt1, actor_fire2 ]
 	{
 		self.goalentity = theMachine;
@@ -245,7 +266,23 @@ void() actor_fire1 =[$rockatt1, actor_fire2 ]
 		// start the end text
 		WriteByte (MSG_ALL, SVC_FINALE);
 
-		WriteString (MSG_ALL, "\nFinally, Quake's Temporal Teleporter\nyields to your assault. A high\npitched scream emits from the\ndevastated device as stressed steel\nblasts outward to rock the cavern.\nThe machine is devoured by molten lava.\n\nThe ground shudders as reality shifts\nback to its predestined path.\n\nYou run to enter the charged time pod,\nscrambling in as the chamber closes.\nYour consciousness fades as you realize\nyou have halted Quake's plans for...\n\nThe Dissolution of Eternity.");
+		WriteString (MSG_ALL, "$qc_finale_rogue_end");
+
+		if (campaign && world.model == "maps/r2m8.bsp")
+		{
+			WriteByte (MSG_ALL, SVC_ACHIEVEMENT);
+			WriteString(MSG_ALL, "ACH_COMPLETE_R2M8");
+	 		if (skill == 3)
+	 		{
+		 		WriteByte (MSG_ALL, SVC_ACHIEVEMENT);
+		 		WriteString(MSG_ALL, "ACH_COMPLETE_R2M8_NIGHTMARE");
+	 		}
+		}
+
+		// instead of sitting here forever, run the quake ex credits and send the user back to start
+		local entity timer = spawn();
+		timer.nextthink = time + 1;
+		timer.think = finale_check;
 	};
 void() actor_fire2 =[$rockatt2, actor_fire3 ]
 	{self.v_angle_x = 0; self.angles_x = 0; self.nextthink=time+0.15;};

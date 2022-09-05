@@ -1,4 +1,4 @@
-/*  Copyright (C) 1996-1997  Rogue Entertainment
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 // Rogue Teamplay Variants
 // Jan'97 by ZOID <zoid@threewave.com>
 // Under contract to id software for Rogue Entertainment
@@ -130,9 +131,9 @@ string(float Team) GetTeamColor =
 
 string(float Team) GetCTFTeam =
 {
-	if (Team == TEAM1) return "ред";
-	else if (Team == TEAM2) return "блуе";
-	else if (Team == TEAM3) return "греы";
+	if (Team == TEAM1) return "О©╫О©╫О©╫";
+	else if (Team == TEAM2) return "О©╫О©╫О©╫О©╫";
+	else if (Team == TEAM3) return "О©╫О©╫О©╫О©╫";
 	return "UNKNOWN";
 
 };
@@ -235,13 +236,11 @@ void(entity targ, entity attacker) TeamAssists =
 		// prevent ppl intentionally allowing enemies to grab the flag,
 		// then immediately fragging them
 		if (targ.ctf_flagsince + CTF_CARRIER_FLAG_SINCE_TIMEOUT > time) {
-			sprint(attacker, "Enemy flag carrier killed, no bonus\n");
+			sprint(attacker, "$qc_enemy_killed_no_bonus");
 		} else {
 			attacker.frags = attacker.frags + CTF_FRAG_CARRIER_BONUS;
-			sprint(attacker, "Enemy flag carrier killed: ");
 			s = ftos(CTF_FRAG_CARRIER_BONUS);
-			sprint(attacker, s);
-			sprint(attacker, " bonus frags\n");
+			sprint(attacker, "$qc_enemy_killed_bonus", s);
 		}
 	}
 
@@ -267,10 +266,7 @@ void(entity targ, entity attacker) TeamAssists =
 		// NOTE: getting CARRIER_DANGER_PROTECT_BONUS precludes getting
 		// other kinds of bonuses for defending the flag carrier, since
 		// it's worth more points
-		bprint(attacker.netname);
-		bprint(" defends ");
-		bprint(s);
-		bprint("'s flag carrier against an agressive enemy\n");
+		bprint("$qc_defend_flag_carrier_aggressive", attacker.netname, s);
 	}
 
 	// Bonusus for defending the flag carrier or the flag itself.
@@ -293,10 +289,7 @@ void(entity targ, entity attacker) TeamAssists =
 				// attacker was near his own flag carrier
 				attacker.frags = attacker.frags + CTF_CARRIER_PROTECT_BONUS;
 				flag_carrier_radius = 1;
-				bprint(attacker.netname);
-				bprint(" defends ");
-				bprint(s);
-				bprint("'s flag carrier\n");
+				bprint("$qc_defend_flag_carrier", attacker.netname, s);
 			}
 		}
 		if ((attacker.steam == TEAM1 && head.classname == "item_flag_team1") ||
@@ -305,13 +298,11 @@ void(entity targ, entity attacker) TeamAssists =
 			// attacker was near his own flag
 			attacker.frags = attacker.frags + CTF_FLAG_DEFENSE_BONUS;
 			flag_radius = 1;
-			bprint(attacker.netname);
-			bprint(" defends the");
 			if (teamplay != TEAM_CTF_ONEFLAG) {
-				bprint(" ");
-				bprint(s);
+				bprint("$qc_defend_team_flag", attacker.netname, s);
+			} else {
+				bprint("$qc_defends_flag", attacker.netname);
 			}
-			bprint(" flag\n");
 		}
 		head = head.chain;
 	}
@@ -327,10 +318,7 @@ void(entity targ, entity attacker) TeamAssists =
 				// target was near attacker's flag carrier
 				attacker.frags = attacker.frags + CTF_CARRIER_PROTECT_BONUS;
 				flag_carrier_radius = 1;
-				bprint(attacker.netname);
-				bprint(" defends ");
-				bprint(s);
-				bprint("'s flag carrier\n");
+				bprint("$qc_defend_flag_carrier", attacker.netname, s);
 			}
 		}
 		if ((attacker.steam == TEAM1 && head.classname == "item_flag_team1") ||
@@ -340,13 +328,11 @@ void(entity targ, entity attacker) TeamAssists =
 			// target was near attacker's flag
 			attacker.frags = attacker.frags + CTF_FLAG_DEFENSE_BONUS;
 			flag_radius = 1;
-			bprint(attacker.netname);
-			bprint(" defends the");
 			if (teamplay != TEAM_CTF_ONEFLAG) {
-				bprint(" ");
-				bprint(s);
+				bprint("$qc_defend_team_flag", attacker.netname, s);
+			} else {
+				bprint("$qc_defends_flag", attacker.netname);
 			}
-			bprint(" flag\n");
 		}
 		head = head.chain;
 	}
@@ -488,9 +474,7 @@ void() TeamCheckTeam =
 	self.ctf_flags = self.ctf_flags | CTF_FLAG_STUFF_COLOR;
 
 	n = GetCTFTeam(newcolor);
-	sprint(self, "You have been assigned to ");
-	sprint(self, n);
-	sprint(self, " team.\n");
+	sprint(self, "$qc_assigned_team", n);
 
 	self.steam = newcolor;      // Remember what team we're on
 	self.team = newcolor;
@@ -534,10 +518,9 @@ void() TeamCheckLock =
 					// if he has tried to change teams several
 					// times, kick him off the server.
 					if (self.suicide_count > 3) {
-						sprint(self, "You were told you can't change teams.\nGo play color games somewhere else.\n");
+						sprint(self, "$qc_color_games");
 						stuffcmd(self, "disconnect\n");
-						bprint(self.netname);
-						bprint(" has bad color sense\n");
+						bprint("$qc_death_color_sense", self.netname);
 					}
 					// case base respawn
 					if (self.ctf_killed != 1)
@@ -546,7 +529,7 @@ void() TeamCheckLock =
 					// trying to change teams counts as a suicide
 					self.suicide_count = self.suicide_count + 1;
 
-					sprint(self, "You cannot change teams.\n");
+					sprint(self, "$qc_cannot_change_teams");
 					stuffcmd(self, "color ");
 					n = self.steam - 1;
 					s = ftos(n);
@@ -737,7 +720,7 @@ void() TossBackpack =
 	if (item.ammo_shells1 + item.ammo_nails1 + item.ammo_lava_nails +
 		item.ammo_rockets1 + item.ammo_multi_rockets + item.ammo_cells1 +
 		item.ammo_plasma == 0) {
-		sprint(self, "No ammo available!\n");
+		sprint(self, "$qc_no_ammo_available");
 		remove(item);
 		return;
 	}
@@ -793,9 +776,7 @@ void() Team_weapon_touch =
 	else
 		objerror ("Team_weapon_touch: unknown classname");
 
-	sprint (other, "You got the ");
-	sprint (other, self.netname);
-	sprint (other, "\n");
+	sprint(other, "$qc_got_item", self.netname);
 // weapon touch sound
 	sound (other, CHAN_ITEM, "weapons/pkup.wav", 1, ATTN_NORM);
 	stuffcmd (other, "bf\n");
@@ -853,7 +834,7 @@ void() TossWeapon =
 	{
 		setmodel (item, "progs/g_shot.mdl");
 		item.weapon = IT_SUPER_SHOTGUN;
-		item.netname = "Double-barrelled Shotgun";
+		item.netname = "$qc_double_shotgun";
 		item.classname = "weapon_supershotgun";
 		self.items = self.items - IT_SUPER_SHOTGUN;
 	}
@@ -862,7 +843,7 @@ void() TossWeapon =
 	{
 		setmodel (item, "progs/g_nail.mdl");
 		item.weapon = IT_NAILGUN;
-		item.netname = "nailgun";
+		item.netname = "$qc_nailgun";
 		item.classname = "weapon_nailgun";
 		self.items = self.items - (self.items & (IT_NAILGUN | IT_LAVA_NAILGUN));
 	}
@@ -871,7 +852,7 @@ void() TossWeapon =
 	{
 		setmodel (item, "progs/g_nail2.mdl");
 		item.weapon = IT_SUPER_NAILGUN;
-		item.netname = "Super Nailgun";
+		item.netname = "$qc_super_nailgun";
 		item.classname = "weapon_supernailgun";
 		self.items = self.items - (self.items & (IT_SUPER_NAILGUN | IT_LAVA_SUPER_NAILGUN));
 	}
@@ -880,7 +861,7 @@ void() TossWeapon =
 	{
 		setmodel (item, "progs/g_rock.mdl");
 		item.weapon = IT_GRENADE_LAUNCHER;
-		item.netname = "Grenade Launcher";
+		item.netname = "$qc_grenade_launcher";
 		item.classname = "weapon_grenadelauncher";
 		self.items = self.items - (self.items & (IT_GRENADE_LAUNCHER | IT_MULTI_GRENADE));
 	}
@@ -889,7 +870,7 @@ void() TossWeapon =
 	{
 		setmodel (item, "progs/g_rock2.mdl");
 		item.weapon = IT_ROCKET_LAUNCHER;
-		item.netname = "Rocket Launcher";
+		item.netname = "$qc_rocket_launcher";
 		item.classname = "weapon_rocketlauncher";
 		self.items = self.items - (self.items & (IT_ROCKET_LAUNCHER | IT_MULTI_ROCKET));
 	}
@@ -898,7 +879,7 @@ void() TossWeapon =
 	{
 		setmodel (item, "progs/g_light.mdl");
 		item.weapon = IT_LIGHTNING;
-		item.netname = "Thunderbolt";
+		item.netname = "$qc_thunderbolt";
 		item.classname = "weapon_lightning";
 		self.items = self.items - (self.items & (IT_LIGHTNING | IT_PLASMA_GUN));
 	}
@@ -932,20 +913,20 @@ void(entity flg) TeamReturnFlag =
 	p = find(world, classname, "player");
 	while (p != world) {
 		if (teamplay == TEAM_CTF_ONEFLAG) // one flag mode?
-			centerprint(p, "The flag has been returned!\n");
+			centerprint(p, "$qc_flag_returned");
 		else {
 			if (teamplay == TEAM_CTF_ALT) {
 				if (flg.team == TEAM1)
-					centerprint(p, "ред flag has been returned to base!\n");
+					centerprint(p, "О©╫О©╫О©╫ flag has been returned to base!\n");
 				else if (flg.team == TEAM2)
-					centerprint(p, "блуе flag has been returned to base!\n");
+					centerprint(p, "О©╫О©╫О©╫О©╫ flag has been returned to base!\n");
 				else
-					centerprint(p, "Some flag has been returned to base!\n");
+					centerprint(p, "$qc_some_flag_returned_base");
 			} else {
 				if (p.steam != flg.team)
-					centerprint(p, "Enemy flag has been returned to base!\n");
+					centerprint(p, "$qc_enemy_flag_returned_base");
 				else if (p.steam == flg.team)
-					centerprint(p, "Your flag has been returned to base!\n");
+					centerprint(p, "$qc_your_flag_returned_base");
 			}
 		}
 		p = find(p, classname, "player");
@@ -980,12 +961,12 @@ void(entity flg) TeamDropFlag =
 
 	bprint(p.netname);
 	if (teamplay == TEAM_CTF_ONEFLAG)
-		bprint(" ЛОСТ the flag!\n");
+		bprint(" О©╫О©╫О©╫О©╫ the flag!\n");
 	else {
 		if (flg.team == TEAM1)
-			bprint(" ЛОСТ the ред flag!\n"); // red
+			bprint(" О©╫О©╫О©╫О©╫ the О©╫О©╫О©╫ flag!\n"); // red
 		else
-			bprint(" ЛОСТ the блуе flag!\n"); // blue
+			bprint(" О©╫О©╫О©╫О©╫ the О©╫О©╫О©╫О©╫ flag!\n"); // blue
 	}
 
 	setorigin(flg, p.origin - '0 0 24');
@@ -993,7 +974,7 @@ void(entity flg) TeamDropFlag =
 	flg.velocity_z = 300;
 	flg.velocity_x = 0;
 	flg.velocity_y = 0;
-	flg.flags = FL_ITEM;
+	flg.flags = FL_ITEM | FL_OBJECTIVE;
 	flg.solid = SOLID_TRIGGER;
 	flg.movetype = MOVETYPE_TOSS;
 	setsize(flg, '-16 -16 0', '16 16 74');
@@ -1046,11 +1027,11 @@ void() TeamFlagTouch =
 		// in one flag mode, we always pick up the flag.  The touch of the
 		// flagbase entities does the scoring
 		bprint(other.netname);
-		bprint(" ГОТ the flag!\n");
+		bprint(" О©╫О©╫О©╫ the flag!\n");
 		if (CTF_FLAG_BONUS)
 			other.frags = other.frags + CTF_FLAG_BONUS;
-		//centerprint(other, "YOU GOT THE FLAG\n\nTAKE IT TO ENEMY BASE\n");
-		  centerprint(other, "ыоу гот тхе флаг\n\nтаке ит то енемы басе\n");
+		//centerprint(other, "$qc_got_flag_enemy_base");
+		  centerprint(other, "О©╫О©╫О©╫ О©╫О©╫О©╫ О©╫О©╫О©╫ О©╫О©╫О©╫О©╫\n\nО©╫О©╫О©╫О©╫ О©╫О©╫ О©╫О©╫ О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫\n");
 
 		sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
 
@@ -1067,7 +1048,7 @@ void() TeamFlagTouch =
 		p = find(world, classname, "player");
 		while (p != world) {
 			if (p != other)
-				centerprint(p, "The flag has been taken!\n");
+				centerprint(p, "$qc_flag_taken");
 			p = find(p, classname, "player");
 		}
 		return;
@@ -1087,9 +1068,9 @@ void() TeamFlagTouch =
 				(self.team == TEAM2 && (other.ctf_flags & CTF_FLAG_TEAM1))) {
 				bprint(other.netname);
 				if (other.team == TEAM1)
-					bprint(" ЦАПТУРЕД the блуе flag!\n"); // blue
+					bprint(" О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ the О©╫О©╫О©╫О©╫ flag!\n"); // blue
 				else
-					bprint(" ЦАПТУРЕД the ред flag!\n"); // red
+					bprint(" О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ the О©╫О©╫О©╫ flag!\n"); // red
 				other.items = other.items - (other.items & (IT_KEY1 | IT_KEY2));
 
 				sound (other, CHAN_VOICE, "misc/flagcap.wav", 1, ATTN_NONE);
@@ -1106,25 +1087,25 @@ void() TeamFlagTouch =
 					if (self.team != other.team) {
 						if (self.team == TEAM3)
 							if (other.team == TEAM1)
-								centerprint(self, "блуе flag was captured!\n");
+								centerprint(self, "О©╫О©╫О©╫О©╫ flag was captured!\n");
 							else
-								centerprint(self, "ред flag was captured!\n");
+								centerprint(self, "О©╫О©╫О©╫ flag was captured!\n");
 						else
-							centerprint(self, "Your flag was captured!\n");
+							centerprint(self, "$qc_your_flag_captured");
 						// reset the last_hurt_carrier variable in all enemy players, so that you don't get
 						// bonuses for defending the flag carrier if the flag carrier has already
 						// completed a capture
 						self.ctf_lasthurtcarrier = -5;
 					} else if (self.team == other.team) {
 						// done to all players on the capturing team
-						centerprint(self, "Your team captured the flag!\n");
+						centerprint(self, "$qc_your_team_captured");
 						// award extra points for capture assists
 						if (self.ctf_lastreturnedflag + CTF_RETURN_FLAG_ASSIST_TIMEOUT > time) {
 							bprint(self.netname);
 							if (self.team == TEAM1)
-								bprint(" gets an assist for returning the ред flag!\n");
+								bprint(" gets an assist for returning the О©╫О©╫О©╫ flag!\n");
 							else
-								bprint(" gets an assist for returning the блуе flag!\n");
+								bprint(" gets an assist for returning the О©╫О©╫О©╫О©╫ flag!\n");
 							self.frags = self.frags + CTF_RETURN_FLAG_ASSIST_BONUS;
 						}
 						if (self.ctf_lastfraggedcarrier + CTF_FRAG_CARRIER_ASSIST_TIMEOUT > time) {
@@ -1146,9 +1127,9 @@ void() TeamFlagTouch =
 		// hey, its not home.  return it by teleporting it back
 		bprint(other.netname);
 		if (other.team == TEAM1)
-			bprint(" РЕТУРНЕД the ред flag!\n"); // red
+			bprint(" О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ the О©╫О©╫О©╫ flag!\n"); // red
 		else
-			bprint(" РЕТУРНЕД the блуе flag!\n"); // blue
+			bprint(" О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ the О©╫О©╫О©╫О©╫ flag!\n"); // blue
 		other.frags = other.frags + CTF_RECOVERY_BONUS;
 		other.ctf_lastreturnedflag = time;
 		sound (other, CHAN_ITEM, self.noise1, 1, ATTN_NORM);
@@ -1163,18 +1144,18 @@ void() TeamFlagTouch =
 	// hey, its not our flag, pick it up
 	bprint(other.netname);
 	if (self.team == TEAM1)
-		bprint(" ГОТ the ред flag!\n"); // red
+		bprint(" О©╫О©╫О©╫ the О©╫О©╫О©╫ flag!\n"); // red
 	else
-		bprint(" ГОТ the блуе flag!\n"); // blue
+		bprint(" О©╫О©╫О©╫ the О©╫О©╫О©╫О©╫ flag!\n"); // blue
 	other.frags = other.frags + CTF_FLAG_BONUS;
 
 	// if in three team, messages are a little different
 	if (other.team == TEAM3) {
-//		centerprint(other, "YOU GOT THE ENEMY FLAG\n\nRETURN IT TO THE OTHER BASE!\n");
-		centerprint(other, "ыоу гот тхе енемы флаг\n\nретурн ит то тхе отхер басе\n");
+//		centerprint(other, "$qc_got_flag_other");
+		centerprint(other, "О©╫О©╫О©╫ О©╫О©╫О©╫ О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫\n\nО©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫ О©╫О©╫ О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫\n");
 	} else {
-//		centerprint(other, "YOU GOT THE ENEMY FLAG!\n\nRETURN TO BASE!\n");
-		centerprint(other, "ыоу гот тхе енемы флаг\n\nретурн то басе\n");
+//		centerprint(other, "$qc_got_flag_return_base");
+		centerprint(other, "О©╫О©╫О©╫ О©╫О©╫О©╫ О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫\n\nО©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫ О©╫О©╫О©╫О©╫\n");
 	}
 	sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
 
@@ -1200,27 +1181,27 @@ void() TeamFlagTouch =
 		{
 			if (p.steam == self.team)
 			{
-				centerprint(p, "Your flag has been taken!\n");
+				centerprint(p, "$qc_your_flag_taken");
 			}
 			else if (p.steam == other.team)
 			{
 				if (self.team == TEAM1)
-					centerprint(p, "Your team has the ред flag!\n");	// Red Flag
+					centerprint(p, "Your team has the О©╫О©╫О©╫ flag!\n");	// Red Flag
 				else
-					centerprint(p, "Your team has the блуе flag!\n");	// Blue Flag
+					centerprint(p, "Your team has the О©╫О©╫О©╫О©╫ flag!\n");	// Blue Flag
 			}
 			else
 			{
 				if (self.team == TEAM1)
 					if (other.steam == TEAM2)
-						centerprint(p, "блуе team has the ред flag!\n"); // Blue has red
+						centerprint(p, "О©╫О©╫О©╫О©╫ team has the О©╫О©╫О©╫ flag!\n"); // Blue has red
 					else // must be team3
-						centerprint(p, "греы team has the ред flag!\n"); // grey has red
+						centerprint(p, "О©╫О©╫О©╫О©╫ team has the О©╫О©╫О©╫ flag!\n"); // grey has red
 				else
 					if (other.steam == TEAM1)
-						centerprint(p, "ред team has the блуе flag!\n"); // red has blue
+						centerprint(p, "О©╫О©╫О©╫ team has the О©╫О©╫О©╫О©╫ flag!\n"); // red has blue
 					else // must be team3
-						centerprint(p, "греы team has the блуе flag!\n");// grey has blue
+						centerprint(p, "О©╫О©╫О©╫О©╫ team has the О©╫О©╫О©╫О©╫ flag!\n");// grey has blue
 			}
 		}
 		p = find(p, classname, "player");
@@ -1250,7 +1231,7 @@ void() TeamFlagBaseTouch =
 			(other.ctf_flags & CTF_FLAG_FLAG)) {
 			// he just touched enemy base, capture it
 			bprint(other.netname);
-			bprint(" ЦАПТУРЕД the flag!\n"); // blue
+			bprint(" О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ the flag!\n"); // blue
 			other.items = other.items - (other.items & (IT_KEY1 | IT_KEY2));
 			sound (other, CHAN_VOICE, "misc/flagcap.wav", 1, ATTN_NONE);
 
@@ -1292,9 +1273,9 @@ void() TeamFlagBaseTouch =
 
 		bprint(other.netname);
 		if (self.team == TEAM1)
-			bprint(" ЦАПТУРЕД the блуе flag!\n"); // blue
+			bprint(" О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ the О©╫О©╫О©╫О©╫ flag!\n"); // blue
 		else
-			bprint(" ЦАПТУРЕД the ред flag!\n"); // red
+			bprint(" О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ the О©╫О©╫О©╫ flag!\n"); // red
 		other.items = other.items - (other.items & (IT_KEY1 | IT_KEY2));
 
 		sound (other, CHAN_VOICE, "misc/flagcap.wav", 1, ATTN_NONE);
@@ -1310,16 +1291,16 @@ void() TeamFlagBaseTouch =
 				self.frags = self.frags + CTF_ALT_TEAM_BONUS;
 			if (self.team != other.team) {
 				if ((other.ctf_flags & CTF_FLAG_TEAM1) && self.team == TEAM1)
-					centerprint(self, "Your flag was captured!\n");
+					centerprint(self, "$qc_your_flag_captured");
 				else if ((other.ctf_flags & CTF_FLAG_TEAM2) && self.team == TEAM2)
-					centerprint(self, "The enemy flag was captured!\n");
+					centerprint(self, "$qc_enemy_flag_captured");
 				// reset the last_hurt_carrier variable in all enemy players, so that you don't get
 				// bonuses for defending the flag carrier if the flag carrier has already
 				// completed a capture
 				self.ctf_lasthurtcarrier = -5;
 			} else if (self.team == other.team) {
 				// done to all players on the capturing team
-				centerprint(self, "Your team captured the flag!\n");
+				centerprint(self, "$qc_your_team_captured");
 			}
 			p = find(p, classname, "player");
 		}
@@ -1421,21 +1402,21 @@ void() TeamFlagStatusReport =
 
 	if (teamplay != TEAM_CTF && teamplay != TEAM_CTF_ONEFLAG &&
 		teamplay != TEAM_CTF_ALT) {
-		sprint(self, "Capture the Flag is not enabled.\n");
+		sprint(self, "$qc_ctf_disabled");
 		return;
 	}
 
 	if (teamplay == TEAM_CTF_ONEFLAG) {
 		flag1 = find (world, classname, "item_flag");
 		if (flag1 == world)
-			sprint(self, "The flag is missing!\n");
+			sprint(self, "$qc_flag_missing");
 		else if (flag1.cnt == FLAG_AT_BASE)
-			sprint(self, "The flag is at base!\n");
+			sprint(self, "$qc_flag_at_base");
 		else if (flag1.cnt == FLAG_DROPPED)
-			sprint(self, "The flag is lying about!\n");
+			sprint(self, "$qc_flag_lying_about");
 		else if (flag1.cnt == FLAG_CARRIED) {
 			if (flag1.owner == self)
-				sprint(self, "You have the flag!\n");
+				sprint(self, "$qc_you_have_flag");
 			else {
 				sprint(self, flag1.owner.netname);
 				n = GetCTFTeam(flag1.owner.steam);
@@ -1444,7 +1425,7 @@ void() TeamFlagStatusReport =
 				sprint(self, " team has the flag!\n");
 			}
 		} else
-			sprint(self, "The flag is screwed up!\n");
+			sprint(self, "$qc_flag_screwed_up");
 		return;
 	}
 
@@ -1478,7 +1459,7 @@ void() TeamFlagStatusReport =
 
 		if (flag2 != world && flag2.cnt == FLAG_CARRIED) {
 			if (self == flag2.owner)
-				sprint(self, "You have the enemy flag.\n");
+				sprint(self, "$qc_you_have_enemy_flag");
 			else {
 				sprint(self, flag2.owner.netname);
 				sprint(self, " has the enemy flag.\n");
@@ -1504,19 +1485,19 @@ void() TeamFlagStatusReport =
 
 		if (flag1 != world && flag1.cnt == FLAG_CARRIED) {
 			if (flag1.owner == self)
-				sprint(self, "You have the ред flag!\n");
+				sprint(self, "You have the О©╫О©╫О©╫ flag!\n");
 			else {
 				sprint(self, flag1.owner.netname);
 				n = GetCTFTeam(flag1.owner.steam);
 				sprint(self, " of the ");
 				sprint(self, n);
-				sprint(self, " team has the ред flag.\n");
+				sprint(self, " team has the О©╫О©╫О©╫ flag.\n");
 			}
 		} else {
 			if (self.steam == flag1.team)
 				sprint(self, "Your flag is ");
 			else
-				sprint(self, "ред flag is ");
+				sprint(self, "О©╫О©╫О©╫ flag is ");
 			if (flag1 == world)
 				sprint(self, "missing!\n");
 			if (flag1.cnt == FLAG_AT_BASE)
@@ -1529,19 +1510,19 @@ void() TeamFlagStatusReport =
 
 		if (flag2 != world && flag2.cnt == FLAG_CARRIED) {
 			if (flag2.owner == self)
-				sprint(self, "You have the блуе flag.\n");
+				sprint(self, "You have the О©╫О©╫О©╫О©╫ flag.\n");
 			else {
 				sprint(self, flag2.owner.netname);
 				n = GetCTFTeam(flag2.owner.steam);
 				sprint(self, " of the ");
 				sprint(self, n);
-				sprint(self, " team has the блуе flag.\n");
+				sprint(self, " team has the О©╫О©╫О©╫О©╫ flag.\n");
 			}
 		} else {
 			if (self.steam == flag1.team)
 				sprint(self, "Your flag is ");
 			else
-				sprint(self, "блуе flag is ");
+				sprint(self, "О©╫О©╫О©╫О©╫ flag is ");
 			if (flag2 == world)
 				sprint(self, "missing!\n");
 			if (flag2.cnt == FLAG_AT_BASE)
@@ -1561,8 +1542,8 @@ $base base
 $skin skin
 
 void() place_flag = {
-	self.mdl = self.model;		// so it can be restored on respawn
-	self.flags = FL_ITEM;		// make extra wide
+	self.mdl = self.model;						// so it can be restored on respawn
+	self.flags = FL_ITEM | FL_OBJECTIVE;	// make extra wide
 	self.solid = SOLID_TRIGGER;
 	self.movetype = MOVETYPE_TOSS;
 	self.velocity = '0 0 0';

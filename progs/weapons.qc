@@ -1,5 +1,4 @@
-/*  Copyright (C) 1996-1997  Id Software, Inc.
-    Copyright (C) 1996-1997  Rogue Entertainment
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 /*
 */
 
@@ -570,6 +570,7 @@ void() GrenadeTouch =
 {
 	if (other == self.owner)
 		return;		// don't explode on owner
+
 	if (other.takedamage == DAMAGE_AIM)
 	{
 		GrenadeExplode();
@@ -715,8 +716,6 @@ void(float ox) W_FireSpikes =
 	self.punchangle_x = -2;
 };
 
-
-
 .float hit_z;
 void() spike_touch =
 {
@@ -792,7 +791,6 @@ local float rand;
 
 };
 
-
 /*
 ===============================================================================
 
@@ -805,7 +803,8 @@ void() W_SetCurrentAmmo =
 {
 	player_run ();		// get out of any weapon firing states
 
-	self.items = self.items - ( self.items & (IT_SHELLS | IT_NAILS | IT_ROCKETS | IT_CELLS) );
+	self.items = self.items -
+		( self.items & (IT_SHELLS | IT_NAILS | IT_ROCKETS | IT_CELLS));
 	self.items2 = self.items2 -
 		(self.items2 & (IT2_LAVA_NAILS|IT2_PLASMA_AMMO|IT2_MULTI_ROCKETS));
 
@@ -926,11 +925,11 @@ float() W_BestWeapon =
 
 // pgm - fix for sandy. will not change to plasma gun
 
-//	if (self.waterlevel <= 1 && self.ammo_plasma >= 1 && (it & IT_PLASMA_GUN))
+//	if(self.waterlevel <= 1 && self.ammo_plasma >= 1 && (it & IT_PLASMA_GUN))
 //		return IT_PLASMA_GUN;
 //	else
-	if (self.waterlevel<=1 && self.ammo_cells1 >= 1 && (it & IT_LIGHTNING) )
-			return IT_LIGHTNING;
+	if(self.waterlevel<=1 && self.ammo_cells1>=1 && (it & IT_LIGHTNING))
+		return IT_LIGHTNING;
 	else if(self.ammo_lava_nails >= 2 && (it & IT_LAVA_SUPER_NAILGUN) )
 		return IT_LAVA_SUPER_NAILGUN;
 	else if(self.ammo_nails1 >= 2 && (it & IT_SUPER_NAILGUN) )
@@ -943,7 +942,24 @@ float() W_BestWeapon =
 		return IT_SUPER_SHOTGUN;
 	else if(self.ammo_shells1 >= 1 && (it & IT_SHOTGUN) )
 		return IT_SHOTGUN;
+
 	return IT_AXE;
+};
+
+float(entity playerEnt, float old, float new) W_WantsToChangeWeapon =
+{
+	float playerFlags = CheckPlayerEXFlags(playerEnt);
+	if((playerFlags & PEF_CHANGENEVER) != 0)
+	{
+		return 0;
+	}
+
+	if(((playerFlags & PEF_CHANGEONLYNEW) != 0) && old == new)
+	{
+		return 0;
+	}
+
+	return 1;
 };
 
 float() W_CheckNoAmmo =
@@ -995,7 +1011,7 @@ void() W_Attack =
 	if (!W_CheckNoAmmo ())
 		return;
 
-	makevectors	(self.v_angle);			// calculate forward angle for velocity
+	makevectors	(self.v_angle);		// calculate forward angle for velocity
 	self.show_hostile = time + 1;	// wake monsters up
 
 // ZOID--
@@ -1247,20 +1263,48 @@ void() W_ChangeWeapon =
 		if (self.ammo_plasma < 1)
 			am = 1;
 	}
+	else if (self.impulse == 65)
+	{
+		fl = IT_NAILGUN;
+
+		if (self.ammo_nails < 1)
+			am = 1;
+	}
+	else if (self.impulse == 66)
+	{
+		fl = IT_SUPER_NAILGUN;
+
+		if (self.ammo_nails < 2)
+			am = 1;
+	}
+	else if (self.impulse == 67)
+	{
+		fl = IT_GRENADE_LAUNCHER;
+
+		if (self.ammo_rockets < 1)
+			am = 1;
+	}
+	else if (self.impulse == 68)
+	{
+		fl = IT_ROCKET_LAUNCHER;
+		if (self.ammo_rockets < 1)
+			am = 1;
+	}
 
 	self.impulse = 0;
 
 	if (!(self.items & fl))
 	{	// don't have the weapon or the ammo
-		sprint (self, "no weapon.\n");
+		sprint (self, "$qc_no_weapon");
 		return;
 	}
 
 	if (am)
 	{	// don't have the ammo
-		sprint (self, "not enough ammo.\n");
+		sprint (self, "$qc_not_enough_ammo");
 		return;
 	}
+
 
 	if (self.weapon != fl)
 	{
@@ -1268,38 +1312,38 @@ void() W_ChangeWeapon =
 				self.weapon == IT_LAVA_SUPER_NAILGUN)
 		{
 			if (fl == IT_NAILGUN || fl == IT_SUPER_NAILGUN)
-				sprint (self, "Normal Nails\n");
+				sprint (self, "$qc_normal_nails");
 		}
 		else if (self.weapon == IT_MULTI_GRENADE)
 		{
 			if (fl == IT_GRENADE_LAUNCHER)
-				sprint (self, "Normal Grenades\n");
+				sprint (self, "$qc_normal_grenades");
 		}
 		else if (self.weapon == IT_MULTI_ROCKET)
 		{
 			if (fl == IT_ROCKET_LAUNCHER)
-				sprint (self, "Normal Rockets\n");
+				sprint (self, "$qc_normal_rockets");
 		}
 		else if (self.weapon == IT_PLASMA_GUN)
 		{
 			if (fl == IT_LIGHTNING)
-				sprint (self, "Lightning Gun\n");
+				sprint (self, "$qc_lightning_gun");
 		}
 		else if (fl == IT_LAVA_NAILGUN || fl == IT_LAVA_SUPER_NAILGUN)
 		{
-			sprint (self, "Lava Nails!\n");
+			sprint (self, "$qc_lava_nails");
 		}
 		else if(fl == IT_MULTI_GRENADE)
 		{
-			sprint (self, "Multi-Grenades!\n");
+			sprint (self, "$qc_multi_gl");
 		}
 		else if(fl == IT_MULTI_ROCKET)
 		{
-			sprint (self, "Multi-Rockets!\n");
+			sprint (self, "$qc_multi_rl");
 		}
 		else if(fl == IT_PLASMA_GUN)
 		{
-			sprint (self, "Plasma Gun!\n");
+			sprint (self, "$qc_plasma_gun");
 		}
 	}
 
@@ -1317,12 +1361,14 @@ CheatCommand
 */
 void() CheatCommand =
 {
-	if (deathmatch || coop)
+	if ( ( deathmatch || coop ) && cheats_allowed == 0 ) { // mal: allow impulse 9 IF cheats allowed
 		return;
+	}
 
 	self.ammo_rockets1 = 100;
 	self.ammo_nails1 = 200;
 	self.ammo_shells1 = 100;
+
 	self.items = self.items |
 		IT_AXE |
 		IT_SHOTGUN |
@@ -1331,6 +1377,7 @@ void() CheatCommand =
 		IT_SUPER_NAILGUN |
 		IT_GRENADE_LAUNCHER |
 		IT_ROCKET_LAUNCHER |
+
 		IT_LAVA_NAILGUN |
 		IT_LAVA_SUPER_NAILGUN |
 		IT_MULTI_GRENADE |
@@ -1608,8 +1655,9 @@ void() QuadCheat =
 	self.super_time = 1;
 	self.super_damage_finished = time + 30;
 	self.items = self.items | IT_QUAD;
-	dprint ("quad cheat\n");
+	dprint ("$qc_quad_cheat");
 };
+
 
 /*
 ============
@@ -1623,7 +1671,7 @@ void() ImpulseCommands =
 
 	if (self.impulse >= 1 && self.impulse <= 8)
 		W_ChangeWeapon ();
-	else if (self.impulse >= 60 && self.impulse <= 64)
+	else if (self.impulse >= 60 && self.impulse <= 68)
 		W_ChangeWeapon ();
 	else if (self.impulse == 9)
 		CheatCommand ();

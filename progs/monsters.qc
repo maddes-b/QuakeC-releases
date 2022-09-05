@@ -1,5 +1,4 @@
-/*  Copyright (C) 1996-1997  Id Software, Inc.
-    Copyright (C) 1996-1997  Rogue Entertainment
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 /* ALL MONSTERS SHOULD BE 1 0 0 IN COLOR */
 
 // name =[framenum,	nexttime, nextthink] {code}
@@ -109,6 +109,7 @@ local entity	etemp;
 		self.yaw_speed = 20;
 	self.view_ofs = '0 0 25';
 	self.use = monster_use;
+	self.team = TEAM_MONSTERS;
 
 	self.flags = self.flags | FL_MONSTER;
 
@@ -160,6 +161,7 @@ void() flymonster_start_go =
 		self.yaw_speed = 10;
 	self.view_ofs = '0 0 25';
 	self.use = monster_use;
+	self.team = TEAM_MONSTERS;
 
 	self.flags = self.flags | FL_FLY;
 	self.flags = self.flags | FL_MONSTER;
@@ -221,6 +223,7 @@ void() swimmonster_start_go =
 		self.yaw_speed = 10;
 	self.view_ofs = '0 0 10';
 	self.use = monster_use;
+	self.team = TEAM_MONSTERS;
 
 	self.flags = self.flags | FL_SWIM;
 	self.flags = self.flags | FL_MONSTER;

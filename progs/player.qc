@@ -1,5 +1,4 @@
-/*  Copyright (C) 1996-1997  Id Software, Inc.
-    Copyright (C) 1996-1997  Rogue Entertainment
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,6 +17,7 @@
     See file, 'COPYING', for details.
 */
 
+
 void() bubble_bob;
 
 /*
@@ -28,7 +28,7 @@ PLAYER
 ==============================================================================
 */
 
-$cd id1/models/player_4
+$cd /raid/quake/id1/models/player_4
 $origin 0 -6 24
 $base base
 $skin skin

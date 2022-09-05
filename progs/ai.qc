@@ -1,5 +1,4 @@
-/*  Copyright (C) 1996-1997  Id Software, Inc.
-    Copyright (C) 1996-1997  Rogue Entertainment
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 void() movetarget_f;
 void() t_movetarget;
 void() knight_walk1;
@@ -306,7 +306,7 @@ local float	rsnd;
         if (self.skin == 0)
             sound (self, CHAN_VOICE, "knight/ksight.wav", 1, ATTN_NORM);
     }
-	else if (self.classname == "monster_shambler")
+    else if (self.classname == "monster_shambler")
 		sound (self, CHAN_VOICE, "shambler/ssight.wav", 1, ATTN_NORM);
 	else if (self.classname == "monster_demon1")
 		sound (self, CHAN_VOICE, "demon/sight2.wav", 1, ATTN_NORM);
@@ -321,7 +321,7 @@ local float	rsnd;
         if (self.skin == 0)
             sound (self, CHAN_VOICE, "hknight/sight1.wav", 1, ATTN_NORM);
     }
-	else if (self.classname == "monster_tarbaby")
+    else if (self.classname == "monster_tarbaby")
 		sound (self, CHAN_VOICE, "blob/sight1.wav", 1, ATTN_NORM);
 	else if (self.classname == "monster_vomit")
 		sound (self, CHAN_VOICE, "vomitus/v_sight1.wav", 1, ATTN_NORM);
@@ -463,7 +463,6 @@ void(float dist) ai_back =
 {
 	walkmove ( (self.angles_y+180), dist);
 };
-
 
 /*
 =============

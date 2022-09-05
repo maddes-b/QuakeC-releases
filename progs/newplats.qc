@@ -1,4 +1,4 @@
-/*  Copyright (C) 1996-1997  Rogue Entertainment
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 // newplats.qc
 // pmack
 // september 1996
@@ -29,7 +30,7 @@ float START_AT_TOP  = 8;
 float PLAT2			= 16;
 float PLAT2_BOTTOM  = 32;
 
-float ELV_BUTN_DIR	= 0;
+var float elvButnDir	= 0;
 
 // ==================================
 // down N and wait code
@@ -187,7 +188,7 @@ void() elvtr_use =
 
 	self.elevatorLastUse = time;
 
-	if (ELV_BUTN_DIR == 0)
+	if (elvButnDir == 0)
 		return;
 
 	elvPos = (self.absmin_z + self.absmax_z) * 0.5;
@@ -214,7 +215,7 @@ void() elvtr_use =
 		}
 	}
 
-	if (ELV_BUTN_DIR == -1)
+	if (elvButnDir == -1)
 	{
 		if(self.elevatorOnFloor > 0)
 		{
@@ -222,7 +223,7 @@ void() elvtr_use =
 			elvtr_go ();
 		}
 	}
-	else if(ELV_BUTN_DIR == 1)
+	else if(elvButnDir == 1)
 	{
 		if(self.elevatorOnFloor < (self.cnt - 1))
 		{

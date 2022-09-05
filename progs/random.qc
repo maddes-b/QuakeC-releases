@@ -1,4 +1,4 @@
-/*  Copyright (C) 1996-1997  Rogue Entertainment
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 // Random.qc
 
 // =======================================================
@@ -41,7 +42,7 @@ void() random_pick_type =
 		self.touch = newitems_touch;
 		self.noise = "shield/pickup.wav";
 		setmodel (self, "progs/shield.mdl");
-		self.netname = "Power Shield";
+		self.netname = "$qc_power_shield";
 		self.items = 0;
 		self.items2 = IT2_SHIELD;
 //		if(norandom == 1)
@@ -52,7 +53,7 @@ void() random_pick_type =
 		self.touch = newitems_touch;
 		self.noise = "belt/pickup.wav";
 		setmodel (self, "progs/beltup.mdl");
-		self.netname = "Anti-Grav Belt";
+		self.netname = "$qc_anti_grav_belt";
 		self.items = 0;
 		self.items2 = IT2_ANTIGRAV;
 //		if(norandom == 1)
@@ -62,7 +63,7 @@ void() random_pick_type =
 	{
 		self.noise = "items/protect.wav";
 		setmodel (self, "progs/invulner.mdl");
-		self.netname = "Pentagram of Protection";
+		self.netname = "$qc_pentagram_of_protection";
 		self.items = IT_INVULNERABILITY;
 		self.items2 = 0;
 //		if(norandom == 1)
@@ -72,7 +73,7 @@ void() random_pick_type =
 	{
 		self.noise = "items/inv1.wav";
 		setmodel (self, "progs/invisibl.mdl");
-		self.netname = "Ring of Shadows";
+		self.netname = "$qc_ring_of_shadows";
 		self.items = IT_INVISIBILITY;
 		self.items2 = 0;
 //		if(norandom == 1)
@@ -82,7 +83,7 @@ void() random_pick_type =
 	{
 		self.noise = "items/damage.wav";
 		setmodel (self, "progs/quaddama.mdl");
-		self.netname = "Quad Damage";
+		self.netname = "$qc_quad_damage";
 		self.items = IT_QUAD;
 		self.items2 = 0;
 //		if(norandom == 1)

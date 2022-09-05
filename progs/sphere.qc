@@ -1,4 +1,4 @@
-/*  Copyright (C) 1996-1997  Rogue Entertainment
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 // vengeance sphere
 
 // ==============================
@@ -53,9 +54,8 @@ void(entity ownerEntity) sphere_remove =
 	{
 		if(theSphere.owner == self)
 		{
-			bprint ( theSphere.owner.netname );
-			bprint ( " is denied Vengeance.\n" );
-			remove (theSphere);
+			bprint("$qc_death_denied_vengance", theSphere.owner.netname);
+			remove(theSphere);
 			theSphere = find(world, classname, "Vengeance");
 		}
 		else
@@ -73,7 +73,7 @@ void() sphere_attack =
 
 	if (self.enemy.health < 1)
 	{
-		sprint ( self.owner, "You are denied Vengeance");
+		sprint ( self.owner, "$qc_you_are_denied_vengeance");
 		remove(self);
 		return;
 	}
@@ -98,7 +98,7 @@ void() sphere_think =
 	{
 		if (self.owner.items2 & IT2_V_SPHERE)
 			self.owner.items2 = self.owner.items2 - IT2_V_SPHERE;
-		sprint ( self.owner, "Vengeance Sphere Lost\n");
+		sprint ( self.owner, "$qc_vengeance_lost");
 		remove (self);
 		return;
 	}
@@ -153,7 +153,7 @@ void() sphere_spawn =
 };
 
 /*QUAKED item_sphere (0 0 1) (-8 -8 -8) (8 8 8) ?
-The Vengeance Sphere. DEATHMATCH ONLY.
+The $qc_vengeance_sphere. DEATHMATCH ONLY.
 */
 void() item_sphere =
 {
@@ -167,7 +167,7 @@ void() item_sphere =
 	precache_sound ("sphere/sphere.wav");
 
 	self.noise = "sphere/sphere.wav";
-	self.netname = "Vengeance Sphere";
+	self.netname = "$qc_vengeance_sphere";
     self.touch = newitems_touch;
 
     setmodel (self, "progs/sphere.mdl");

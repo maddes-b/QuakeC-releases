@@ -1,5 +1,4 @@
-/*  Copyright (C) 1996-1997  Id Software, Inc.
-    Copyright (C) 1996-1997  Rogue Entertainment
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 /*
 ==============================================================================
 
@@ -24,7 +24,7 @@ ZOMBIE
 
 ==============================================================================
 */
-$cd id1/models/zombie
+$cd /raid/quake/id1/models/zombie
 
 $origin	0 0 24
 
@@ -123,7 +123,8 @@ void() zombie_lurk =
 	self.nextthink = time + 0.1 + random()*0.1;
 };
 
-void() zombie_cruc1	=	[	$cruc_1,		zombie_cruc2	] {
+void() zombie_cruc1	= [ $cruc_1, zombie_cruc2 ]
+	{
 	zombie_lurk();
 	if (random() < 0.1)
 		sound (self, CHAN_VOICE, "zombie/idle_w2.wav", 1, ATTN_STATIC);
@@ -157,24 +158,24 @@ ai_walk(0);
 if (random() < 0.2)
 	sound (self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_IDLE);};
 
-void() zombie_run1		=[	$run1,		zombie_run2	] {ai_run(1);self.inpain = 0;};
-void() zombie_run2		=[	$run2,		zombie_run3	] {ai_run(1);};
-void() zombie_run3		=[	$run3,		zombie_run4	] {ai_run(0);};
-void() zombie_run4		=[	$run4,		zombie_run5	] {ai_run(1);};
-void() zombie_run5		=[	$run5,		zombie_run6	] {ai_run(2);};
-void() zombie_run6		=[	$run6,		zombie_run7	] {ai_run(3);};
-void() zombie_run7		=[	$run7,		zombie_run8	] {ai_run(4);};
-void() zombie_run8		=[	$run8,		zombie_run9	] {ai_run(4);};
-void() zombie_run9		=[	$run9,		zombie_run10	] {ai_run(2);};
-void() zombie_run10		=[	$run10,		zombie_run11	] {ai_run(0);};
-void() zombie_run11		=[	$run11,		zombie_run12	] {ai_run(0);};
-void() zombie_run12		=[	$run12,		zombie_run13	] {ai_run(0);};
-void() zombie_run13		=[	$run13,		zombie_run14	] {ai_run(2);};
-void() zombie_run14		=[	$run14,		zombie_run15	] {ai_run(4);};
-void() zombie_run15		=[	$run15,		zombie_run16	] {ai_run(6);};
-void() zombie_run16		=[	$run16,		zombie_run17	] {ai_run(7);};
-void() zombie_run17		=[	$run17,		zombie_run18	] {ai_run(3);};
-void() zombie_run18		=[	$run18,		zombie_run1	] {
+void() zombie_run1 =[	$run1,		zombie_run2	] {ai_run(1);self.inpain = 0;};
+void() zombie_run2 =[	$run2,		zombie_run3	] {ai_run(1);};
+void() zombie_run3 =[	$run3,		zombie_run4	] {ai_run(0);};
+void() zombie_run4 =[	$run4,		zombie_run5	] {ai_run(1);};
+void() zombie_run5 =[	$run5,		zombie_run6	] {ai_run(2);};
+void() zombie_run6 =[	$run6,		zombie_run7	] {ai_run(3);};
+void() zombie_run7 =[	$run7,		zombie_run8	] {ai_run(4);};
+void() zombie_run8 =[	$run8,		zombie_run9	] {ai_run(4);};
+void() zombie_run9 =[	$run9,		zombie_run10	] {ai_run(2);};
+void() zombie_run10 =[	$run10,		zombie_run11	] {ai_run(0);};
+void() zombie_run11 =[	$run11,		zombie_run12	] {ai_run(0);};
+void() zombie_run12 =[	$run12,		zombie_run13	] {ai_run(0);};
+void() zombie_run13 =[	$run13,		zombie_run14	] {ai_run(2);};
+void() zombie_run14 =[	$run14,		zombie_run15	] {ai_run(4);};
+void() zombie_run15 =[	$run15,		zombie_run16	] {ai_run(6);};
+void() zombie_run16 =[	$run16,		zombie_run17	] {ai_run(7);};
+void() zombie_run17 =[	$run17,		zombie_run18	] {ai_run(3);};
+void() zombie_run18 =[	$run18,		zombie_run1	] {
 ai_run(8);
 if (random() < 0.2)
 	sound (self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_IDLE);
@@ -376,7 +377,11 @@ void() zombie_painc16	=[	$painc16,	zombie_painc17	] {};
 void() zombie_painc17	=[	$painc17,	zombie_painc18	] {};
 void() zombie_painc18	=[	$painc18,	zombie_run1	] {};
 
-void() zombie_paind1	=[	$paind1,	zombie_paind2	] {sound (self, CHAN_VOICE, "zombie/z_pain.wav", 1, ATTN_NORM);};
+void() zombie_paind1	=[	$paind1,	zombie_paind2	]
+	{
+		sound (self, CHAN_VOICE, "zombie/z_pain.wav", 1, ATTN_NORM);
+		droptofloor();
+	};
 void() zombie_paind2	=[	$paind2,	zombie_paind3	] {};
 void() zombie_paind3	=[	$paind3,	zombie_paind4	] {};
 void() zombie_paind4	=[	$paind4,	zombie_paind5	] {};
@@ -390,10 +395,11 @@ void() zombie_paind11	=[	$paind11,	zombie_paind12	] {};
 void() zombie_paind12	=[	$paind12,	zombie_paind13	] {};
 void() zombie_paind13	=[	$paind13,	zombie_run1	] {};
 
-void() zombie_paine1	=[	$paine1,	zombie_paine2	] {
-	sound (self, CHAN_VOICE, "zombie/z_pain.wav", 1, ATTN_NORM);
-	self.health = 60;
-};
+void() zombie_paine1	=[	$paine1,	zombie_paine2	]
+	{
+		sound (self, CHAN_VOICE, "zombie/z_pain.wav", 1, ATTN_NORM);
+		self.health = 60;
+	};
 void() zombie_paine2	=[	$paine2,	zombie_paine3	] {ai_pain(8);};
 void() zombie_paine3	=[	$paine3,	zombie_paine4	] {ai_pain(5);};
 void() zombie_paine4	=[	$paine4,	zombie_paine5	] {ai_pain(3);};
@@ -402,29 +408,32 @@ void() zombie_paine6	=[	$paine6,	zombie_paine7	] {ai_pain(2);};
 void() zombie_paine7	=[	$paine7,	zombie_paine8	] {ai_pain(1);};
 void() zombie_paine8	=[	$paine8,	zombie_paine9	] {ai_pain(1);};
 void() zombie_paine9	=[	$paine9,	zombie_paine10	] {ai_pain(2);};
-void() zombie_paine10	=[	$paine10,	zombie_paine11	] {
+void() zombie_paine10	=[	$paine10,	zombie_paine11	]
+	{
 		sound (self, CHAN_BODY, "zombie/z_fall.wav", 1, ATTN_NORM);
 		self.solid = SOLID_NOT;
-};
-void() zombie_paine11	=[	$paine11,	zombie_paine12	] {
-	droptofloor();
-	self.nextthink = self.nextthink + 5;
-	self.health = 60;
-};
-void() zombie_paine12	=[	$paine12,	zombie_paine13	]{
-// see if ok to stand up
-	droptofloor();
-	self.health = 60;
-	sound (self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_IDLE);
-	setsize (self, VEC_HULL_MIN, VEC_HULL_MAX);
-	self.solid = SOLID_SLIDEBOX;
-	if (!walkmove (0, 0))
+	};
+void() zombie_paine11	=[	$paine11,	zombie_paine12	]
 	{
-		self.think = zombie_paine11;
-		self.solid = SOLID_NOT;
-		return;
-	}
-};
+		droptofloor();
+		self.nextthink = self.nextthink + 5;
+		self.health = 60;
+	};
+void() zombie_paine12	=[	$paine12,	zombie_paine13	]
+	{
+		// see if ok to stand up
+		droptofloor();
+		self.health = 60;
+		sound (self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_IDLE);
+		setsize (self, VEC_HULL_MIN, VEC_HULL_MAX);
+		self.solid = SOLID_SLIDEBOX;
+		if (!walkmove (0, 0))
+		{
+			self.think = zombie_paine11;
+			self.solid = SOLID_NOT;
+			return;
+		}
+	};
 void() zombie_paine13	=[	$paine13,	zombie_paine14	] {};
 void() zombie_paine14	=[	$paine14,	zombie_paine15	] {};
 void() zombie_paine15	=[	$paine15,	zombie_paine16	] {};
@@ -442,7 +451,8 @@ void() zombie_paine26	=[	$paine26,	zombie_paine27	] {ai_painforward(3);};
 void() zombie_paine27	=[	$paine27,	zombie_paine28	] {ai_painforward(1);};
 void() zombie_paine28	=[	$paine28,	zombie_paine29	] {ai_pain(1);};
 void() zombie_paine29	=[	$paine29,	zombie_paine30	] {};
-void() zombie_paine30	=[	$paine30,	zombie_run1		] {};
+void() zombie_paine30	=[	$paine30,	zombie_run1		]
+	{ };
 
 void() zombie_die =
 {

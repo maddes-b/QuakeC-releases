@@ -17,28 +17,36 @@
     See file, 'COPYING', for details.
 */
 
+/*
+========================
+Bot_PreThink
 
-// these are the only sprites still in the game...
+Called by the engine every frame before running the bots update in C++
 
-$spritename s_explod
-$type vp_parallel
-$load /raid/quake/id1/gfx/sprites/explod03.lbm
-$frame	24	24	56	56
-$frame	120	24	56	56
-$frame	216	24	56	56
-$frame	24	88	56	56
-$frame	120	88	56	56
-$frame	216	88	56	56
+Example usages of this function:
 
-
-$spritename s_bubble
-$type vp_parallel
-$load /raid/quake/id1/gfx/sprites/bubble.lbm
-$frame	16	16	16	16
-$frame	40	16	16	16
+	1. Telling bots what to do or where to go.
+	2. Modifying properties on the bot player ( or other players in-game ) that the bots can see/use doing their update.
+========================
+*/
+void Bot_PreThink() {
 
 
-$spritename s_light
-$type vp_parallel
-$load /raid/quake/id1/gfx/sprites/light.lbm
-$frame	104	32	32	32
+};
+
+/*
+========================
+Bot_PostThink
+
+Called by the engine every frame after running the bots update in C++
+
+Example usages of this function:
+
+	1. Overriding/modifying bot user cmds.
+	2. Overriding/modifying bot player properties.
+========================
+*/
+void Bot_PostThink() {
+
+
+};

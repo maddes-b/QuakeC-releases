@@ -1,4 +1,4 @@
-/*  Copyright (C) 1996-1997  Id Software, Inc.
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 /*
 ==============================================================================
 
@@ -23,7 +24,7 @@ SHAL-RATH
 
 ==============================================================================
 */
-$cd id1/models/shalrath
+$cd /raid/quake/id1/models/shalrath
 $origin 0 0 24
 $base base
 $skin skin
@@ -184,10 +185,7 @@ void() ShalHome =
 		return;
 	}
 	dir = normalize(vtemp - self.origin);
-	if (skill == 3)
-		self.velocity = dir * 350;
-	else
-		self.velocity = dir * 250;
+	self.velocity = dir * 250;
 	self.nextthink = time + 0.2;
 	self.think = ShalHome;
 };

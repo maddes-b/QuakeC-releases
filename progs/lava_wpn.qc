@@ -1,4 +1,4 @@
-/*  Copyright (C) 1996-1997  Rogue Entertainment
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 // LAVA Weapon Routines
 
 /*
@@ -80,7 +81,7 @@ void(float ox) W_FireLavaSpikes =
 
 	if (self.ammo_lava_nails < 1)
 	{
-		sprint (self, "Out of Lava Nails\n");
+		sprint (self, "$qc_out_lava_nails");
 		self.weapon = W_BestWeapon ();
 		W_SetCurrentAmmo ();
 		return;

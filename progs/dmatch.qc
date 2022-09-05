@@ -1,4 +1,4 @@
-/*  Copyright (C) 1996-1997  Rogue Entertainment
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 // dmatch - general deathmatch additions
 
 // =======================================
@@ -60,8 +61,7 @@ void() tag_token_drop =
 	if(tagToken == world)
 		return;
 
-	bprint ( tagToken.owner.netname );
-	bprint ( " lost the tag token!\n");
+	bprint("$qc_lost_token", tagToken.owner.netname);
 	tagToken.tag_frags = 0;
 	tagToken.solid = SOLID_TRIGGER;
 	tagToken.owner = world;
@@ -78,8 +78,7 @@ void() tag_token_think =
 	{
 		if ( self.tag_message_time < time )
 		{
-			bprint ( self.owner.netname );
-			bprint ( " has the tag token!\n");
+			bprint("$qc_has_token", self.owner.netname);
 			self.tag_message_time = time + 30;
 		}
 
@@ -105,8 +104,7 @@ void() tag_token_touch =
 
 	sound ( self, CHAN_AUTO, "runes/end1.wav", 1, ATTN_NORM);
 
-	bprint ( other.netname );
-	bprint ( " got the tag token!\n");
+	bprint("$qc_got_token", other.netname);
 	self.tag_message_time = time + 30;
 
 	self.owner = other;
@@ -158,7 +156,7 @@ void(entity targ, entity attacker) dmatch_score =
 			attacker.frags = attacker.frags + 3;
 			if ( tagToken.tag_frags == 5 )
 			{
-				sprint (attacker, "You got the Quad Damage\n");
+				sprint (attacker, "$qc_got_quad");
 				attacker.items = attacker.items | IT_QUAD;
 				stuffcmd (attacker, "bf\n");
 				sound (attacker,CHAN_VOICE,"items/damage.wav", 1, ATTN_NORM);
@@ -167,8 +165,7 @@ void(entity targ, entity attacker) dmatch_score =
 			}
 			else if (tagToken.tag_frags == 10)
 			{
-				bprint ( attacker.netname );
-				bprint ( " lost the tag token\n" );
+				bprint("$qc_lost_token", attacker.netname);
 				tagToken.solid = SOLID_TRIGGER;
 				tagToken.tag_frags = 0;
 				tagToken.touch = tag_token_touch;

@@ -18,8 +18,9 @@
 //  See file, 'COPYING', for details.
 
 // based on:
-// * re-GPLed versions of v1.00 mission pack #2, v1.06 and v1.05 beta by Maddes (assuming to follow Rogue's and id's intention), https://github.com/maddes-b/QuakeC-releases/
+// * compilation of all releases by Maddes, https://github.com/maddes-b/QuakeC-releases/
 // * minor cleanup by Maddes (trim trailing spaces), https://github.com/maddes-b/QuakeC-releases/
+// * 2021 Rerelease Update 3 (QuakeEx v1.0.5039), https://github.com/id-Software/quake-rerelease-qc
 // * v1.00 mission pack #2 release by Rogue Entertainment, https://www.gamers.org/pub/games/idgames2/more_idstuff/doe_qc.zip
 // * v1.06 release by id Software, https://www.quaddicted.com/files/idgames2/idstuff/unsup/progs106.zip
 // * v1.05 beta release by id Software, https://github.com/Jason2Brownlee/QuakeOfficialArchive
@@ -91,3 +92,5 @@ morph.qc
 ending.qc
 mummy.qc
 timemach.qc
+
+bots/bot.qc				// bot support

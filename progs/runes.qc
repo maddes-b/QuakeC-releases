@@ -1,4 +1,4 @@
-/*  Copyright (C) 1996-1997  Rogue Entertainment
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 // Rogue Runes
 // Jan'97 by ZOID <zoid@threewave.com>
 // Under contract to id software for Rogue Entertainment
@@ -45,7 +46,7 @@ void() RuneTouch =
 
 	if (other.rune) {
 		if (other.runetime < time)
-			centerprint(other, "You already have a rune\n");
+			centerprint(other, "$qc_already_have_rune");
 		other.runetime = time + 5;
 		return;
 	}
@@ -55,13 +56,13 @@ void() RuneTouch =
 	sound (other, CHAN_ITEM, "weapons/pkup.wav", 1, ATTN_NORM);
 
 	if (self.rune & ITEM_RUNE1)
-		centerprint(other, "Earth Magic\n\nRESISTANCE");
+		centerprint(other, "$qc_rune_resistance");
 	else if (self.rune & ITEM_RUNE2)
-		centerprint(other, "Black Magic\n\nSTRENGTH");
+		centerprint(other, "$qc_rune_strength");
 	else if (self.rune & ITEM_RUNE3)
-		centerprint(other, "Hell Magic\n\nHASTE");
+		centerprint(other, "$qc_rune_haste");
 	else if (self.rune & ITEM_RUNE4)
-		centerprint(other, "Edler Magic\n\nRegeneration");
+		centerprint(other, "$qc_rune_regeneration");
 	remove(self);
 };
 

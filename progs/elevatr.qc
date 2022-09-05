@@ -1,4 +1,4 @@
-/*  Copyright (C) 1996-1997  Rogue Entertainment
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 // elevator button
 // pmack
 // sept 96
@@ -27,11 +28,11 @@ void() elvtr_button_return;
 
 void() elvtr_button_wait =
 {
-	ELV_BUTN_DIR = 0;
+	elvButnDir = 0;
 	if (self.spawnflags & ELVTR_DOWN)
-		ELV_BUTN_DIR = -1;
+		elvButnDir = -1;
 	else
-		ELV_BUTN_DIR = 1;
+		elvButnDir = 1;
 
 	self.state = STATE_TOP;
 	self.nextthink = self.ltime + self.wait;

@@ -1,5 +1,4 @@
-/*  Copyright (C) 1996-1997  Id Software, Inc.
-    Copyright (C) 1996-1997  Rogue Entertainment
+/*  Copyright (C) 1996-2022 id Software LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,6 +16,7 @@
 
     See file, 'COPYING', for details.
 */
+
 // combat.qc
 
 float IsExplosionDamage;
@@ -99,6 +99,16 @@ void(entity targ, entity attacker) Killed =
 	{
 		killed_monsters = killed_monsters + 1;
 		WriteByte (MSG_ALL, SVC_KILLEDMONSTER);
+		if (attacker.classname == "player")
+		{
+			attacker.frags = attacker.frags + 1;
+		}
+
+		if (attacker != self && attacker.flags & FL_MONSTER)
+		{
+			WriteByte (MSG_ALL, SVC_ACHIEVEMENT);
+			WriteString(MSG_ALL, "ACH_FRIENDLY_FIRE");
+		}
 	}
 
 // PGM - guarantee gib if killed by buzzsaw.
@@ -142,6 +152,13 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage=
 
 	if (!targ.takedamage)
 		return;
+
+	// mal: in Coop, don't let bots hurt human teammates - that would be REALLY annoying...
+	if ( coop && targ != attacker && targ.classname == "player" && attacker.classname == "player" ) {
+		if ( attacker.flags & FL_ISBOT && !( targ.flags & FL_ISBOT ) ) {
+			return;
+		}
+	}
 
 	if (targ.classname == "trigger_explosion")
 	{
