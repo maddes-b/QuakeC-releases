@@ -20,7 +20,7 @@
 /*
 ==============================================================================
 
-			SOURCE FOR GLOBALVARS_T C STRUCTURE
+            SOURCE FOR GLOBALVARS_T C STRUCTURE
 
 ==============================================================================
 */
@@ -35,13 +35,13 @@ float		time;
 float		frametime;
 
 float		force_retouch;		// force all entities to touch triggers
-								// next frame.  this is needed because
-								// non-moving things don't normally scan
-								// for triggers, and when a trigger is
-								// created (like a teleport trigger), it
-								// needs to catch everything.
-								// decremented each frame, so set to 2
-								// to guarantee everything is touched
+                                // next frame.  this is needed because
+                                // non-moving things don't normally scan
+                                // for triggers, and when a trigger is
+                                // created (like a teleport trigger), it
+                                // needs to catch everything.
+                                // decremented each frame, so set to 2
+                                // to guarantee everything is touched
 string		mapname;
 
 float		deathmatch;
@@ -49,7 +49,7 @@ float		coop;
 float		teamplay;
 
 float		serverflags;		// propagated from level to level, used to
-								// keep track of completed episodes
+                                // keep track of completed episodes
 
 float		total_secrets;
 float		total_monsters;
@@ -96,11 +96,11 @@ void() 		PutClientInServer;		// call after setting the parm1... parms
 void()		ClientDisconnect;
 
 void()		SetNewParms;			// called when a client first connects to
-									// a server. sets parms so they can be
-									// saved off for restarts
+                                    // a server. sets parms so they can be
+                                    // saved off for restarts
 
 void()		SetChangeParms;			// call to set parms for self so they can
-									// be saved for a level transition
+                                    // be saved for a level transition
 
 
 //================================================
@@ -110,7 +110,7 @@ void		end_sys_globals;		// flag for structure dumping
 /*
 ==============================================================================
 
-			SOURCE FOR ENTVARS_T C STRUCTURE
+            SOURCE FOR ENTVARS_T C STRUCTURE
 
 ==============================================================================
 */
@@ -232,7 +232,7 @@ void		end_sys_fields;			// flag for structure dumping
 /*
 ==============================================================================
 
-				VARS NOT REFERENCED BY C CODE
+                VARS NOT REFERENCED BY C CODE
 
 ==============================================================================
 */
@@ -494,8 +494,8 @@ float	AS_MISSILE		= 4;
 .float		axhitme;
 
 .float		show_hostile;	// set to time+0.2 whenever a client fires a
-							// weapon or takes damage.  Used to alert
-							// monsters that otherwise would let the player go
+                            // weapon or takes damage.  Used to alert
+                            // monsters that otherwise would let the player go
 .float		jump_flag;		// player jump flag
 .float		swim_flag;		// player swimming sound flag
 .float		air_finished;	// when time > air_finished, start drowning
@@ -633,7 +633,7 @@ void(string s) localcmd = #46;					// put string into local que
 entity(entity e) nextent = #47;					// for looping through all ents
 void(vector o, vector d, float color, float count) particle = #48;// start a particle effect
 void() ChangeYaw = #49;						// turn towards self.ideal_yaw
-											// at self.yaw_speed
+                                            // at self.yaw_speed
 // #50 was removed
 vector(vector v) vectoangles			= #51;
 
@@ -681,8 +681,8 @@ string(string s) precache_sound2	= #76;		// registered version only
 string(string s) precache_file2		= #77;		// registered version only
 
 void(entity e) setspawnparms		= #78;		// set parm1... to the
-												// values at level start
-												// for coop respawn
+                                                // values at level start
+                                                // for coop respawn
 
 //============================================================================
 

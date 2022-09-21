@@ -70,34 +70,34 @@ $frame pull1 pull2 pull3 pull4 pull5 pull6 pull7 pull8 pull9 pull10 pull11
 
 void() OgreGrenadeExplode =
 {
-	T_RadiusDamage (self, self.owner, 40, world);
-	sound (self, CHAN_VOICE, "weapons/r_exp3.wav", 1, ATTN_NORM);
+    T_RadiusDamage (self, self.owner, 40, world);
+    sound (self, CHAN_VOICE, "weapons/r_exp3.wav", 1, ATTN_NORM);
 
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_EXPLOSION);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
+    WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+    WriteByte (MSG_BROADCAST, TE_EXPLOSION);
+    WriteCoord (MSG_BROADCAST, self.origin_x);
+    WriteCoord (MSG_BROADCAST, self.origin_y);
+    WriteCoord (MSG_BROADCAST, self.origin_z);
 
-	self.velocity = '0 0 0';
-	self.touch = SUB_Null;
-	setmodel (self, "progs/s_explod.spr");
-	self.solid = SOLID_NOT;
-	s_explode1 ();
+    self.velocity = '0 0 0';
+    self.touch = SUB_Null;
+    setmodel (self, "progs/s_explod.spr");
+    self.solid = SOLID_NOT;
+    s_explode1 ();
 };
 
 void() OgreGrenadeTouch =
 {
-	if (other == self.owner)
-		return;		// don't explode on owner
-	if (other.takedamage == DAMAGE_AIM)
-	{
-		OgreGrenadeExplode();
-		return;
-	}
-	sound (self, CHAN_VOICE, "weapons/bounce.wav", 1, ATTN_NORM);	// bounce sound
-	if (self.velocity == '0 0 0')
-		self.avelocity = '0 0 0';
+    if (other == self.owner)
+        return;		// don't explode on owner
+    if (other.takedamage == DAMAGE_AIM)
+    {
+        OgreGrenadeExplode();
+        return;
+    }
+    sound (self, CHAN_VOICE, "weapons/bounce.wav", 1, ATTN_NORM);	// bounce sound
+    if (self.velocity == '0 0 0')
+        self.avelocity = '0 0 0';
 };
 
 /*
@@ -107,38 +107,38 @@ OgreFireGrenade
 */
 void() OgreFireGrenade =
 {
-	local	entity missile, mpuff;
+    local	entity missile, mpuff;
 
-	self.effects = self.effects | EF_MUZZLEFLASH;
+    self.effects = self.effects | EF_MUZZLEFLASH;
 
-	sound (self, CHAN_WEAPON, "weapons/grenade.wav", 1, ATTN_NORM);
+    sound (self, CHAN_WEAPON, "weapons/grenade.wav", 1, ATTN_NORM);
 
-	missile = spawn ();
-	missile.owner = self;
-	missile.movetype = MOVETYPE_BOUNCE;
-	missile.solid = SOLID_BBOX;
+    missile = spawn ();
+    missile.owner = self;
+    missile.movetype = MOVETYPE_BOUNCE;
+    missile.solid = SOLID_BBOX;
 
 // set missile speed
 
-	makevectors (self.angles);
+    makevectors (self.angles);
 
-	missile.velocity = normalize(self.enemy.origin - self.origin);
-	missile.velocity = missile.velocity * 600;
-	missile.velocity_z = 200;
+    missile.velocity = normalize(self.enemy.origin - self.origin);
+    missile.velocity = missile.velocity * 600;
+    missile.velocity_z = 200;
 
-	missile.avelocity = '300 300 300';
+    missile.avelocity = '300 300 300';
 
-	missile.angles = vectoangles(missile.velocity);
+    missile.angles = vectoangles(missile.velocity);
 
-	missile.touch = OgreGrenadeTouch;
+    missile.touch = OgreGrenadeTouch;
 
 // set missile duration
-	missile.nextthink = time + 2.5;
-	missile.think = OgreGrenadeExplode;
+    missile.nextthink = time + 2.5;
+    missile.think = OgreGrenadeExplode;
 
-	setmodel (missile, "progs/grenade.mdl");
-	setsize (missile, '0 0 0', '0 0 0');
-	setorigin (missile, self.origin);
+    setmodel (missile, "progs/grenade.mdl");
+    setsize (missile, '0 0 0', '0 0 0');
+    setorigin (missile, self.origin);
 };
 
 
@@ -156,29 +156,29 @@ void(float side) chainsaw =
 local vector	delta;
 local float 	ldmg;
 
-	if (!self.enemy)
-		return;
-	if (!CanDamage (self.enemy, self))
-		return;
+    if (!self.enemy)
+        return;
+    if (!CanDamage (self.enemy, self))
+        return;
 
-	ai_charge(10);
+    ai_charge(10);
 
-	delta = self.enemy.origin - self.origin;
+    delta = self.enemy.origin - self.origin;
 
-	if (vlen(delta) > 100)
-		return;
+    if (vlen(delta) > 100)
+        return;
 
-	ldmg = (random() + random() + random()) * 4;
-	T_Damage (self.enemy, self, self, ldmg);
+    ldmg = (random() + random() + random()) * 4;
+    T_Damage (self.enemy, self, self, ldmg);
 
-	if (side)
-	{
-		makevectors (self.angles);
-		if (side == 1)
-			SpawnMeatSpray (self.origin + v_forward*16, crandom() * 100 * v_right);
-		else
-			SpawnMeatSpray (self.origin + v_forward*16, side * v_right);
-	}
+    if (side)
+    {
+        makevectors (self.angles);
+        if (side == 1)
+            SpawnMeatSpray (self.origin + v_forward*16, crandom() * 100 * v_right);
+        else
+            SpawnMeatSpray (self.origin + v_forward*16, side * v_right);
+    }
 };
 
 
@@ -188,7 +188,7 @@ void() ogre_stand3	=[	$stand3,	ogre_stand4	] {ai_stand();};
 void() ogre_stand4	=[	$stand4,	ogre_stand5	] {ai_stand();};
 void() ogre_stand5	=[	$stand5,	ogre_stand6	] {
 if (random() < 0.2)
-	sound (self, CHAN_VOICE, "ogre/ogidle.wav", 1, ATTN_IDLE);
+    sound (self, CHAN_VOICE, "ogre/ogidle.wav", 1, ATTN_IDLE);
 ai_stand();
 };
 void() ogre_stand6	=[	$stand6,	ogre_stand7	] {ai_stand();};
@@ -201,14 +201,14 @@ void() ogre_walk2	=[	$walk2,		ogre_walk3	] {ai_walk(2);};
 void() ogre_walk3	=[	$walk3,		ogre_walk4	] {
 ai_walk(2);
 if (random() < 0.2)
-	sound (self, CHAN_VOICE, "ogre/ogidle.wav", 1, ATTN_IDLE);
+    sound (self, CHAN_VOICE, "ogre/ogidle.wav", 1, ATTN_IDLE);
 };
 void() ogre_walk4	=[	$walk4,		ogre_walk5	] {ai_walk(2);};
 void() ogre_walk5	=[	$walk5,		ogre_walk6	] {ai_walk(2);};
 void() ogre_walk6	=[	$walk6,		ogre_walk7	] {
 ai_walk(5);
 if (random() < 0.1)
-	sound (self, CHAN_VOICE, "ogre/ogdrag.wav", 1, ATTN_IDLE);
+    sound (self, CHAN_VOICE, "ogre/ogdrag.wav", 1, ATTN_IDLE);
 };
 void() ogre_walk7	=[	$walk7,		ogre_walk8	] {ai_walk(3);};
 void() ogre_walk8	=[	$walk8,		ogre_walk9	] {ai_walk(2);};
@@ -223,7 +223,7 @@ void() ogre_walk16	=[	$walk16,	ogre_walk1	] {ai_walk(4);};
 
 void() ogre_run1	=[	$run1,		ogre_run2	] {ai_run(9);
 if (random() < 0.2)
-	sound (self, CHAN_VOICE, "ogre/ogidle2.wav", 1, ATTN_IDLE);
+    sound (self, CHAN_VOICE, "ogre/ogidle2.wav", 1, ATTN_IDLE);
 };
 void() ogre_run2	=[	$run2,		ogre_run3	] {ai_run(12);};
 void() ogre_run3	=[	$run3,		ogre_run4	] {ai_run(8);};
@@ -332,41 +332,41 @@ void()	ogre_paine15=[	$paine15,	ogre_run1	] {};
 
 void(entity attacker, float damage)	ogre_pain =
 {
-	local float	r;
+    local float	r;
 
 // don't make multiple pain sounds right after each other
-	if (self.pain_finished > time)
-		return;
+    if (self.pain_finished > time)
+        return;
 
-	sound (self, CHAN_VOICE, "ogre/ogpain1.wav", 1, ATTN_NORM);
+    sound (self, CHAN_VOICE, "ogre/ogpain1.wav", 1, ATTN_NORM);
 
-	r = random();
+    r = random();
 
-	if (r < 0.25)
-	{
-		ogre_pain1 ();
-		self.pain_finished = time + 1;
-	}
-	else if (r < 0.5)
-	{
-		ogre_painb1 ();
-		self.pain_finished = time + 1;
-	}
-	else if (r < 0.75)
-	{
-		ogre_painc1 ();
-		self.pain_finished = time + 1;
-	}
-	else if (r < 0.88)
-	{
-		ogre_paind1 ();
-		self.pain_finished = time + 2;
-	}
-	else
-	{
-		ogre_paine1 ();
-		self.pain_finished = time + 2;
-	}
+    if (r < 0.25)
+    {
+        ogre_pain1 ();
+        self.pain_finished = time + 1;
+    }
+    else if (r < 0.5)
+    {
+        ogre_painb1 ();
+        self.pain_finished = time + 1;
+    }
+    else if (r < 0.75)
+    {
+        ogre_painc1 ();
+        self.pain_finished = time + 1;
+    }
+    else if (r < 0.88)
+    {
+        ogre_paind1 ();
+        self.pain_finished = time + 2;
+    }
+    else
+    {
+        ogre_paine1 ();
+        self.pain_finished = time + 2;
+    }
 };
 
 void()	ogre_die1	=[	$death1,	ogre_die2	] {};
@@ -402,30 +402,30 @@ void()	ogre_bdie10	=[	$bdeath10,	ogre_bdie10	] {};
 void() ogre_die =
 {
 // check for gib
-	if (self.health < -80)
-	{
-		sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
-		ThrowHead ("progs/h_ogre.mdl", self.health);
-		ThrowGib ("progs/gib3.mdl", self.health);
-		ThrowGib ("progs/gib3.mdl", self.health);
-		ThrowGib ("progs/gib3.mdl", self.health);
-		return;
-	}
+    if (self.health < -80)
+    {
+        sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
+        ThrowHead ("progs/h_ogre.mdl", self.health);
+        ThrowGib ("progs/gib3.mdl", self.health);
+        ThrowGib ("progs/gib3.mdl", self.health);
+        ThrowGib ("progs/gib3.mdl", self.health);
+        return;
+    }
 
-	sound (self, CHAN_VOICE, "ogre/ogdth.wav", 1, ATTN_NORM);
+    sound (self, CHAN_VOICE, "ogre/ogdth.wav", 1, ATTN_NORM);
 
-	if (random() < 0.5)
-		ogre_die1 ();
-	else
-		ogre_bdie1 ();
+    if (random() < 0.5)
+        ogre_die1 ();
+    else
+        ogre_bdie1 ();
 };
 
 void() ogre_melee =
 {
-	if (random() > 0.5)
-		ogre_smash1 ();
-	else
-		ogre_swing1 ();
+    if (random() > 0.5)
+        ogre_smash1 ();
+    else
+        ogre_swing1 ();
 };
 
 
@@ -434,43 +434,43 @@ void() ogre_melee =
 */
 void() monster_ogre =
 {
-	if (deathmatch)
-	{
-		remove(self);
-		return;
-	}
-	precache_model ("progs/ogre.mdl");
-	precache_model ("progs/h_ogre.mdl");
-	precache_model ("progs/grenade.mdl");
+    if (deathmatch)
+    {
+        remove(self);
+        return;
+    }
+    precache_model ("progs/ogre.mdl");
+    precache_model ("progs/h_ogre.mdl");
+    precache_model ("progs/grenade.mdl");
 
-	precache_sound ("ogre/ogdrag.wav");
-	precache_sound ("ogre/ogdth.wav");
-	precache_sound ("ogre/ogidle.wav");
-	precache_sound ("ogre/ogidle2.wav");
-	precache_sound ("ogre/ogpain1.wav");
-	precache_sound ("ogre/ogsawatk.wav");
-	precache_sound ("ogre/ogwake.wav");
+    precache_sound ("ogre/ogdrag.wav");
+    precache_sound ("ogre/ogdth.wav");
+    precache_sound ("ogre/ogidle.wav");
+    precache_sound ("ogre/ogidle2.wav");
+    precache_sound ("ogre/ogpain1.wav");
+    precache_sound ("ogre/ogsawatk.wav");
+    precache_sound ("ogre/ogwake.wav");
 
-	self.solid = SOLID_SLIDEBOX;
-	self.movetype = MOVETYPE_STEP;
+    self.solid = SOLID_SLIDEBOX;
+    self.movetype = MOVETYPE_STEP;
 
-	setmodel (self, "progs/ogre.mdl");
+    setmodel (self, "progs/ogre.mdl");
 
-	setsize (self, VEC_HULL2_MIN, VEC_HULL2_MAX);
-	self.health = 200;
+    setsize (self, VEC_HULL2_MIN, VEC_HULL2_MAX);
+    self.health = 200;
 
-	self.th_stand = ogre_stand1;
-	self.th_walk = ogre_walk1;
-	self.th_run = ogre_run1;
-	self.th_die = ogre_die;
-	self.th_melee = ogre_melee;
-	self.th_missile = ogre_nail1;
-	self.th_pain = ogre_pain;
+    self.th_stand = ogre_stand1;
+    self.th_walk = ogre_walk1;
+    self.th_run = ogre_run1;
+    self.th_die = ogre_die;
+    self.th_melee = ogre_melee;
+    self.th_missile = ogre_nail1;
+    self.th_pain = ogre_pain;
 
-	walkmonster_start();
+    walkmonster_start();
 };
 
 void() monster_ogre_marksman =
 {
-	monster_ogre ();
+    monster_ogre ();
 };

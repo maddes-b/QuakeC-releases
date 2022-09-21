@@ -59,13 +59,13 @@ void() boss_face =
 {
 
 // go for another player if multi player
-	if (self.enemy.health <= 0 || random() < 0.02)
-	{
-		self.enemy = find(self.enemy, classname, "player");
-		if (!self.enemy)
-			self.enemy = find(self.enemy, classname, "player");
-	}
-	ai_face();
+    if (self.enemy.health <= 0 || random() < 0.02)
+    {
+        self.enemy = find(self.enemy, classname, "player");
+        if (!self.enemy)
+            self.enemy = find(self.enemy, classname, "player");
+    }
+    ai_face();
 };
 
 void() boss_rise1	=[	$rise1, boss_rise2 ] {
@@ -194,86 +194,86 @@ void() boss_death7 = [$death7, boss_death8] {};
 void() boss_death8 = [$death8, boss_death9] {};
 void() boss_death9 = [$death9, boss_death10]
 {
-	sound (self, CHAN_BODY, "boss1/out1.wav", 1, ATTN_NORM);
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_LAVASPLASH);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
+    sound (self, CHAN_BODY, "boss1/out1.wav", 1, ATTN_NORM);
+    WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+    WriteByte (MSG_BROADCAST, TE_LAVASPLASH);
+    WriteCoord (MSG_BROADCAST, self.origin_x);
+    WriteCoord (MSG_BROADCAST, self.origin_y);
+    WriteCoord (MSG_BROADCAST, self.origin_z);
 };
 
 void() boss_death10 = [$death9, boss_death10]
 {
-	killed_monsters = killed_monsters + 1;
-	WriteByte (MSG_ALL, SVC_KILLEDMONSTER);	// FIXME: reliable broadcast
-	SUB_UseTargets ();
-	remove (self);
+    killed_monsters = killed_monsters + 1;
+    WriteByte (MSG_ALL, SVC_KILLEDMONSTER);	// FIXME: reliable broadcast
+    SUB_UseTargets ();
+    remove (self);
 };
 
 void(vector p) boss_missile =
 {
-	local	vector	offang;
-	local	vector	org, vec, d;
-	local	float	t;
+    local	vector	offang;
+    local	vector	org, vec, d;
+    local	float	t;
 
-	offang = vectoangles (self.enemy.origin - self.origin);
-	makevectors (offang);
+    offang = vectoangles (self.enemy.origin - self.origin);
+    makevectors (offang);
 
-	org = self.origin + p_x*v_forward + p_y*v_right + p_z*'0 0 1';
+    org = self.origin + p_x*v_forward + p_y*v_right + p_z*'0 0 1';
 
 // lead the player on hard mode
-	if (skill > 1)
-	{
-		t = vlen(self.enemy.origin - org) / 300;
-		vec = self.enemy.velocity;
-		vec_z = 0;
-		d = self.enemy.origin + t * vec;
-	}
-	else
-	{
-		d = self.enemy.origin;
-	}
+    if (skill > 1)
+    {
+        t = vlen(self.enemy.origin - org) / 300;
+        vec = self.enemy.velocity;
+        vec_z = 0;
+        d = self.enemy.origin + t * vec;
+    }
+    else
+    {
+        d = self.enemy.origin;
+    }
 
-	vec = normalize (d - org);
+    vec = normalize (d - org);
 
-	launch_spike (org, vec);
-	setmodel (newmis, "progs/lavaball.mdl");
-	newmis.avelocity = '200 100 300';
-	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
-	newmis.velocity = vec*300;
-	newmis.touch = T_MissileTouch; // rocket explosion
-	sound (self, CHAN_WEAPON, "boss1/throw.wav", 1, ATTN_NORM);
+    launch_spike (org, vec);
+    setmodel (newmis, "progs/lavaball.mdl");
+    newmis.avelocity = '200 100 300';
+    setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
+    newmis.velocity = vec*300;
+    newmis.touch = T_MissileTouch; // rocket explosion
+    sound (self, CHAN_WEAPON, "boss1/throw.wav", 1, ATTN_NORM);
 
 // check for dead enemy
-	if (self.enemy.health <= 0)
-		boss_idle1 ();
+    if (self.enemy.health <= 0)
+        boss_idle1 ();
 };
 
 
 void() boss_awake =
 {
-	self.solid = SOLID_SLIDEBOX;
-	self.movetype = MOVETYPE_STEP;
-	self.takedamage = DAMAGE_NO;
+    self.solid = SOLID_SLIDEBOX;
+    self.movetype = MOVETYPE_STEP;
+    self.takedamage = DAMAGE_NO;
 
-	setmodel (self, "progs/boss.mdl");
-	setsize (self, '-128 -128 -24', '128 128 256');
+    setmodel (self, "progs/boss.mdl");
+    setsize (self, '-128 -128 -24', '128 128 256');
 
-	if (skill == 0)
-		self.health = 1;
-	else
-		self.health = 3;
+    if (skill == 0)
+        self.health = 1;
+    else
+        self.health = 3;
 
-	self.enemy = activator;
+    self.enemy = activator;
 
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_LAVASPLASH);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
+    WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+    WriteByte (MSG_BROADCAST, TE_LAVASPLASH);
+    WriteCoord (MSG_BROADCAST, self.origin_x);
+    WriteCoord (MSG_BROADCAST, self.origin_y);
+    WriteCoord (MSG_BROADCAST, self.origin_z);
 
-	self.yaw_speed = 20;
-	boss_rise1 ();
+    self.yaw_speed = 20;
+    boss_rise1 ();
 };
 
 
@@ -281,25 +281,25 @@ void() boss_awake =
 */
 void() monster_boss =
 {
-	if (deathmatch)
-	{
-		remove(self);
-		return;
-	}
-	precache_model ("progs/boss.mdl");
-	precache_model ("progs/lavaball.mdl");
+    if (deathmatch)
+    {
+        remove(self);
+        return;
+    }
+    precache_model ("progs/boss.mdl");
+    precache_model ("progs/lavaball.mdl");
 
-	precache_sound ("weapons/rocket1i.wav");
-	precache_sound ("boss1/out1.wav");
-	precache_sound ("boss1/sight1.wav");
-	precache_sound ("misc/power.wav");
-	precache_sound ("boss1/throw.wav");
-	precache_sound ("boss1/pain.wav");
-	precache_sound ("boss1/death.wav");
+    precache_sound ("weapons/rocket1i.wav");
+    precache_sound ("boss1/out1.wav");
+    precache_sound ("boss1/sight1.wav");
+    precache_sound ("misc/power.wav");
+    precache_sound ("boss1/throw.wav");
+    precache_sound ("boss1/pain.wav");
+    precache_sound ("boss1/death.wav");
 
-	total_monsters = total_monsters + 1;
+    total_monsters = total_monsters + 1;
 
-	self.use = boss_awake;
+    self.use = boss_awake;
 };
 
 //===========================================================================
@@ -309,86 +309,86 @@ float	lightning_end;
 
 void() lightning_fire =
 {
-	local vector p1, p2;
+    local vector p1, p2;
 
-	if (time >= lightning_end)
-	{	// done here, put the terminals back up
-		self = le1;
-		door_go_down ();
-		self = le2;
-		door_go_down ();
-		return;
-	}
+    if (time >= lightning_end)
+    {	// done here, put the terminals back up
+        self = le1;
+        door_go_down ();
+        self = le2;
+        door_go_down ();
+        return;
+    }
 
-	p1 = (le1.mins + le1.maxs) * 0.5;
-	p1_z = le1.absmin_z - 16;
+    p1 = (le1.mins + le1.maxs) * 0.5;
+    p1_z = le1.absmin_z - 16;
 
-	p2 = (le2.mins + le2.maxs) * 0.5;
-	p2_z = le2.absmin_z - 16;
+    p2 = (le2.mins + le2.maxs) * 0.5;
+    p2_z = le2.absmin_z - 16;
 
-	// compensate for length of bolt
-	p2 = p2 - normalize(p2-p1)*100;
+    // compensate for length of bolt
+    p2 = p2 - normalize(p2-p1)*100;
 
-	self.nextthink = time + 0.1;
-	self.think = lightning_fire;
+    self.nextthink = time + 0.1;
+    self.think = lightning_fire;
 
-	WriteByte (MSG_ALL, SVC_TEMPENTITY);
-	WriteByte (MSG_ALL, TE_LIGHTNING3);
-	WriteEntity (MSG_ALL, world);
-	WriteCoord (MSG_ALL, p1_x);
-	WriteCoord (MSG_ALL, p1_y);
-	WriteCoord (MSG_ALL, p1_z);
-	WriteCoord (MSG_ALL, p2_x);
-	WriteCoord (MSG_ALL, p2_y);
-	WriteCoord (MSG_ALL, p2_z);
+    WriteByte (MSG_ALL, SVC_TEMPENTITY);
+    WriteByte (MSG_ALL, TE_LIGHTNING3);
+    WriteEntity (MSG_ALL, world);
+    WriteCoord (MSG_ALL, p1_x);
+    WriteCoord (MSG_ALL, p1_y);
+    WriteCoord (MSG_ALL, p1_z);
+    WriteCoord (MSG_ALL, p2_x);
+    WriteCoord (MSG_ALL, p2_y);
+    WriteCoord (MSG_ALL, p2_z);
 };
 
 void() lightning_use =
 {
-	if (lightning_end >= time + 1)
-		return;
+    if (lightning_end >= time + 1)
+        return;
 
-	le1 = find( world, target, "lightning");
-	le2 = find( le1, target, "lightning");
-	if (!le1 || !le2)
-	{
-		dprint ("missing lightning targets\n");
-		return;
-	}
+    le1 = find( world, target, "lightning");
+    le2 = find( le1, target, "lightning");
+    if (!le1 || !le2)
+    {
+        dprint ("missing lightning targets\n");
+        return;
+    }
 
-	if (
-	 (le1.state != STATE_TOP && le1.state != STATE_BOTTOM)
-	|| (le2.state != STATE_TOP && le2.state != STATE_BOTTOM)
-	|| (le1.state != le2.state) )
-	{
+    if (
+     (le1.state != STATE_TOP && le1.state != STATE_BOTTOM)
+    || (le2.state != STATE_TOP && le2.state != STATE_BOTTOM)
+    || (le1.state != le2.state) )
+    {
 //		dprint ("not aligned\n");
-		return;
-	}
+        return;
+    }
 
 // don't let the electrodes go back up until the bolt is done
-	le1.nextthink = -1;
-	le2.nextthink = -1;
-	lightning_end = time + 1;
+    le1.nextthink = -1;
+    le2.nextthink = -1;
+    lightning_end = time + 1;
 
-	sound (self, CHAN_VOICE, "misc/power.wav", 1, ATTN_NORM);
-	lightning_fire ();
+    sound (self, CHAN_VOICE, "misc/power.wav", 1, ATTN_NORM);
+    lightning_fire ();
 
 // advance the boss pain if down
-	self = find (world, classname, "monster_boss");
-	if (!self)
-		return;
-	self.enemy = activator;
-	if (le1.state == STATE_TOP && self.health > 0)
-	{
-		sound (self, CHAN_VOICE, "boss1/pain.wav", 1, ATTN_NORM);
-		self.health = self.health - 1;
-		if (self.health >= 2)
-			boss_shocka1();
-		else if (self.health == 1)
-			boss_shockb1();
-		else if (self.health == 0)
-			boss_shockc1();
-	}
+    self = find (world, classname, "monster_boss");
+    if (!self)
+        return;
+    self.enemy = activator;
+    if (le1.state == STATE_TOP && self.health > 0)
+    {
+        sound (self, CHAN_VOICE, "boss1/pain.wav", 1, ATTN_NORM);
+        self.health = self.health - 1;
+        if (self.health >= 2)
+            boss_shocka1();
+        else if (self.health == 1)
+            boss_shockb1();
+        else if (self.health == 0)
+            boss_shockc1();
+    }
 };
 
 
@@ -397,5 +397,5 @@ Just for boss level.
 */
 void() event_lightning =
 {
-	self.use = lightning_use;
+    self.use = lightning_use;
 };
