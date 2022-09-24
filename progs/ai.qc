@@ -30,9 +30,9 @@ Will be world if not currently angry at anyone.
 
 .movetarget
 The next path spot to walk toward.  If .enemy, ignore .movetarget.
-When an enemy is killed, the monster will try to return to it's path.
+When an enemy is killed, the monster will try to return to its path.
 
-.huntt_ime
+.hunt_time
 Set to time + something when the player is in sight, but movement straight for
 him is blocked.  This causes the monster to use wall following code for
 movement direction instead of sighting on the player.
@@ -43,7 +43,7 @@ to 45 deg / state.  If the enemy is in view and hunt_time is not active,
 this will be the exact line towards the enemy.
 
 .pausetime
-A monster will leave it's stand state and head towards it's .movetarget when
+A monster will leave its stand state and head towards its .movetarget when
 time > .pausetime.
 
 walkmove(angle, speed) primitive is all or nothing
@@ -80,7 +80,7 @@ float(float v) anglemod =
 
 MOVETARGET CODE
 
-The angle of the movetarget effects standing and bowing direction, but has no effect on movement, which allways heads to the next target.
+The angle of the movetarget effects standing and bowing direction, but has no effect on movement, which always heads to the next target.
 
 targetname
 must be present.  The name of this movetarget.
@@ -156,7 +156,7 @@ void() t_movetarget =
 =============
 range
 
-returns the range catagorization of an entity reletive to self
+returns the range categorization of an entity relative to self
 RANGE_MELEE  melee range, will become hostile even if back is turned
 RANGE_NEAR   visibility and infront, or visibility and show hostile
 RANGE_MID    infront and show hostile
@@ -496,7 +496,7 @@ void(float dist) ai_painforward =
 =============
 ai_walk
 
-The monster is walking it's beat
+The monster is walking its beat
 =============
 */
 void(float dist) ai_walk =
@@ -677,7 +677,7 @@ void() ai_run_missile =
 =============
 ai_run_slide
 
-Strafe sideways, but stay at aproximately the same range
+Strafe sideways, but stay at approximately the same range
 =============
 */
 void() ai_run_slide =

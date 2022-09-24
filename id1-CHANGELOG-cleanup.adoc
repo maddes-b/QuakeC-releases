@@ -20,7 +20,7 @@ This will already be done with v1.01 for people that have concerns about the ori
 ** 2 empty lines after each function definition, except for animation functions
 ** reduce all other blocks to 2 empty lines
 * [x] enhance/align comments
-* [ ] fix typos
+* [x] fix typos
 * [ ] fix unusual syntax
 * [ ] fix function definitions/declarations
 * [ ] remove unused variables

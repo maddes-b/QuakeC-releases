@@ -346,7 +346,7 @@ Unless the NO_INTERMISSION flag is set, the view will go to the info_intermissio
 void() trigger_changelevel =
 {
     if (!self.map)
-        objerror("chagnelevel trigger doesn't have map");
+        objerror("changelevel trigger doesn't have map");
 
     InitTrigger();
     self.touch = changelevel_touch;
@@ -369,7 +369,7 @@ void() respawn =
     if (coop)
     {
         // make a copy of the dead body for appearances sake
-        CopyToBodyQue(self);
+        CopyToBodyQueue(self);
         // get the spawn parms as they were at level start
         setspawnparms(self);
         // respawn
@@ -378,7 +378,7 @@ void() respawn =
     else if (deathmatch)
     {
         // make a copy of the dead body for appearances sake
-        CopyToBodyQue(self);
+        CopyToBodyQueue(self);
         // set default spawn parms
         SetNewParms();
         // respawn
@@ -504,7 +504,7 @@ void() PutClientInServer =
     self.th_die = PlayerDie;
 
     self.deadflag = DEAD_NO;
-    // paustime is set by teleporters to keep the player from moving a while
+    // pausetime is set by teleporters to keep the player from moving a while
     self.pausetime = 0;
 
     spot = SelectSpawnPoint();
@@ -617,7 +617,7 @@ void() DumpScore =
     if (world.chain)
         error("DumpScore: world.chain is set");
 
-    // build a sorted lis
+    // build a sorted list
     e = find(world, classname, "player");
     sort = world;
     while (e)
@@ -676,7 +676,7 @@ void() NextLevel =
 {
     local entity o;
 
-    // find a trigger changelevel
+    // find a trigger_changelevel
     o = find(world, classname, "trigger_changelevel");
     if (!o || mapname == "start")
     { // go back to same map if no trigger_changelevel
@@ -798,7 +798,7 @@ void() PlayerJump =
         else
             self.velocity_z = 50;
 
-        // play swiming sound
+        // play swimming sound
         if (self.swim_flag < time)
         {
             self.swim_flag = time + 1;
@@ -1011,7 +1011,7 @@ void() CheckPowerups =
     // invisibility
     if (self.invisible_finished)
     {
-        // sound and screen flash when items starts to run out
+        // sound and screen flash when item starts to run out
         if (self.invisible_sound < time)
         {
             sound(self, CHAN_AUTO, "items/inv3.wav", 0.5, ATTN_IDLE);
@@ -1052,7 +1052,7 @@ void() CheckPowerups =
     // invincibility
     if (self.invincible_finished)
     {
-        // sound and screen flash when items starts to run out
+        // sound and screen flash when item starts to run out
         if (self.invincible_finished < time + 3)
         {
             if (self.invincible_time == 1)
@@ -1085,7 +1085,7 @@ void() CheckPowerups =
     // super damage
     if (self.super_damage_finished)
     {
-        // sound and screen flash when items starts to run out
+        // sound and screen flash when item starts to run out
         if (self.super_damage_finished < time + 3)
         {
             if (self.super_time == 1)
@@ -1120,7 +1120,7 @@ void() CheckPowerups =
     {
         self.air_finished = time + 12; // don't drown
 
-        // sound and screen flash when items starts to run out
+        // sound and screen flash when item starts to run out
         if (self.radsuit_finished < time + 3)
         {
             if (self.rad_time == 1)
@@ -1301,7 +1301,7 @@ void(entity targ, entity attacker) ClientObituary =
                 rnum = attacker.weapon;
                 if (rnum == IT_AXE)
                 {
-                    deathstring = " was ax-murdered by ";
+                    deathstring = " was axe-murdered by ";
                     deathstring2 = "\n";
                 }
                 if (rnum == IT_SHOTGUN)

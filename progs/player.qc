@@ -315,7 +315,7 @@ void() PainSound =
 
     // don't make multiple pain sounds right after each other
 
-    // ax pain sound
+    // axe pain sound
     if (self.axhitme == 1)
     {
         self.axhitme = 0;
@@ -609,9 +609,9 @@ void() PlayerDie =
 
 
 void() set_suicide_frame =
-{ // used by klill command and diconnect command
+{ // used by kill command and disconnect command
     if (self.model != "progs/player.mdl")
-        return; // allready gibbed
+        return; // already gibbed
 
     self.frame = $deatha11;
     self.solid = SOLID_NOT;

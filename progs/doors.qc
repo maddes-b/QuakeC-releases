@@ -25,7 +25,7 @@ float DOOR_TOGGLE = 32;
 
 /*
 Doors are similar to buttons, but can spawn a fat trigger field around them
-to open without a touch, and they link together to form simultanious
+to open without a touch, and they link together to form simultaneous
 double/quad doors.
 
 Door.owner is the master door.  If there is only one door, it points to itself.
@@ -97,7 +97,7 @@ void() door_go_down =
 void() door_go_up =
 {
     if (self.state == STATE_UP)
-        return; // allready going up
+        return; // already going up
 
     if (self.state == STATE_TOP)
     { // reset top wait time
@@ -200,7 +200,7 @@ void() door_killed =
     oself = self;
     self = self.owner;
     self.health = self.max_health;
-    self.takedamage = DAMAGE_NO; // wil be reset upon return
+    self.takedamage = DAMAGE_NO; // will be reset upon return
     door_use();
     self = oself;
 };
@@ -413,9 +413,9 @@ if two doors touch, they are assumed to be connected and operate as a unit.
 
 TOGGLE causes the door to wait in both the start and end states for a trigger event.
 
-START_OPEN causes the door to move to its destination when spawned, and operate in reverse.  It is used to temporarily or permanently close off an area when triggered (not usefull for touch or takedamage doors).
+START_OPEN causes the door to move to its destination when spawned, and operate in reverse.  It is used to temporarily or permanently close off an area when triggered (not useful for touch or takedamage doors).
 
-Key doors are allways wait -1.
+Key doors are always wait -1.
 
 "message"     is printed when the door is touched if it is a trigger door and it hasn't been fired yet
 "angle"       determines the opening direction
@@ -736,7 +736,7 @@ Basic secret door. Slides back, then to the side. Angle determines direction.
 "t_length"      override LENGTH to move sideways
 "dmg"           damage to inflict when blocked (2 default)
 
-If a secret door has a targetname, it will only be opened by it's botton or trigger, not by damage.
+If a secret door has a targetname, it will only be opened by its button or trigger, not by damage.
 "sounds"
 1) medieval
 2) metal

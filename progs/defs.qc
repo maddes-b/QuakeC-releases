@@ -138,7 +138,7 @@ void end_sys_globals; // flag for structure dumping
 .float skin;
 .float effects;
 
-.vector mins, maxs; // bounding box extents reletive to origin
+.vector mins, maxs; // bounding box extents relative to origin
 .vector size; // maxs - mins
 
 .void() touch;
@@ -193,7 +193,7 @@ void end_sys_globals; // flag for structure dumping
 .float armortype; // save this fraction of incoming damage
 .float armorvalue;
 
-.float waterlevel; // 0 = not in, 1 = feet, 2 = wast, 3 = eyes
+.float waterlevel; // 0 = not in, 1 = feet, 2 = waist, 3 = eyes
 .float watertype; // a contents value
 
 .float ideal_yaw;
@@ -368,7 +368,7 @@ float TE_TELEPORT     = 11;
 
 // sound channels
 // channel 0 never willingly overrides
-// other channels (1-7) allways override a playing sound on that channel
+// other channels (1-7) always override a playing sound on that channel
 float CHAN_AUTO   = 0;
 float CHAN_WEAPON = 1;
 float CHAN_VOICE  = 2;
@@ -616,7 +616,7 @@ float(vector v) pointcontents = #41; // returns a CONTENT_*
 float(float f) fabs = #43;
 vector(entity e, float speed) aim = #44; // returns the shooting vector
 float(string s) cvar = #45; // return cvar.value
-void(string s) localcmd = #46; // put string into local que
+void(string s) localcmd = #46; // put string into local queue
 entity(entity e) nextent = #47; // for looping through all ents
 void(vector o, vector d, float color, float count) particle = #48; // start a particle effect
 void() ChangeYaw = #49; // turn towards self.ideal_yaw

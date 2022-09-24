@@ -125,7 +125,7 @@ void() plat_outside_touch =
 void() plat_trigger_use =
 {
     if (self.think)
-        return; // allready activated
+        return; // already activated
 
     plat_go_down();
 };
@@ -161,7 +161,7 @@ void() plat_use =
 
 Plats are always drawn in the extended position, so they will light correctly.
 
-If the plat is the target of another trigger or button, it will start out disabled in the extended position until it is trigger, when it will lower and become a normal plat.
+If the plat is the target of another trigger or button, it will start out disabled in the extended position until it is triggered, when it will lower and become a normal plat.
 
 If the "height" key is set, that will determine the amount the plat moves, instead of being implicitly determined by the model's height.
 Set "sounds" to one of the following:
@@ -360,7 +360,7 @@ void() func_train =
 
 
 /*QUAKED misc_teleporttrain (0 .5 .8) (-8 -8 -8) (8 8 8)
-This is used for the final bos
+This is used for the final boss
 */
 void() misc_teleporttrain =
 {

@@ -423,7 +423,7 @@ $base base
 $skin skin
 $frame frame1 frame2 frame3
 
-$modelname bolt3 // lightning towar bolts
+$modelname bolt3 // lightning tower bolts
 $cd /raid/quake/id1/models/bolt2
 $origin 0 0 0
 $base base

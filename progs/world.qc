@@ -17,13 +17,13 @@
     See file, 'COPYING', for details.
 */
 
-void() InitBodyQue;
+void() InitBodyQueue;
 
 void() main =
 {
     dprint("main function\n");
 
-    // these are just commands the the prog compiler to copy these files
+    // these are just commands for the prog compiler to copy these files
     precache_file("progs.dat");
     precache_file("gfx.wad");
     precache_file("quake.rc");
@@ -188,7 +188,7 @@ World Types:
 void() worldspawn =
 {
     lastspawn = world;
-    InitBodyQue();
+    InitBodyQueue();
 
     // custom map attributes
     if (self.model == "maps/e1m8.bsp")
@@ -205,7 +205,7 @@ void() worldspawn =
     precache_sound("demon/dland2.wav"); // landing thud
     precache_sound("misc/h2ohit1.wav"); // landing splash
 
-    // setup precaches allways needed
+    // setup precaches always needed
     precache_sound("items/itembk2.wav"); // item respawn sound
     precache_sound("player/plyrjmp8.wav"); // player jump
     precache_sound("player/land.wav"); // player landing
@@ -252,10 +252,10 @@ void() worldspawn =
     precache_sound("player/death4.wav");
     precache_sound("player/death5.wav");
 
-    // ax sounds
-    precache_sound("weapons/ax1.wav"); // ax swoosh
-    precache_sound("player/axhit1.wav"); // ax hit meat
-    precache_sound("player/axhit2.wav"); // ax hit world
+    // axe sounds
+    precache_sound("weapons/ax1.wav"); // axe swoosh
+    precache_sound("player/axhit1.wav"); // axe hit meat
+    precache_sound("player/axhit2.wav"); // axe hit world
 
     precache_sound("player/h2ojump.wav"); // player jumping into water
     precache_sound("player/slimbrn2.wav"); // player enter slime
@@ -361,48 +361,48 @@ void() StartFrame =
 /*
 ==============================================================================
 
-BODY QUE
+BODY QUEUE
 
 ==============================================================================
 */
 
-entity bodyque_head;
+entity bodyqueue_head;
 
-void() bodyque =
+void() bodyqueue =
 { // just here so spawn functions don't complain after the world
-    // creates bodyques
+    // creates bodyqueues
 };
 
 
-void() InitBodyQue =
+void() InitBodyQueue =
 {
     local entity e;
 
-    bodyque_head = spawn();
-    bodyque_head.classname = "bodyque";
-    bodyque_head.owner = spawn();
-    bodyque_head.owner.classname = "bodyque";
-    bodyque_head.owner.owner = spawn();
-    bodyque_head.owner.owner.classname = "bodyque";
-    bodyque_head.owner.owner.owner = spawn();
-    bodyque_head.owner.owner.owner.classname = "bodyque";
-    bodyque_head.owner.owner.owner.owner = bodyque_head;
+    bodyqueue_head = spawn();
+    bodyqueue_head.classname = "bodyqueue";
+    bodyqueue_head.owner = spawn();
+    bodyqueue_head.owner.classname = "bodyqueue";
+    bodyqueue_head.owner.owner = spawn();
+    bodyqueue_head.owner.owner.classname = "bodyqueue";
+    bodyqueue_head.owner.owner.owner = spawn();
+    bodyqueue_head.owner.owner.owner.classname = "bodyqueue";
+    bodyqueue_head.owner.owner.owner.owner = bodyqueue_head;
 };
 
 
-// make a body que entry for the given ent so the ent can be
+// make a body queue entry for the given ent so the ent can be
 // respawned elsewhere
-void(entity ent) CopyToBodyQue =
+void(entity ent) CopyToBodyQueue =
 {
-    bodyque_head.angles = ent.angles;
-    bodyque_head.model = ent.model;
-    bodyque_head.modelindex = ent.modelindex;
-    bodyque_head.frame = ent.frame;
-    bodyque_head.colormap = ent.colormap;
-    bodyque_head.movetype = ent.movetype;
-    bodyque_head.velocity = ent.velocity;
-    bodyque_head.flags = 0;
-    setorigin(bodyque_head, ent.origin);
-    setsize(bodyque_head, ent.mins, ent.maxs);
-    bodyque_head = bodyque_head.owner;
+    bodyqueue_head.angles = ent.angles;
+    bodyqueue_head.model = ent.model;
+    bodyqueue_head.modelindex = ent.modelindex;
+    bodyqueue_head.frame = ent.frame;
+    bodyqueue_head.colormap = ent.colormap;
+    bodyqueue_head.movetype = ent.movetype;
+    bodyqueue_head.velocity = ent.velocity;
+    bodyqueue_head.flags = 0;
+    setorigin(bodyqueue_head, ent.origin);
+    setsize(bodyqueue_head, ent.mins, ent.maxs);
+    bodyqueue_head = bodyqueue_head.owner;
 };

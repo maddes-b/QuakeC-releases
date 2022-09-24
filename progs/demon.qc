@@ -252,7 +252,7 @@ Returns TRUE if a melee attack would hit right now
 float() CheckDemonMelee =
 {
     if (enemy_range == RANGE_MELEE)
-    { // FIXME: check canreach
+    { // FIXME: check can reach
         self.attack_state = AS_MELEE;
         return TRUE;
     }

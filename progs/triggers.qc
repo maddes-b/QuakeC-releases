@@ -49,7 +49,7 @@ void() multi_trigger =
 {
     if (self.nextthink > time)
     {
-        return; // allready been triggered
+        return; // already been triggered
     }
 
     if (self.classname == "trigger_secret")
@@ -78,7 +78,7 @@ void() multi_trigger =
     }
     else
     { // we can't just remove(self) here, because this is a touch function
-        // called wheil C code is looping through area links...
+        // called while C code is looping through area links...
         self.touch = SUB_Null;
         self.nextthink = time + 0.1;
         self.think = SUB_Remove;
@@ -281,9 +281,9 @@ void() counter_use =
 /*QUAKED trigger_counter (.5 .5 .5) ? nomessage
 Acts as an intermediary for an action that takes multiple inputs.
 
-If nomessage is not set, t will print "1 more.. " etc when triggered and "sequence complete" when finished.
+If nomessage is not set, it will print "1 more..." etc when triggered and "sequence complete" when finished.
 
-After the counter has been triggered "count" times (default 2), it will fire all of it's targets and remove itself.
+After the counter has been triggered "count" times (default 2), it will fire all of its targets and remove itself.
 */
 void() trigger_counter =
 {
@@ -598,7 +598,7 @@ void() hurt_touch =
 /*QUAKED trigger_hurt (.5 .5 .5) ?
 Any object touching this will be hurt
 set dmg to damage amount
-defalt dmg = 5
+default dmg = 5
 */
 void() trigger_hurt =
 {

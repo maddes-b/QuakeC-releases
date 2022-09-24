@@ -60,7 +60,7 @@ will duck back out and catch it.
 LaunchMissile
 
 Sets the given entities velocity and angles so that it will hit self.enemy
-if self.enemy maintains it's current velocity
+if self.enemy maintains its current velocity
 0.1 is moderately accurate, 0.0 is totally accurate
 =============
 */
@@ -74,7 +74,7 @@ void(entity missile, float mspeed, float accuracy) LaunchMissile =
     // set missile speed
     vec = self.enemy.origin + self.enemy.mins + self.enemy.size * 0.7 - missile.origin;
 
-    // calc aproximate time for missile to reach vec
+    // calc approximate time for missile to reach vec
     fly = vlen(vec) / mspeed;
 
     // get the entities xy velocity
@@ -408,7 +408,7 @@ void() monster_wizard =
     precache_model("progs/h_wizard.mdl");
     precache_model("progs/w_spike.mdl");
 
-    precache_sound("wizard/hit.wav"); // used by c code
+    precache_sound("wizard/hit.wav"); // used by C code
     precache_sound("wizard/wattack.wav");
     precache_sound("wizard/wdeath.wav");
     precache_sound("wizard/widle1.wav");

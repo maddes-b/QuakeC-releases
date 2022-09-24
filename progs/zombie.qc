@@ -425,7 +425,7 @@ zombie_pain
 Zombies can only be killed (gibbed) by doing 60 hit points of damage
 in a single frame (rockets, grenades, quad shotgun, quad nailgun).
 
-A hit of 25 points or more (super shotgun, quad nailgun) will allways put it
+A hit of 25 points or more (super shotgun, quad nailgun) will always put it
 down to the ground.
 
 A hit of from 10 to 40 points in one frame will cause it to go down if it
@@ -441,7 +441,7 @@ void(entity attacker, float take) zombie_pain =
 {
     local float r;
 
-    self.health = 60; // allways reset health
+    self.health = 60; // always reset health
 
     if (take < 9)
         return; // totally ignore
@@ -459,7 +459,7 @@ void(entity attacker, float take) zombie_pain =
 
     if (self.inpain)
     {
-        // if hit again in next gre seconds while not in pain frames, definately drop
+        // if hit again in next three seconds while not in pain frames, definitely drop
         self.pain_finished = time + 3;
         return; // currently going through an animation, don't change
     }
@@ -472,7 +472,7 @@ void(entity attacker, float take) zombie_pain =
         return;
     }
 
-    // gp into one of the fast pain animations
+    // go into one of the fast pain animations
     self.inpain = 1;
 
     r = random();

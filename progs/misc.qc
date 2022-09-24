@@ -537,7 +537,7 @@ void() func_wall_use =
 
 
 /*QUAKED func_wall (0 .5 .8) ?
-This is just a solid wall if not inhibitted
+This is just a solid wall if not inhibited
 */
 void() func_wall =
 {
@@ -563,7 +563,7 @@ void() func_illusionary =
 
 
 /*QUAKED func_episodegate (0 .5 .8) ? E1 E2 E3 E4
-This bmodel will appear if the episode has allready been completed, so players can't reenter it.
+This bmodel will appear if the episode has already been completed, so players can't reenter it.
 */
 void() func_episodegate =
 {
@@ -693,7 +693,7 @@ void() noise_think =
 
 /*QUAKED misc_noisemaker (1 0.5 0) (-10 -10 -10) (10 10 10)
 
-For optimzation testing, starts a lot of sounds.
+For optimization testing, starts a lot of sounds.
 */
 void() misc_noisemaker =
 {

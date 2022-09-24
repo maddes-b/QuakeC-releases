@@ -30,11 +30,11 @@ void() W_Precache =
     precache_sound("weapons/rocket1i.wav"); // spike gun
     precache_sound("weapons/sgun1.wav");
     precache_sound("weapons/guncock.wav"); // player shotgun
-    precache_sound("weapons/ric1.wav"); // ricochet (used in c code)
-    precache_sound("weapons/ric2.wav"); // ricochet (used in c code)
-    precache_sound("weapons/ric3.wav"); // ricochet (used in c code)
+    precache_sound("weapons/ric1.wav"); // ricochet (used in C code)
+    precache_sound("weapons/ric2.wav"); // ricochet (used in C code)
+    precache_sound("weapons/ric3.wav"); // ricochet (used in C code)
     precache_sound("weapons/spike2.wav"); // super spikes
-    precache_sound("weapons/tink1.wav"); // spikes tink (used in c code)
+    precache_sound("weapons/tink1.wav"); // spikes tink (used in C code)
     precache_sound("weapons/grenade.wav"); // grenade launcher
     precache_sound("weapons/bounce.wav"); // grenade bounce
     precache_sound("weapons/shotgn2.wav"); // super shotgun

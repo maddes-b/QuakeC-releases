@@ -557,7 +557,7 @@ void() weapon_nailgun =
     precache_model("progs/g_nail.mdl");
     setmodel(self, "progs/g_nail.mdl");
     self.weapon = IT_NAILGUN;
-    self.netname = "nailgun";
+    self.netname = "Nailgun";
     self.touch = weapon_touch;
     setsize(self, '-16 -16 0', '16 16 56');
     StartItem();
@@ -862,7 +862,7 @@ void() item_weapon =
             self.aflag = 20;
         }
         self.weapon = 2;
-        self.netname = "spikes";
+        self.netname = "nails";
     }
 
     if (self.spawnflags & WEAPON_ROCKET)
@@ -1136,7 +1136,7 @@ void() powerup_touch =
     other.items = other.items | self.items;
     self.model = string_null;
 
-    // do the apropriate action
+    // do the appropriate action
     if (self.classname == "item_artifact_envirosuit")
     {
         other.rad_time = 1;

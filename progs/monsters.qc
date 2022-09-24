@@ -61,7 +61,7 @@ void() monster_use =
 ================
 monster_death_use
 
-When a mosnter dies, it fires all of its targets with the current
+When a monster dies, it fires all of its targets with the current
 enemy as activator.
 ================
 */
