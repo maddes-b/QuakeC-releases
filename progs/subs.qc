@@ -17,10 +17,10 @@
     See file, 'COPYING', for details.
 */
 
-
 void() SUB_Null = {};
 
-void() SUB_Remove = {remove(self);};
+
+void() SUB_Remove = { remove(self); };
 
 
 /*
@@ -35,12 +35,13 @@ vector() SetMovedir =
         self.movedir = '0 0 -1';
     else
     {
-        makevectors (self.angles);
+        makevectors(self.angles);
         self.movedir = v_forward;
     }
 
     self.angles = '0 0 0';
 };
+
 
 /*
 ================
@@ -49,16 +50,17 @@ InitTrigger
 */
 void() InitTrigger =
 {
-// trigger angles are used for one-way touches.  An angle of 0 is assumed
-// to mean no restrictions, so use a yaw of 360 instead.
+    // trigger angles are used for one-way touches.  An angle of 0 is assumed
+    // to mean no restrictions, so use a yaw of 360 instead.
     if (self.angles != '0 0 0')
-        SetMovedir ();
+        SetMovedir();
     self.solid = SOLID_TRIGGER;
-    setmodel (self, self.model);	// set size and link into world
+    setmodel(self, self.model); // set size and link into world
     self.movetype = MOVETYPE_NONE;
     self.modelindex = 0;
     self.model = "";
 };
+
 
 /*
 =============
@@ -70,18 +72,20 @@ self.origin traveling at speed
 */
 void(entity ent, vector tdest, float tspeed, void() func) SUB_CalcMoveEnt =
 {
-local entity	stemp;
+    local entity stemp;
+
     stemp = self;
     self = ent;
 
-    SUB_CalcMove (tdest, tspeed, func);
+    SUB_CalcMove(tdest, tspeed, func);
     self = stemp;
 };
 
+
 void(vector tdest, float tspeed, void() func) SUB_CalcMove =
 {
-local vector	vdestdelta;
-local float		len, traveltime;
+    local vector vdestdelta;
+    local float len, traveltime;
 
     if (!tspeed)
         objerror("No speed is defined!");
@@ -97,13 +101,13 @@ local float		len, traveltime;
         return;
     }
 
-// set destdelta to the vector needed to move
+    // set destdelta to the vector needed to move
     vdestdelta = tdest - self.origin;
 
-// calculate length of vector
-    len = vlen (vdestdelta);
+    // calculate length of vector
+    len = vlen(vdestdelta);
 
-// divide by speed to get time to reach dest
+    // divide by speed to get time to reach dest
     traveltime = len / tspeed;
 
     if (traveltime < 0.1)
@@ -113,19 +117,20 @@ local float		len, traveltime;
         return;
     }
 
-// set nextthink to trigger a think when dest is reached
+    // set nextthink to trigger a think when dest is reached
     self.nextthink = self.ltime + traveltime;
 
-// scale the destdelta vector by the time spent traveling to get velocity
-    self.velocity = vdestdelta * (1/traveltime);	// qcc won't take vec/float
+    // scale the destdelta vector by the time spent traveling to get velocity
+    self.velocity = vdestdelta * (1 / traveltime); // qcc won't take vec/float
 };
+
 
 /*
 ============
 After moving, set origin to exact final destination
 ============
 */
-void()  SUB_CalcMoveDone =
+void() SUB_CalcMoveDone =
 {
     setorigin(self, self.finaldest);
     self.velocity = '0 0 0';
@@ -147,40 +152,43 @@ The calling function should make sure self.think is valid
 */
 void(entity ent, vector destangle, float tspeed, void() func) SUB_CalcAngleMoveEnt =
 {
-local entity		stemp;
+    local entity stemp;
+
     stemp = self;
     self = ent;
-    SUB_CalcAngleMove (destangle, tspeed, func);
+    SUB_CalcAngleMove(destangle, tspeed, func);
     self = stemp;
 };
 
+
 void(vector destangle, float tspeed, void() func) SUB_CalcAngleMove =
 {
-local vector	destdelta;
-local float		len, traveltime;
+    local vector destdelta;
+    local float len, traveltime;
 
     if (!tspeed)
         objerror("No speed is defined!");
 
-// set destdelta to the vector needed to move
+    // set destdelta to the vector needed to move
     destdelta = destangle - self.angles;
 
-// calculate length of vector
-    len = vlen (destdelta);
+    // calculate length of vector
+    len = vlen(destdelta);
 
-// divide by speed to get time to reach dest
+    // divide by speed to get time to reach dest
     traveltime = len / tspeed;
 
-// set nextthink to trigger a think when dest is reached
+    // set nextthink to trigger a think when dest is reached
     self.nextthink = self.ltime + traveltime;
 
-// scale the destdelta vector by the time spent traveling to get velocity
+    // scale the destdelta vector by the time spent traveling to get velocity
     self.avelocity = destdelta * (1 / traveltime);
 
     self.think1 = func;
     self.finalangle = destangle;
     self.think = SUB_CalcAngleMoveDone;
 };
+
 
 /*
 ============
@@ -202,9 +210,10 @@ void() SUB_CalcAngleMoveDone =
 void() DelayThink =
 {
     activator = self.enemy;
-    SUB_UseTargets ();
+    SUB_UseTargets();
     remove(self);
 };
+
 
 /*
 ==============================
@@ -229,12 +238,12 @@ void() SUB_UseTargets =
 {
     local entity t, stemp, otemp, act;
 
-//
-// check for a delay
-//
+    //
+    // check for a delay
+    //
     if (self.delay)
     {
-    // create a temp object to fire at a later time
+        // create a temp object to fire at a later time
         t = spawn();
         t.classname = "DelayedUse";
         t.nextthink = time + self.delay;
@@ -246,46 +255,47 @@ void() SUB_UseTargets =
         return;
     }
 
-
-//
-// print the message
-//
+    //
+    // print the message
+    //
     if (activator.classname == "player" && self.message != "")
     {
-        centerprint (activator, self.message);
+        centerprint(activator, self.message);
         if (!self.noise)
-            sound (activator, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
+            sound(activator, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
     }
 
-//
-// kill the killtagets
-//
+    //
+    // kill the killtagets
+    //
     if (self.killtarget)
     {
         t = world;
         do
         {
-            t = find (t, targetname, self.killtarget);
+            t = find(t, targetname, self.killtarget);
             if (!t)
                 return;
-            remove (t);
-        } while ( 1 );
+
+            remove(t);
+        } while (1);
     }
 
-//
-// fire targets
-//
+    //
+    // fire targets
+    //
     if (self.target)
     {
         act = activator;
         t = world;
         do
         {
-            t = find (t, targetname, self.target);
+            t = find(t, targetname, self.target);
             if (!t)
             {
                 return;
             }
+
             stemp = self;
             otemp = other;
             self = t;
@@ -293,42 +303,41 @@ void() SUB_UseTargets =
             if (self.use != SUB_Null)
             {
                 if (self.use)
-                    self.use ();
+                    self.use();
             }
             self = stemp;
             other = otemp;
             activator = act;
-        } while ( 1 );
+        } while (1);
     }
-
-
 };
 
 
 /*
-
 in nightmare mode, all attack_finished times become 0
 some monsters refire twice automatically
-
 */
-
 void(float normal) SUB_AttackFinished =
 {
-    self.cnt = 0;		// refire count for nightmare
+    self.cnt = 0; // refire count for nightmare
     if (skill != 3)
         self.attack_finished = time + normal;
 };
 
-float (entity targ) visible;
 
-void (void() thinkst) SUB_CheckRefire =
+float(entity targ) visible;
+
+void(void() thinkst) SUB_CheckRefire =
 {
     if (skill != 3)
         return;
+
     if (self.cnt == 1)
         return;
-    if (!visible (self.enemy))
+
+    if (!visible(self.enemy))
         return;
+
     self.cnt = 1;
     self.think = thinkst;
 };

@@ -10,13 +10,13 @@ This will already be done with v1.01 for people that have concerns about the ori
 == Tasks
 
 * [x] remove trailing white spaces (VSCode: Trim Trailing Spaces)
-* [ ] convert tabs to spaces
+* [x] convert tabs to spaces
 ** tab size: 4
 ** convert indentations to spaces (VSCode: Convert Indentation to Spaces)
 ** line comments starting correctly indented (for correct bracket collapsing)
 ** fix code indentation
 ** convert other tabs
-* [ ] align empty line usage
+* [x] align empty line usage
 ** 2 empty lines after each function definition, except for animation functions
 ** reduce all other blocks to 2 empty lines
 * [ ] enhance/align comments
