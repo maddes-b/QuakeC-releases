@@ -1457,7 +1457,7 @@ void(entity targ, entity attacker) ClientObituary =
 
             bprint(targ.netname);
 
-            // killed by a montser?
+            // killed by a monster?
             if ((attacker.flags & FL_MONSTER))
             {
                 if (attacker.classname == "monster_army")
