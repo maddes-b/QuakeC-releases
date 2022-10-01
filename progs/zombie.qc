@@ -437,20 +437,20 @@ A hit of less than 10 points of damage (winged by a shotgun) will be ignored.
 FIXME: don't use pain_finished because of nightmare hack
 =================
 */
-void(entity attacker, float take) zombie_pain =
+void(entity attacker, float damage) zombie_pain =
 {
     local float r;
 
     self.health = 60; // always reset health
 
-    if (take < 9)
+    if (damage < 9)
         return; // totally ignore
 
     if (self.inpain == 2)
         return; // down on ground, so don't reset any counters
 
     // go down immediately if a big enough hit
-    if (take >= 25)
+    if (damage >= 25)
     {
         self.inpain = 2;
         zombie_paine1();
