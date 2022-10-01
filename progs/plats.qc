@@ -313,7 +313,7 @@ The train spawns at the first target it is pointing at.
 If the train is the target of a button or trigger, it will not begin moving until activated.
 "speed"  movement speed (default 100)
 "dmg"    damage to inflict when blocked (default 2)
-sounds
+"sounds"
 1) ratchet metal
 */
 void() func_train =
@@ -328,16 +328,16 @@ void() func_train =
 
     if (self.sounds == 0)
     {
-        self.noise = ("misc/null.wav");
+        self.noise = ("misc/null.wav"); //stop sound
         precache_sound("misc/null.wav");
-        self.noise1 = ("misc/null.wav");
+        self.noise1 = ("misc/null.wav"); //move sound
         precache_sound("misc/null.wav");
     }
     if (self.sounds == 1)
     {
-        self.noise = ("plats/train2.wav");
+        self.noise = ("plats/train2.wav"); //stop sound
         precache_sound("plats/train2.wav");
-        self.noise1 = ("plats/train1.wav");
+        self.noise1 = ("plats/train1.wav"); //move sound
         precache_sound("plats/train1.wav");
     }
 

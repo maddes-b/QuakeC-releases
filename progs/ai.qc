@@ -157,10 +157,10 @@ void() t_movetarget =
 range
 
 returns the range catagorization of an entity reletive to self
-0  melee range, will become hostile even if back is turned
-1  visibility and infront, or visibility and show hostile
-2  infront and show hostile
-3  only triggered by damage
+RANGE_MELEE  melee range, will become hostile even if back is turned
+RANGE_NEAR   visibility and infront, or visibility and show hostile
+RANGE_MID    infront and show hostile
+RANGE_FAR    only triggered by damage
 =============
 */
 float(entity targ) range =

@@ -340,7 +340,8 @@ void() changelevel_touch =
 
 
 /*QUAKED trigger_changelevel (0.5 0.5 0.5) ? NO_INTERMISSION
-When the player touches this, he gets sent to the map listed in the "map" variable.  Unless the NO_INTERMISSION flag is set, the view will go to the info_intermission spot and display stats.
+When the player touches this, he gets sent to the map listed in the "map" variable.
+Unless the NO_INTERMISSION flag is set, the view will go to the info_intermission spot and display stats.
 */
 void() trigger_changelevel =
 {
@@ -1219,9 +1220,9 @@ called when a player disconnects from a server
 void() ClientDisconnect =
 {
     if (gameover)
-        return;
         // if the level end trigger has been activated, just return
         // since they aren't *really* leaving
+        return;
 
     // let everyone else know
     bprint(self.netname);
@@ -1272,6 +1273,7 @@ void(entity targ, entity attacker) ClientObituary =
 
         if (attacker.classname == "player")
         {
+            // killed by a player (incl. itself)
             if (targ == attacker)
             {
                 // killed self
@@ -1359,7 +1361,8 @@ void(entity targ, entity attacker) ClientObituary =
         }
         else
         {
-            targ.frags = targ.frags - 1; // killed self
+            // killed by something else, which was not an attack by any player (incl. itself)
+            targ.frags = targ.frags - 1;
             rnum = targ.watertype;
 
             bprint(targ.netname);

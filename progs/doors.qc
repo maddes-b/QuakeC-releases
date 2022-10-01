@@ -421,10 +421,10 @@ Key doors are allways wait -1.
 "angle"       determines the opening direction
 "targetname"  if set, no touch field will be spawned and a remote button or trigger field activates the door.
 "health"      if set, door must be shot open
-"speed"       movement speed (100 default)
-"wait"        wait before returning (3 default, -1 = never return)
-"lip"         lip remaining at end of move (8 default)
-"dmg"         damage to inflict when blocked (2 default)
+"speed"       movement speed (default 100)
+"wait"        wait before returning (default 3, -1 = never return)
+"lip"         lip remaining at end of move (default 8)
+"dmg"         damage to inflict when blocked (default 2)
 "sounds"
 0) no sound
 1) stone
@@ -592,8 +592,8 @@ void() fd_secret_use =
 
     if (!(self.spawnflags & SECRET_NO_SHOOT))
     {
-        self.th_pain = SUB_Null;
-        self.takedamage = DAMAGE_NO;
+        self.th_pain = SUB_Null; // will be reset upon return
+        self.takedamage = DAMAGE_NO; // will be reset upon return
     }
     self.velocity = '0 0 0';
 

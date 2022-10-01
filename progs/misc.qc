@@ -368,7 +368,7 @@ void() trap_spikeshooter =
 
 /*QUAKED trap_shooter (0 .5 .8) (-8 -8 -8) (8 8 8) superspike laser
 Continuously fires spikes.
-"wait" time between spike (1.0 default)
+"wait" time between spike (default 1.0)
 "nextthink" delay before firing first spike, so multiple shooters can be stagered.
 */
 void() trap_shooter =

@@ -877,10 +877,10 @@ float() W_BestWeapon =
 float() W_CheckNoAmmo =
 {
     if (self.currentammo > 0)
-        return TRUE;
+        return TRUE; // has at least one ammo
 
     if (self.weapon == IT_AXE)
-        return TRUE;
+        return TRUE; // weapon doesn't need ammo
 
     self.weapon = W_BestWeapon();
 

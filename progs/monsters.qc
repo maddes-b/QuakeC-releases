@@ -50,8 +50,7 @@ void() monster_use =
     if (activator.classname != "player")
         return;
 
-    // delay reaction so if the monster is teleported, its sound is still
-    // heard
+    // delay reaction so if the monster is teleported, its sound is still heard
     self.enemy = activator;
     self.nextthink = time + 0.1;
     self.think = FoundTarget;
@@ -117,11 +116,11 @@ void() walkmonster_start_go =
         self.ideal_yaw = vectoyaw(self.goalentity.origin - self.origin);
         if (!self.movetarget)
         {
+            // this used to be an objerror
             dprint("Monster can't find target at ");
             dprint(vtos(self.origin));
             dprint("\n");
         }
-            // this used to be an objerror
         if (self.movetarget.classname == "path_corner")
             self.th_walk();
         else
@@ -174,11 +173,11 @@ void() flymonster_start_go =
         self.goalentity = self.movetarget = find(world, targetname, self.target);
         if (!self.movetarget)
         {
+            // this used to be an objerror
             dprint("Monster can't find target at ");
             dprint(vtos(self.origin));
             dprint("\n");
         }
-            // this used to be an objerror
         if (self.movetarget.classname == "path_corner")
             self.th_walk();
         else
@@ -227,11 +226,11 @@ void() swimmonster_start_go =
         self.goalentity = self.movetarget = find(world, targetname, self.target);
         if (!self.movetarget)
         {
+            // this used to be an objerror
             dprint("Monster can't find target at ");
             dprint(vtos(self.origin));
             dprint("\n");
         }
-            // this used to be an objerror
         self.ideal_yaw = vectoyaw(self.goalentity.origin - self.origin);
         self.th_walk();
     }

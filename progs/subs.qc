@@ -64,10 +64,7 @@ void() InitTrigger =
 
 /*
 =============
-SUB_CalcMove
-
-calculate self.velocity and self.nextthink to reach dest from
-self.origin traveling at speed
+SUB_CalcMoveEnt
 ===============
 */
 void(entity ent, vector tdest, float tspeed, void() func) SUB_CalcMoveEnt =
@@ -82,6 +79,14 @@ void(entity ent, vector tdest, float tspeed, void() func) SUB_CalcMoveEnt =
 };
 
 
+/*
+=============
+SUB_CalcMove
+
+calculate self.velocity and self.nextthink to reach dest from
+self.origin traveling at speed
+===============
+*/
 void(vector tdest, float tspeed, void() func) SUB_CalcMove =
 {
     local vector vdestdelta;

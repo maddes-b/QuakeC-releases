@@ -121,10 +121,10 @@ void() multi_touch =
 /*QUAKED trigger_multiple (.5 .5 .5) ? notouch
 Variable sized repeatable trigger.  Must be targeted at one or more entities.  If "health" is set, the trigger must be killed to activate each time.
 If "delay" is set, the trigger waits some time after activating before firing.
-"wait" : Seconds between triggerings. (.2 default)
-If notouch is set, the trigger is only fired by other entities, not by touching.
+"wait" = seconds between triggerings. (default .2)
+If "notouch" is set, the trigger is only fired by other entities, not by touching.
 NOTOUCH has been obsoleted by trigger_relay!
-sounds
+"sounds"
 1) secret
 2) beep beep
 3) large switch
@@ -179,10 +179,10 @@ void() trigger_multiple =
 /*QUAKED trigger_once (.5 .5 .5) ? notouch
 Variable sized trigger. Triggers once, then removes itself.  You must set the key "target" to the name of another object in the level that has a matching
 "targetname".  If "health" is set, the trigger must be killed to activate.
-If notouch is set, the trigger is only fired by other entities, not by touching.
+If "notouch" is set, the trigger is only fired by other entities, not by touching.
 if "killtarget" is set, any objects that have a matching "target" will be removed when the trigger is fired.
 if "angle" is set, the trigger will only fire when someone is facing the direction of the angle.  Use "360" for an angle of 0.
-sounds
+"sounds"
 1) secret
 2) beep beep
 3) large switch
@@ -211,7 +211,7 @@ void() trigger_relay =
 
 /*QUAKED trigger_secret (.5 .5 .5) ?
 secret counter trigger
-sounds
+"sounds"
 1) secret
 2) beep beep
 3)
