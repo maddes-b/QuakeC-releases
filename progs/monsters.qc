@@ -19,13 +19,13 @@
 
 /* ALL MONSTERS SHOULD BE 1 0 0 IN COLOR */
 
-// name = [ framenum, nexttime, nextthink ] { code }
-// expands to:
+// name = [ framenum, think ] { code }
+// expands to: (see qcc's function PR_ParseState)
 // name()
 // {
 //     self.frame = framenum;
-//     self.nextthink = time + nexttime;
-//     self.think = nextthink
+//     self.nextthink = time + 0.1;
+//     self.think = think;
 //     <code>
 // };
 
