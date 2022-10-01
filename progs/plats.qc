@@ -328,16 +328,16 @@ void() func_train =
 
     if (self.sounds == 0)
     {
-        self.noise = ("misc/null.wav"); //stop sound
+        self.noise = "misc/null.wav"; //stop sound
         precache_sound("misc/null.wav");
-        self.noise1 = ("misc/null.wav"); //move sound
+        self.noise1 = "misc/null.wav"; //move sound
         precache_sound("misc/null.wav");
     }
     if (self.sounds == 1)
     {
-        self.noise = ("plats/train2.wav"); //stop sound
+        self.noise = "plats/train2.wav"; //stop sound
         precache_sound("plats/train2.wav");
-        self.noise1 = ("plats/train1.wav"); //move sound
+        self.noise1 = "plats/train1.wav"; //move sound
         precache_sound("plats/train1.wav");
     }
 
@@ -376,9 +376,9 @@ void() misc_teleporttrain =
     self.use = train_use;
     self.avelocity = '100 200 300';
 
-    self.noise = ("misc/null.wav");
+    self.noise = "misc/null.wav";
     precache_sound("misc/null.wav");
-    self.noise1 = ("misc/null.wav");
+    self.noise1 = "misc/null.wav";
     precache_sound("misc/null.wav");
 
     precache_model2("progs/teleport.mdl");

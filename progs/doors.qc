@@ -305,7 +305,7 @@ entity(vector fmins, vector fmaxs) spawn_field =
     t1 = fmins;
     t2 = fmaxs;
     setsize(trigger, t1 - '60 60 8', t2 + '60 60 8');
-    return(trigger);
+    return trigger;
 };
 
 
