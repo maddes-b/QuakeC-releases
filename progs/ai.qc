@@ -22,7 +22,7 @@ void() t_movetarget;
 void() knight_walk1;
 void() knight_bow6;
 void() knight_bow1;
-void(entity etemp, entity stemp, entity stemp, float dmg) T_Damage;
+void(entity targ, entity inflictor, entity attacker, float damage) T_Damage;
 
 /*
 .enemy
