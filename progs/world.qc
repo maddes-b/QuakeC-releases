@@ -376,8 +376,6 @@ void() bodyqueue =
 
 void() InitBodyQueue =
 {
-    local entity e;
-
     bodyqueue_head = spawn();
     bodyqueue_head.classname = "bodyqueue";
     bodyqueue_head.owner = spawn();

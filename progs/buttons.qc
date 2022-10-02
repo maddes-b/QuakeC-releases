@@ -109,8 +109,6 @@ When a button is touched, it moves some distance in the direction of its angle, 
 */
 void() func_button =
 {
-    local float gtemp, ftemp;
-
     if (self.sounds == 0)
     {
         precache_sound("buttons/airbut1.wav");
