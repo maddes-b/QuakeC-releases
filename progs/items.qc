@@ -1357,13 +1357,13 @@ void() BackpackTouch =
         return;
     }
 
-    acount = 0;
+    acount = FALSE;
     sprint(other, "You get ");
 
     if (self.items)
         if ((other.items & self.items) == 0)
         {
-            acount = 1;
+            acount = TRUE;
             sprint(other, "the ");
             sprint(other, self.netname);
         }
@@ -1391,7 +1391,7 @@ void() BackpackTouch =
     {
         if (acount)
             sprint(other, ", ");
-        acount = 1;
+        acount = TRUE;
         s = ftos(self.ammo_shells);
         sprint(other, s);
         sprint(other, " shells");
@@ -1400,7 +1400,7 @@ void() BackpackTouch =
     {
         if (acount)
             sprint(other, ", ");
-        acount = 1;
+        acount = TRUE;
         s = ftos(self.ammo_nails);
         sprint(other, s);
         sprint(other, " nails");
@@ -1409,7 +1409,7 @@ void() BackpackTouch =
     {
         if (acount)
             sprint(other, ", ");
-        acount = 1;
+        acount = TRUE;
         s = ftos(self.ammo_rockets);
         sprint(other, s);
         sprint(other, " rockets");
@@ -1418,7 +1418,7 @@ void() BackpackTouch =
     {
         if (acount)
             sprint(other, ", ");
-        acount = 1;
+        acount = TRUE;
         s = ftos(self.ammo_cells);
         sprint(other, s);
         sprint(other, " cells");

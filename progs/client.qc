@@ -483,7 +483,7 @@ entity() SelectSpawnPoint =
     else if (deathmatch)
     {
         spot = lastspawn;
-        while (1)
+        while (TRUE)
         {
             spot = find(spot, classname, "info_player_deathmatch");
             if (spot != world)
