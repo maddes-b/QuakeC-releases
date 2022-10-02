@@ -1254,45 +1254,45 @@ void() CycleWeaponReverseCommand =
     it = self.items;
     self.impulse = 0;
 
-    while (1)
+    while (TRUE)
     {
-        am = 0;
+        am = FALSE;
 
         if (self.weapon == IT_LIGHTNING)
         {
             self.weapon = IT_ROCKET_LAUNCHER;
             if (self.ammo_rockets < 1)
-                am = 1;
+                am = TRUE;
         }
         else if (self.weapon == IT_ROCKET_LAUNCHER)
         {
             self.weapon = IT_GRENADE_LAUNCHER;
             if (self.ammo_rockets < 1)
-                am = 1;
+                am = TRUE;
         }
         else if (self.weapon == IT_GRENADE_LAUNCHER)
         {
             self.weapon = IT_SUPER_NAILGUN;
             if (self.ammo_nails < 2)
-                am = 1;
+                am = TRUE;
         }
         else if (self.weapon == IT_SUPER_NAILGUN)
         {
             self.weapon = IT_NAILGUN;
             if (self.ammo_nails < 1)
-                am = 1;
+                am = TRUE;
         }
         else if (self.weapon == IT_NAILGUN)
         {
             self.weapon = IT_SUPER_SHOTGUN;
             if (self.ammo_shells < 2)
-                am = 1;
+                am = TRUE;
         }
         else if (self.weapon == IT_SUPER_SHOTGUN)
         {
             self.weapon = IT_SHOTGUN;
             if (self.ammo_shells < 1)
-                am = 1;
+                am = TRUE;
         }
         else if (self.weapon == IT_SHOTGUN)
         {
@@ -1302,10 +1302,10 @@ void() CycleWeaponReverseCommand =
         {
             self.weapon = IT_LIGHTNING;
             if (self.ammo_cells < 1)
-                am = 1;
+                am = TRUE;
         }
 
-        if ((it & self.weapon) && am == 0)
+        if ((it & self.weapon) && am == FALSE)
         {
             W_SetCurrentAmmo();
             return;
