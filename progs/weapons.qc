@@ -1364,7 +1364,7 @@ void() ImpulseCommands =
     {
         ServerflagsCommand();
     }
-    if (self.impulse == 12)
+    else if (self.impulse == 12)
         CycleWeaponReverseCommand();
     else if (self.impulse == 255)
     {
