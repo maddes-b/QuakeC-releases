@@ -42,7 +42,6 @@ $frame walk1 walk2 walk3 walk4 walk5 walk6 walk7 walk8 walk9 walk10
 $frame walk11 walk12
 
 
-void(entity attacker, float damage) shalrath_pain;
 void() ShalMissile;
 
 void() shal_stand = [ $walk1, shal_stand ] { ai_stand(); };

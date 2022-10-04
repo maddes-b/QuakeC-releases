@@ -17,9 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-void(entity targ, entity inflictor, entity attacker, float damage) T_Damage;
-void() player_run;
-void(entity bomb, entity attacker, float rad, entity ignore) T_RadiusDamage;
 void(vector org, vector vel, float damage) SpawnBlood;
 void() SuperDamageSound;
 
@@ -890,15 +887,6 @@ W_Attack
 An attack impulse can be triggered now
 ============
 */
-void() player_axe1;
-void() player_axeb1;
-void() player_axec1;
-void() player_axed1;
-void() player_shot1;
-void() player_nail1;
-void() player_light1;
-void() player_rocket1;
-
 void() W_Attack =
 {
     local float r;

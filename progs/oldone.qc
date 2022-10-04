@@ -31,15 +31,6 @@ $base base
 $skin skin
 $scale 1
 
-
-void() finale_1;
-void() finale_2;
-void() finale_3;
-void() finale_4;
-
-entity shub;
-
-
 $frame old1 old2 old3 old4 old5 old6 old7 old8 old9
 $frame old10 old11 old12 old13 old14 old15 old16 old17 old18 old19
 $frame old20 old21 old22 old23 old24 old25 old26 old27 old28 old29
@@ -49,6 +40,13 @@ $frame old40 old41 old42 old43 old44 old45 old46
 $frame shake1 shake2 shake3 shake4 shake5 shake6 shake7 shake8
 $frame shake9 shake10 shake11 shake12 shake12 shake13 shake14
 $frame shake15 shake16 shake17 shake18 shake19 shake20
+
+
+void() finale_2;
+void() finale_3;
+void() finale_4;
+
+entity shub;
 
 
 //void() old_stand = [ $old1, old_stand ] {};

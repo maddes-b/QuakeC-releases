@@ -675,22 +675,83 @@ void(entity e) setspawnparms = #78; // set parm1... to the
 //============================================================================
 
 //
-// subs.qc
+// ai.qc
 //
-void(vector tdest, float tspeed, void() func) SUB_CalcMove;
-void(entity ent, vector tdest, float tspeed, void() func) SUB_CalcMoveEnt;
-void(vector destangle, float tspeed, void() func) SUB_CalcAngleMove;
-void() SUB_CalcMoveDone;
-void() SUB_CalcAngleMoveDone;
-void() SUB_Null;
-void() SUB_UseTargets;
-void() SUB_Remove;
+float(entity targ) visible; // for subs.qc
 
 //
 // combat.qc
 //
-void(entity targ, entity inflictor, entity attacker, float damage) T_Damage;
+float(entity targ, entity inflictor) CanDamage; // for fight.qc
+void(entity targ, entity inflictor, entity attacker, float damage) T_Damage; // for fight.qc
 
-float(entity e, float healamount, float ignore) T_Heal; // health function
+//
+// client.qc
+//
+void(entity targ, entity attacker) ClientObituary; // for combat.qc
 
-float(entity targ, entity inflictor) CanDamage;
+//
+// misc.qc
+//
+void() bubble_bob; // for player.qc
+
+//
+// monsters.qc
+//
+void() monster_death_use; // for combat.qc
+
+//
+// player.qc
+//
+void() player_run; // for weapons.qc
+void() player_axe1; // for weapons.qc
+void() player_axeb1; // for weapons.qc
+void() player_axec1; // for weapons.qc
+void() player_axed1; // for weapons.qc
+void() player_shot1; // for weapons.qc
+void() player_nail1; // for weapons.qc
+void() player_light1; // for weapons.qc
+void() player_rocket1; // for weapons.qc
+void(entity attacker, float damage) player_pain; // for client.qc
+void() player_stand1; // for client.qc
+void() set_suicide_frame; // for client.qc
+void() PlayerDie; // for client.qc
+
+//
+// triggers.qc
+//
+void(vector org) spawn_tfog; // for client.qc
+void(vector org, entity death_owner) spawn_tdeath; // for client.qc
+
+//
+// weapons.qc
+//
+void() W_SetCurrentAmmo; // for items.qc
+float() W_BestWeapon; // for items.qc
+
+
+//
+// demon.qc
+//
+float() DemonCheckAttack; // for ai.qc
+
+//
+// dog.qc
+//
+float() DogCheckAttack; // for ai.qc
+
+//
+// enforcer.qc
+//
+void(vector org, vector vec) LaunchLaser; // for misc.qc
+
+//
+// knight.qc
+//
+void() knight_atk1; // for fight.qc
+void() knight_runatk1; // for fight.qc
+
+//
+// wizard.qc
+//
+float() WizardCheckAttack; // for ai.qc

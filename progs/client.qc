@@ -17,14 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-// prototypes
-void() W_WeaponFrame;
-void() W_SetCurrentAmmo;
-void(entity attacker, float damage) player_pain;
-void() player_stand1;
-void(vector org) spawn_tfog;
-void(vector org, entity death_owner) spawn_tdeath;
-
 float modelindex_eyes, modelindex_player;
 
 /*
@@ -359,8 +351,6 @@ void() trigger_changelevel =
 =============================================================================
 */
 
-void() set_suicide_frame;
-
 // called by ClientKill and DeadThink
 void() respawn =
 {
@@ -469,9 +459,6 @@ PutClientInServer
 called each time a player is spawned
 ============
 */
-void() DecodeLevelParms;
-void() PlayerDie;
-
 void() PutClientInServer =
 {
     local entity spot;

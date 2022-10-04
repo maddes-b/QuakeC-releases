@@ -318,8 +318,6 @@ void() misc_explobox2 =
 float SPAWNFLAG_SUPERSPIKE = 1;
 float SPAWNFLAG_LASER = 2;
 
-void(vector org, vector vec) LaunchLaser;
-
 void() spikeshooter_use =
 {
     if (self.spawnflags & SPAWNFLAG_LASER)
@@ -390,7 +388,6 @@ void() trap_shooter =
 */
 void() make_bubbles;
 void() bubble_remove;
-void() bubble_bob;
 
 /*QUAKED air_bubbles (0 .5 .8) (-8 -8 -8) (8 8 8)
 

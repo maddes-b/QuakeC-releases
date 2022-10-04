@@ -17,8 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-void() bubble_bob;
-
 /*
 ==============================================================================
 
@@ -100,7 +98,6 @@ $frame axattd1 axattd2 axattd3 axattd4 axattd5 axattd6
 PLAYER
 ==============================================================================
 */
-void() player_run;
 
 void() player_stand1 = [ $axstnd1, player_stand1 ]
 {

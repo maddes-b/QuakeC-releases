@@ -17,8 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-void() W_SetCurrentAmmo;
-
 /* ALL LIGHTS SHOULD BE 0 1 0 IN COLOR ALL OTHER ITEMS SHOULD
 BE .8 .3 .4 IN COLOR */
 
@@ -258,8 +256,6 @@ ARMOR
 ===============================================================================
 */
 
-void() armor_touch;
-
 void() armor_touch =
 {
     local float type, value, bit;
@@ -416,8 +412,6 @@ void(float old, float new) Deathmatch_Weapon =
 weapon_touch
 =============
 */
-float() W_BestWeapon;
-
 void() weapon_touch =
 {
     local float hadammo, best, new, old;
@@ -1093,8 +1087,6 @@ POWERUPS
 
 ===============================================================================
 */
-
-void() powerup_touch;
 
 void() powerup_touch =
 {

@@ -17,6 +17,12 @@
     See file, 'COPYING', for details.
 */
 
+void(vector tdest, float tspeed, void() func) SUB_CalcMove;
+void() SUB_CalcMoveDone;
+void(vector destangle, float tspeed, void() func) SUB_CalcAngleMove;
+void() SUB_CalcAngleMoveDone;
+void() SUB_UseTargets;
+
 void() SUB_Null = {};
 
 
@@ -329,8 +335,6 @@ void(float normal) SUB_AttackFinished =
         self.attack_finished = time + normal;
 };
 
-
-float(entity targ) visible;
 
 void(void() thinkst) SUB_CheckRefire =
 {

@@ -17,11 +17,6 @@
     See file, 'COPYING', for details.
 */
 
-void() T_MissileTouch;
-void() info_player_start;
-void(entity targ, entity attacker) ClientObituary;
-void() monster_death_use;
-
 //============================================================================
 
 /*

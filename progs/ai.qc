@@ -17,12 +17,7 @@
     See file, 'COPYING', for details.
 */
 
-void() movetarget_f;
 void() t_movetarget;
-void() knight_walk1;
-void() knight_bow6;
-void() knight_bow1;
-void(entity targ, entity inflictor, entity attacker, float damage) T_Damage;
 
 /*
 .enemy
@@ -606,9 +601,6 @@ float() FacingIdeal =
 
 
 //=============================================================================
-
-float() WizardCheckAttack;
-float() DogCheckAttack;
 
 float() CheckAnyAttack =
 {

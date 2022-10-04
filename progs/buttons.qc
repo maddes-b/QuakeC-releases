@@ -19,7 +19,6 @@
 
 // button and multiple button
 
-void() button_wait;
 void() button_return;
 
 void() button_wait =
