@@ -146,7 +146,7 @@ void() zombie_run18 = [ $run18, zombie_run1  ] {
     ai_run(8);
     if (random() < 0.2)
         sound(self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_IDLE);
-    if (random() > 0.8)
+    else if (random() > 0.8)
         sound(self, CHAN_VOICE, "zombie/z_idle1.wav", 1, ATTN_IDLE);
 };
 

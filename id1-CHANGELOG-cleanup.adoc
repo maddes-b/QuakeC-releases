@@ -26,7 +26,7 @@ This will already be done with v1.01 for people that have concerns about the ori
 * [x] remove unused variables
 * [x] use existing constants where possible
 * [x] reduce function forward declarations
-* [ ] avoid unnecessary condition checks
+* [x] avoid unnecessary condition checks
 * [ ] align code style
 ** curly brackets on separate lines, except for animation functions
 ** one statement per line, except for animation function definitions (max. 2 statement)

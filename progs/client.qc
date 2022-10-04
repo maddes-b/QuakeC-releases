@@ -48,7 +48,7 @@ void() SetChangeParms =
     // cap super health
     if (self.health > 100)
         self.health = 100;
-    if (self.health < 50)
+    else if (self.health < 50)
         self.health = 50;
 
     parm1 = self.items;
@@ -883,9 +883,9 @@ void() WaterMove =
         // player enter water sound
         if (self.watertype == CONTENT_LAVA)
             sound(self, CHAN_BODY, "player/inlava.wav", 1, ATTN_NORM);
-        if (self.watertype == CONTENT_WATER)
+        else if (self.watertype == CONTENT_WATER)
             sound(self, CHAN_BODY, "player/inh2o.wav", 1, ATTN_NORM);
-        if (self.watertype == CONTENT_SLIME)
+        else if (self.watertype == CONTENT_SLIME)
             sound(self, CHAN_BODY, "player/slimbrn2.wav", 1, ATTN_NORM);
 
         self.flags = self.flags + FL_INWATER;
@@ -1006,8 +1006,7 @@ void() CheckPowerups =
                 sound(self, CHAN_AUTO, "items/inv2.wav", 1, ATTN_NORM);
                 self.invisible_time = time + 1;
             }
-
-            if (self.invisible_time < time)
+            else if (self.invisible_time < time)
             {
                 self.invisible_time = time + 1;
                 stuffcmd(self, "bf\n");
@@ -1041,8 +1040,7 @@ void() CheckPowerups =
                 sound(self, CHAN_AUTO, "items/protect2.wav", 1, ATTN_NORM);
                 self.invincible_time = time + 1;
             }
-
-            if (self.invincible_time < time)
+            else if (self.invincible_time < time)
             {
                 self.invincible_time = time + 1;
                 stuffcmd(self, "bf\n");
@@ -1074,8 +1072,7 @@ void() CheckPowerups =
                 sound(self, CHAN_AUTO, "items/damage2.wav", 1, ATTN_NORM);
                 self.super_time = time + 1;
             }
-
-            if (self.super_time < time)
+            else if (self.super_time < time)
             {
                 self.super_time = time + 1;
                 stuffcmd(self, "bf\n");
@@ -1109,8 +1106,7 @@ void() CheckPowerups =
                 sound(self, CHAN_AUTO, "items/suit2.wav", 1, ATTN_NORM);
                 self.rad_time = time + 1;
             }
-
-            if (self.rad_time < time)
+            else if (self.rad_time < time)
             {
                 self.rad_time = time + 1;
                 stuffcmd(self, "bf\n");
@@ -1280,27 +1276,27 @@ void(entity targ, entity attacker) ClientObituary =
                     deathstring = " was axe-murdered by ";
                     deathstring2 = "\n";
                 }
-                if (rnum == IT_SHOTGUN)
+                else if (rnum == IT_SHOTGUN)
                 {
                     deathstring = " chewed on ";
                     deathstring2 = "'s boomstick\n";
                 }
-                if (rnum == IT_SUPER_SHOTGUN)
+                else if (rnum == IT_SUPER_SHOTGUN)
                 {
                     deathstring = " ate 2 loads of ";
                     deathstring2 = "'s buckshot\n";
                 }
-                if (rnum == IT_NAILGUN)
+                else if (rnum == IT_NAILGUN)
                 {
                     deathstring = " was nailed by ";
                     deathstring2 = "\n";
                 }
-                if (rnum == IT_SUPER_NAILGUN)
+                else if (rnum == IT_SUPER_NAILGUN)
                 {
                     deathstring = " was punctured by ";
                     deathstring2 = "\n";
                 }
-                if (rnum == IT_GRENADE_LAUNCHER)
+                else if (rnum == IT_GRENADE_LAUNCHER)
                 {
                     deathstring = " eats ";
                     deathstring2 = "'s pineapple\n";
@@ -1310,7 +1306,7 @@ void(entity targ, entity attacker) ClientObituary =
                         deathstring2 = "'s grenade\n";
                     }
                 }
-                if (rnum == IT_ROCKET_LAUNCHER)
+                else if (rnum == IT_ROCKET_LAUNCHER)
                 {
                     deathstring = " rides ";
                     deathstring2 = "'s rocket\n";
@@ -1320,7 +1316,7 @@ void(entity targ, entity attacker) ClientObituary =
                         deathstring2 = "'s rocket\n";
                     }
                 }
-                if (rnum == IT_LIGHTNING)
+                else if (rnum == IT_LIGHTNING)
                 {
                     deathstring = " accepts ";
                     if (attacker.waterlevel > 1)
@@ -1377,35 +1373,35 @@ void(entity targ, entity attacker) ClientObituary =
             {
                 if (attacker.classname == "monster_army")
                     bprint(" was shot by a Grunt\n");
-                if (attacker.classname == "monster_demon1")
+                else if (attacker.classname == "monster_demon1")
                     bprint(" was eviscerated by a Fiend\n");
-                if (attacker.classname == "monster_dog")
+                else if (attacker.classname == "monster_dog")
                     bprint(" was mauled by a Rottweiler\n");
-                if (attacker.classname == "monster_dragon")
+                else if (attacker.classname == "monster_dragon")
                     bprint(" was fried by a Dragon\n");
-                if (attacker.classname == "monster_enforcer")
+                else if (attacker.classname == "monster_enforcer")
                     bprint(" was blasted by an Enforcer\n");
-                if (attacker.classname == "monster_fish")
+                else if (attacker.classname == "monster_fish")
                     bprint(" was fed to the Rotfish\n");
-                if (attacker.classname == "monster_hell_knight")
+                else if (attacker.classname == "monster_hell_knight")
                     bprint(" was slain by a Death Knight\n");
-                if (attacker.classname == "monster_knight")
+                else if (attacker.classname == "monster_knight")
                     bprint(" was slashed by a Knight\n");
-                if (attacker.classname == "monster_ogre")
+                else if (attacker.classname == "monster_ogre")
                     bprint(" was destroyed by an Ogre\n");
-                if (attacker.classname == "monster_oldone")
+                else if (attacker.classname == "monster_oldone")
                     bprint(" became one with Shub-Niggurath\n");
-                if (attacker.classname == "monster_shalrath")
+                else if (attacker.classname == "monster_shalrath")
                     bprint(" was exploded by a Vore\n");
-                if (attacker.classname == "monster_shambler")
+                else if (attacker.classname == "monster_shambler")
                     bprint(" was smashed by a Shambler\n");
-                if (attacker.classname == "monster_tarbaby")
+                else if (attacker.classname == "monster_tarbaby")
                     bprint(" was slimed by a Spawn\n");
-                if (attacker.classname == "monster_vomit")
+                else if (attacker.classname == "monster_vomit")
                     bprint(" was vomited on by a Vomitus\n");
-                if (attacker.classname == "monster_wizard")
+                else if (attacker.classname == "monster_wizard")
                     bprint(" was scragged by a Scrag\n");
-                if (attacker.classname == "monster_zombie")
+                else if (attacker.classname == "monster_zombie")
                     bprint(" joins the Zombies\n");
 
                 return;

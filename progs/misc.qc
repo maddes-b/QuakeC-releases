@@ -472,7 +472,7 @@ void() bubble_bob =
     self.cnt = self.cnt + 1;
     if (self.cnt == 4)
         bubble_split();
-    if (self.cnt == 20)
+    else if (self.cnt == 20)
         remove(self);
 
     rnd1 = self.velocity_x + (-10 + (random() * 20));
@@ -481,17 +481,17 @@ void() bubble_bob =
 
     if (rnd1 > 10)
         rnd1 = 5;
-    if (rnd1 < -10)
+    else if (rnd1 < -10)
         rnd1 = -5;
 
     if (rnd2 > 10)
         rnd2 = 5;
-    if (rnd2 < -10)
+    else if (rnd2 < -10)
         rnd2 = -5;
 
     if (rnd3 < 10)
         rnd3 = 15;
-    if (rnd3 > 30)
+    else if (rnd3 > 30)
         rnd3 = 25;
 
     self.velocity_x = rnd1;

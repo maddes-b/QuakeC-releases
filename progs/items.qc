@@ -271,13 +271,13 @@ void() armor_touch =
         value = 100;
         bit = IT_ARMOR1;
     }
-    if (self.classname == "item_armor2")
+    else if (self.classname == "item_armor2")
     {
         type = 0.6;
         value = 150;
         bit = IT_ARMOR2;
     }
-    if (self.classname == "item_armorInv")
+    else if (self.classname == "item_armorInv")
     {
         type = 0.8;
         value = 200;
@@ -646,7 +646,7 @@ void() ammo_touch =
         other.ammo_shells = other.ammo_shells + self.aflag;
     }
     // spikes
-    if (self.weapon == 2)
+    else if (self.weapon == 2)
     {
         if (other.ammo_nails >= 200)
             return;
@@ -654,7 +654,7 @@ void() ammo_touch =
         other.ammo_nails = other.ammo_nails + self.aflag;
     }
     // rockets
-    if (self.weapon == 3)
+    else if (self.weapon == 3)
     {
         if (other.ammo_rockets >= 100)
             return;
@@ -662,7 +662,7 @@ void() ammo_touch =
         other.ammo_rockets = other.ammo_rockets + self.aflag;
     }
     // cells
-    if (self.weapon == 4)
+    else if (self.weapon == 4)
     {
         if (other.ammo_cells >= 200)
             return;
@@ -924,12 +924,12 @@ void() key_setsounds =
         precache_sound("misc/medkey.wav");
         self.noise = "misc/medkey.wav";
     }
-    if (world.worldtype == 1)
+    else if (world.worldtype == 1)
     {
         precache_sound("misc/runekey.wav");
         self.noise = "misc/runekey.wav";
     }
-    if (world.worldtype == 2)
+    else if (world.worldtype == 2)
     {
         precache_sound2("misc/basekey.wav");
         self.noise = "misc/basekey.wav";
@@ -993,13 +993,13 @@ void() item_key2 =
         setmodel(self, "progs/w_g_key.mdl");
         self.netname = "gold key";
     }
-    if (world.worldtype == 1)
+    else if (world.worldtype == 1)
     {
         precache_model("progs/m_g_key.mdl");
         setmodel(self, "progs/m_g_key.mdl");
         self.netname = "gold runekey";
     }
-    if (world.worldtype == 2)
+    else if (world.worldtype == 2)
     {
         precache_model2("progs/b_g_key.mdl");
         setmodel(self, "progs/b_g_key.mdl");
@@ -1124,17 +1124,17 @@ void() powerup_touch =
         other.rad_time = 1;
         other.radsuit_finished = time + 30;
     }
-    if (self.classname == "item_artifact_invulnerability")
+    else if (self.classname == "item_artifact_invulnerability")
     {
         other.invincible_time = 1;
         other.invincible_finished = time + 30;
     }
-    if (self.classname == "item_artifact_invisibility")
+    else if (self.classname == "item_artifact_invisibility")
     {
         other.invisible_time = 1;
         other.invisible_finished = time + 30;
     }
-    if (self.classname == "item_artifact_super_damage")
+    else if (self.classname == "item_artifact_super_damage")
     {
         other.super_time = 1;
         other.super_damage_finished = time + 30;

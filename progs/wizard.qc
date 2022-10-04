@@ -277,7 +277,7 @@ void() Wiz_idlesound =
         self.waitmin = time + 2;
         if (wr > 4.5)
             sound(self, CHAN_VOICE, "wizard/widle1.wav", 1, ATTN_IDLE);
-        if (wr < 1.5)
+        else if (wr < 1.5)
             sound(self, CHAN_VOICE, "wizard/widle2.wav", 1, ATTN_IDLE);
     }
     return;

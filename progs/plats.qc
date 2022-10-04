@@ -182,7 +182,7 @@ void() func_plat =
         self.noise = "plats/plat1.wav";
         self.noise1 = "plats/plat2.wav";
     }
-    if (self.sounds == 2)
+    else if (self.sounds == 2)
     {
         precache_sound("plats/medplat1.wav");
         precache_sound("plats/medplat2.wav");
@@ -327,7 +327,7 @@ void() func_train =
         self.noise1 = "misc/null.wav"; //move sound
         precache_sound("misc/null.wav");
     }
-    if (self.sounds == 1)
+    else if (self.sounds == 1)
     {
         self.noise = "plats/train2.wav"; //stop sound
         precache_sound("plats/train2.wav");

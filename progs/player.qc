@@ -435,13 +435,13 @@ void() DeathSound =
     rs = rint((random() * 4) + 1);
     if (rs == 1)
         self.noise = "player/death1.wav";
-    if (rs == 2)
+    else if (rs == 2)
         self.noise = "player/death2.wav";
-    if (rs == 3)
+    else if (rs == 3)
         self.noise = "player/death3.wav";
-    if (rs == 4)
+    else if (rs == 4)
         self.noise = "player/death4.wav";
-    if (rs == 5)
+    else if (rs == 5)
         self.noise = "player/death5.wav";
 
     sound(self, CHAN_VOICE, self.noise, 1, ATTN_NONE);
