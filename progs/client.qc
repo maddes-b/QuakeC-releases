@@ -338,7 +338,7 @@ void() changelevel_touch =
         return;
     }
 
-    if ((cvar("noexit") == 1) || ((cvar("noexit") == 2) && (mapname != "start")))
+    if (cvar("noexit") == 1 || (cvar("noexit") == 2 && mapname != "start"))
     {
         T_Damage(other, self, self, 50000);
         return;
@@ -489,14 +489,18 @@ entity() SelectSpawnPoint =
             if (spot != world)
             {
                 if (spot == lastspawn)
+                {
                     return lastspawn;
+                }
 
                 pcount = 0;
                 thing = findradius(spot.origin, 32);
                 while (thing)
                 {
                     if (thing.classname == "player")
+                    {
                         pcount = pcount + 1;
+                    }
                     thing = thing.chain;
                 }
                 if (pcount == 0)

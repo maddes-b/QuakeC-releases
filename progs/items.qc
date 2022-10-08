@@ -1361,12 +1361,14 @@ void() BackpackTouch =
     sprint(other, "You get ");
 
     if (self.items)
+    {
         if ((other.items & self.items) == 0)
         {
             acount = TRUE;
             sprint(other, "the ");
             sprint(other, self.netname);
         }
+    }
 
     // if the player was using his best weapon, change up to the new one if better
     stemp = self;
@@ -1382,7 +1384,9 @@ void() BackpackTouch =
 
     new = self.items;
     if (!new)
+    {
         new = other.weapon;
+    }
     old = other.items;
     other.items = other.items | new;
 
@@ -1390,7 +1394,9 @@ void() BackpackTouch =
     if (self.ammo_shells)
     {
         if (acount)
+        {
             sprint(other, ", ");
+        }
         acount = TRUE;
         s = ftos(self.ammo_shells);
         sprint(other, s);
@@ -1399,7 +1405,9 @@ void() BackpackTouch =
     if (self.ammo_nails)
     {
         if (acount)
+        {
             sprint(other, ", ");
+        }
         acount = TRUE;
         s = ftos(self.ammo_nails);
         sprint(other, s);
@@ -1408,7 +1416,9 @@ void() BackpackTouch =
     if (self.ammo_rockets)
     {
         if (acount)
+        {
             sprint(other, ", ");
+        }
         acount = TRUE;
         s = ftos(self.ammo_rockets);
         sprint(other, s);
@@ -1417,7 +1427,9 @@ void() BackpackTouch =
     if (self.ammo_cells)
     {
         if (acount)
+        {
             sprint(other, ", ");
+        }
         acount = TRUE;
         s = ftos(self.ammo_cells);
         sprint(other, s);
@@ -1466,23 +1478,41 @@ void() DropBackpack =
 
     item.items = self.weapon;
     if (item.items == IT_AXE)
+    {
         item.netname = "Axe";
+    }
     else if (item.items == IT_SHOTGUN)
+    {
         item.netname = "Shotgun";
+    }
     else if (item.items == IT_SUPER_SHOTGUN)
+    {
         item.netname = "Double-barrelled Shotgun";
+    }
     else if (item.items == IT_NAILGUN)
+    {
         item.netname = "Nailgun";
+    }
     else if (item.items == IT_SUPER_NAILGUN)
+    {
         item.netname = "Super Nailgun";
+    }
     else if (item.items == IT_GRENADE_LAUNCHER)
+    {
         item.netname = "Grenade Launcher";
+    }
     else if (item.items == IT_ROCKET_LAUNCHER)
+    {
         item.netname = "Rocket Launcher";
+    }
     else if (item.items == IT_LIGHTNING)
+    {
         item.netname = "Thunderbolt";
+    }
     else
+    {
         item.netname = "";
+    }
 
     item.ammo_shells = self.ammo_shells;
     item.ammo_nails = self.ammo_nails;
