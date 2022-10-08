@@ -79,7 +79,9 @@ void() f_walk18 = [ $swim18, f_walk1  ] { ai_walk(8); };
 void() f_run1 = [ $swim1,  f_run2 ] {
     ai_run(12);
     if (random() < 0.5)
+    {
         sound(self, CHAN_VOICE, "fish/idle.wav", 1, ATTN_NORM);
+    }
 };
 void() f_run2 = [ $swim3,  f_run3 ] { ai_run(12); };
 void() f_run3 = [ $swim5,  f_run4 ] { ai_run(12); };
@@ -96,11 +98,15 @@ void() fish_melee =
     local float ldmg;
 
     if (!self.enemy)
+    {
         return; // removed before stroke
+    }
 
     delta = self.enemy.origin - self.origin;
     if (vlen(delta) > 60)
+    {
         return;
+    }
 
     sound(self, CHAN_VOICE, "fish/bite.wav", 1, ATTN_NORM);
     ldmg = (random() + random()) * 3;

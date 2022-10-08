@@ -64,7 +64,9 @@ void() boss_face =
     {
         self.enemy = find(self.enemy, classname, "player");
         if (!self.enemy)
+        {
             self.enemy = find(self.enemy, classname, "player");
+        }
     }
     ai_face();
 };
@@ -238,7 +240,9 @@ void(vector p) boss_missile =
 
     // check for dead enemy
     if (self.enemy.health <= 0)
+    {
         boss_idle1();
+    }
 };
 
 
@@ -252,9 +256,13 @@ void() boss_awake =
     setsize(self, '-128 -128 -24', '128 128 256');
 
     if (skill == 0)
+    {
         self.health = 1;
+    }
     else
+    {
         self.health = 3;
+    }
 
     self.enemy = activator;
 
@@ -341,8 +349,10 @@ void() lightning_fire =
 
 void() lightning_use =
 {
-    if (lightning_end >= time + 1)
+    if (lightning_end >= (time + 1))
+    {
         return;
+    }
 
     le1 = find(world, target, "lightning");
     le2 = find(le1, target, "lightning");
@@ -371,7 +381,9 @@ void() lightning_use =
     // advance the boss pain if down
     self = find(world, classname, "monster_boss");
     if (!self)
+    {
         return;
+    }
 
     self.enemy = activator;
 
@@ -380,11 +392,17 @@ void() lightning_use =
         sound(self, CHAN_VOICE, "boss1/pain.wav", 1, ATTN_NORM);
         self.health = self.health - 1;
         if (self.health >= 2)
+        {
             boss_shocka1();
+        }
         else if (self.health == 1)
+        {
             boss_shockb1();
+        }
         else if (self.health == 0)
+        {
             boss_shockc1();
+        }
     }
 };
 

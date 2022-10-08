@@ -113,10 +113,14 @@ float() WizardCheckAttack =
     local float chance;
 
     if (time < self.attack_finished)
+    {
         return FALSE;
+    }
 
     if (!enemy_vis)
+    {
         return FALSE;
+    }
 
     if (enemy_range == RANGE_FAR)
     {
@@ -148,13 +152,21 @@ float() WizardCheckAttack =
     }
 
     if (enemy_range == RANGE_MELEE)
+    {
         chance = 0.9;
+    }
     else if (enemy_range == RANGE_NEAR)
+    {
         chance = 0.6;
+    }
     else if (enemy_range == RANGE_MID)
+    {
         chance = 0.2;
+    }
     else
+    {
         chance = 0;
+    }
 
     if (random() < chance)
     {
@@ -277,9 +289,13 @@ void() Wiz_idlesound =
     {
         self.waitmin = time + 2;
         if (wr > 4.5)
+        {
             sound(self, CHAN_VOICE, "wizard/widle1.wav", 1, ATTN_IDLE);
+        }
         else if (wr < 1.5)
+        {
             sound(self, CHAN_VOICE, "wizard/widle2.wav", 1, ATTN_IDLE);
+        }
     }
     return;
 };
@@ -382,8 +398,10 @@ void() wiz_die =
 void(entity attacker, float damage) Wiz_Pain =
 {
     sound(self, CHAN_VOICE, "wizard/wpain.wav", 1, ATTN_NORM);
-    if (random() * 70 > damage)
+    if ((random() * 70) > damage)
+    {
         return; // didn't flinch
+    }
 
     wiz_pain1();
 };

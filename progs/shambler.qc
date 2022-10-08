@@ -88,7 +88,9 @@ void() sham_walk11 = [ $walk11, sham_walk12 ] { ai_walk(7); };
 void() sham_walk12 = [ $walk12, sham_walk1  ] {
     ai_walk(7);
     if (random() > 0.8)
+    {
         sound(self, CHAN_VOICE, "shambler/sidle.wav", 1, ATTN_IDLE);
+    }
 };
 
 void() sham_run1 = [ $run1, sham_run2 ] { ai_run(20); };
@@ -99,7 +101,9 @@ void() sham_run5 = [ $run5, sham_run6 ] { ai_run(24); };
 void() sham_run6 = [ $run6, sham_run1 ] {
     ai_run(20);
     if (random() > 0.8)
+    {
         sound(self, CHAN_VOICE, "shambler/sidle.wav", 1, ATTN_IDLE);
+    }
 };
 
 void() sham_smash1  = [ $smash1,  sham_smash2  ] { sound(self, CHAN_VOICE, "shambler/melee1.wav", 1, ATTN_NORM); ai_charge(2); };
@@ -116,16 +120,22 @@ void() sham_smash10 = [ $smash10, sham_smash11 ] {
     local float ldmg;
 
     if (!self.enemy)
+    {
         return;
+    }
 
     ai_charge(0);
 
     delta = self.enemy.origin - self.origin;
     if (vlen(delta) > 100)
+    {
         return;
+    }
 
     if (!CanDamage(self.enemy, self))
+    {
         return;
+    }
 
     ldmg = (random() + random() + random()) * 40;
     T_Damage(self.enemy, self, self, ldmg);
@@ -145,13 +155,17 @@ void(float side) ShamClaw =
     local float ldmg;
 
     if (!self.enemy)
+    {
         return;
+    }
 
     ai_charge(10);
 
     delta = self.enemy.origin - self.origin;
     if (vlen(delta) > 100)
+    {
         return;
+    }
 
     ldmg = (random() + random() + random()) * 20;
     T_Damage(self.enemy, self, self, ldmg);
@@ -176,7 +190,9 @@ void() sham_swingl8 = [ $swingl8, sham_swingl9 ] { ai_charge(4); };
 void() sham_swingl9 = [ $swingl9, sham_run1    ] {
     ai_charge(8);
     if (random() < 0.5)
+    {
         self.think = sham_swingr1;
+    }
 };
 
 void() sham_swingr1 = [ $swingr1, sham_swingr2 ] { sound(self, CHAN_VOICE, "shambler/melee1.wav", 1, ATTN_NORM); ai_charge(1); };
@@ -191,7 +207,9 @@ void() sham_swingr9 = [ $swingr9, sham_run1    ] {
     ai_charge(1);
     ai_charge(10);
     if (random() < 0.5)
+    {
         self.think = sham_swingl1;
+    }
 };
 
 void() sham_melee =
@@ -200,11 +218,17 @@ void() sham_melee =
 
     chance = random();
     if (chance > 0.6 || self.health == 600)
+    {
         sham_smash1();
+    }
     else if (chance > 0.3)
+    {
         sham_swingr1();
+    }
     else
+    {
         sham_swingl1();
+    }
 };
 
 
@@ -268,7 +292,9 @@ void() sham_magic9  = [ $magic9,  sham_magic10 ] { CastLightning(); };
 void() sham_magic10 = [ $magic10, sham_magic11 ] { CastLightning(); };
 void() sham_magic11 = [ $magic11, sham_magic12 ] {
     if (skill == 3)
+    {
         CastLightning();
+    }
 };
 void() sham_magic12 = [ $magic12, sham_run1    ] {};
 
@@ -284,13 +310,19 @@ void(entity attacker, float damage) sham_pain =
     sound(self, CHAN_VOICE, "shambler/shurt2.wav", 1, ATTN_NORM);
 
     if (self.health <= 0)
+    {
         return; // already dying, don't go into pain frame
+    }
 
-    if (random() * 400 > damage)
+    if ((random() * 400) > damage)
+    {
         return; // didn't flinch
+    }
 
     if (self.pain_finished > time)
+    {
         return;
+    }
 
     self.pain_finished = time + 2;
     sham_pain1();

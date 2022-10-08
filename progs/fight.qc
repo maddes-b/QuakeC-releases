@@ -36,9 +36,13 @@ void() knight_attack =
     len = vlen(self.enemy.origin + self.enemy.view_ofs - (self.origin + self.view_ofs));
 
     if (len < 80)
+    {
         knight_atk1();
+    }
     else
+    {
         knight_runatk1();
+    }
 };
 
 
@@ -67,10 +71,14 @@ float() CheckAttack =
     traceline(spot1, spot2, FALSE, self);
 
     if (trace_ent != targ)
+    {
         return FALSE; // don't have a clear shot
+    }
 
     if (trace_inopen && trace_inwater)
+    {
         return FALSE; // sight line crossed contents
+    }
 
     if (enemy_range == RANGE_MELEE)
     {
@@ -78,22 +86,32 @@ float() CheckAttack =
         if (self.th_melee)
         {
             if (self.classname == "monster_knight")
+            {
                 knight_attack();
+            }
             else
+            {
                 self.th_melee();
+            }
             return TRUE;
         }
     }
 
     // missile attack
     if (!self.th_missile)
+    {
         return FALSE;
+    }
 
     if (time < self.attack_finished)
+    {
         return FALSE;
+    }
 
     if (enemy_range == RANGE_FAR)
+    {
         return FALSE;
+    }
 
     if (enemy_range == RANGE_MELEE)
     {
@@ -103,19 +121,29 @@ float() CheckAttack =
     else if (enemy_range == RANGE_NEAR)
     {
         if (self.th_melee)
+        {
             chance = 0.2;
+        }
         else
+        {
             chance = 0.4;
+        }
     }
     else if (enemy_range == RANGE_MID)
     {
         if (self.th_melee)
+        {
             chance = 0.05;
+        }
         else
+        {
             chance = 0.1;
+        }
     }
     else
+    {
         chance = 0;
+    }
 
     if (random() < chance)
     {
@@ -184,11 +212,15 @@ void() ai_melee =
     local float ldmg;
 
     if (!self.enemy)
+    {
         return; // removed before stroke
+    }
 
     delta = self.enemy.origin - self.origin;
     if (vlen(delta) > 60)
+    {
         return;
+    }
 
     ldmg = (random() + random() + random()) * 3;
     T_Damage(self.enemy, self, self, ldmg);
@@ -201,16 +233,22 @@ void() ai_melee_side =
     local float ldmg;
 
     if (!self.enemy)
+    {
         return; // removed before stroke
+    }
 
     ai_charge_side();
 
     delta = self.enemy.origin - self.origin;
     if (vlen(delta) > 60)
+    {
         return;
+    }
 
     if (!CanDamage(self.enemy, self))
+    {
         return;
+    }
 
     ldmg = (random() + random() + random()) * 3;
     T_Damage(self.enemy, self, self, ldmg);
@@ -242,33 +280,51 @@ float() SoldierCheckAttack =
     traceline(spot1, spot2, FALSE, self);
 
     if (trace_inopen && trace_inwater)
+    {
         return FALSE; // sight line crossed contents
+    }
 
     if (trace_ent != targ)
+    {
         return FALSE; // don't have a clear shot
+    }
 
     // missile attack
     if (time < self.attack_finished)
+    {
         return FALSE;
+    }
 
     if (enemy_range == RANGE_FAR)
+    {
         return FALSE;
+    }
 
     if (enemy_range == RANGE_MELEE)
+    {
         chance = 0.9;
+    }
     else if (enemy_range == RANGE_NEAR)
+    {
         chance = 0.4;
+    }
     else if (enemy_range == RANGE_MID)
+    {
         chance = 0.05;
+    }
     else
+    {
         chance = 0;
+    }
 
     if (random() < chance)
     {
         self.th_missile();
         SUB_AttackFinished(1 + random());
         if (random() < 0.3)
+        {
             self.lefty = !self.lefty;
+        }
 
         return TRUE;
     }
@@ -302,10 +358,14 @@ float() ShamCheckAttack =
     }
 
     if (time < self.attack_finished)
+    {
         return FALSE;
+    }
 
     if (!enemy_vis)
+    {
         return FALSE;
+    }
 
     targ = self.enemy;
 
@@ -314,12 +374,16 @@ float() ShamCheckAttack =
     spot2 = targ.origin + targ.view_ofs;
 
     if (vlen(spot1 - spot2) > 600)
+    {
         return FALSE;
+    }
 
     traceline(spot1, spot2, FALSE, self);
 
     if (trace_inopen && trace_inwater)
+    {
         return FALSE; // sight line crossed contents
+    }
 
     if (trace_ent != targ)
     {
@@ -328,7 +392,9 @@ float() ShamCheckAttack =
 
     // missile attack
     if (enemy_range == RANGE_FAR)
+    {
         return FALSE;
+    }
 
     self.attack_state = AS_MISSILE;
     SUB_AttackFinished(2 + 2 * random());
@@ -362,10 +428,14 @@ float() OgreCheckAttack =
     }
 
     if (time < self.attack_finished)
+    {
         return FALSE;
+    }
 
     if (!enemy_vis)
+    {
         return FALSE;
+    }
 
     targ = self.enemy;
 
@@ -376,7 +446,9 @@ float() OgreCheckAttack =
     traceline(spot1, spot2, FALSE, self);
 
     if (trace_inopen && trace_inwater)
+    {
         return FALSE; // sight line crossed contents
+    }
 
     if (trace_ent != targ)
     {
@@ -385,16 +457,26 @@ float() OgreCheckAttack =
 
     // missile attack
     if (time < self.attack_finished)
+    {
         return FALSE;
+    }
 
     if (enemy_range == RANGE_FAR)
+    {
         return FALSE;
+    }
     else if (enemy_range == RANGE_NEAR)
+    {
         chance = 0.10;
+    }
     else if (enemy_range == RANGE_MID)
+    {
         chance = 0.05;
+    }
     else
+    {
         chance = 0;
+    }
 
     self.attack_state = AS_MISSILE;
     SUB_AttackFinished(1 + 2 * random());

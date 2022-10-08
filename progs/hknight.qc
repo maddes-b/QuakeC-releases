@@ -104,15 +104,23 @@ void() CheckForCharge =
 {
     // check for mad charge
     if (!enemy_vis)
+    {
         return;
+    }
 
     if (time < self.attack_finished)
+    {
         return;
+    }
 
     if (fabs(self.origin_z - self.enemy.origin_z) > 20)
+    {
         return; // too much height change
+    }
     if (vlen(self.origin - self.enemy.origin) < 80)
+    {
         return; // use regular attack
+    }
 
     // charge
     SUB_AttackFinished(2);
@@ -130,9 +138,13 @@ void() CheckContinueCharge =
     }
 
     if (random() > 0.5)
+    {
         sound(self, CHAN_WEAPON, "knight/sword2.wav", 1, ATTN_NORM);
+    }
     else
+    {
         sound(self, CHAN_WEAPON, "knight/sword1.wav", 1, ATTN_NORM);
+    }
 };
 
 
@@ -236,9 +248,13 @@ void() hknight_die =
     sound(self, CHAN_VOICE, "hknight/death1.wav", 1, ATTN_NORM);
 
     if (random() > 0.5)
+    {
         hknight_die1();
+    }
     else
+    {
         hknight_dieb1();
+    }
 };
 
 
@@ -378,18 +394,22 @@ void() hknight_watk22 = [ $w_attack22, hknight_run1   ] { ai_charge(3); };
 void() hk_idle_sound =
 {
     if (random() < 0.2)
+    {
         sound(self, CHAN_VOICE, "hknight/idle.wav", 1, ATTN_NORM);
+    }
 };
 
 
 void(entity attacker, float damage) hknight_pain =
 {
     if (self.pain_finished > time)
+    {
         return;
+    }
 
     sound(self, CHAN_VOICE, "hknight/pain1.wav", 1, ATTN_NORM);
 
-    if (time - self.pain_finished > 5)
+    if ((time - self.pain_finished) > 5)
     {
         // always go into pain frame if it has been a while
         hknight_pain1();
@@ -397,8 +417,10 @@ void(entity attacker, float damage) hknight_pain =
         return;
     }
 
-    if ((random() * 30 > damage))
+    if ((random() * 30) > damage)
+    {
         return; // didn't flinch
+    }
 
     self.pain_finished = time + 1;
     hknight_pain1();
@@ -413,9 +435,13 @@ void() hknight_melee =
 
     sound(self, CHAN_WEAPON, "hknight/slash1.wav", 1, ATTN_NORM);
     if (hknight_type == 1)
+    {
         hknight_slice1();
+    }
     else if (hknight_type == 2)
+    {
         hknight_smash1();
+    }
     else if (hknight_type == 3)
     {
         hknight_watk1();

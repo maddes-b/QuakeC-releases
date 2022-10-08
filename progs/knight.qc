@@ -77,7 +77,9 @@ void() knight_stand9 = [ $stand9, knight_stand1 ] { ai_stand(); };
 
 void() knight_walk1  = [ $walk1,  knight_walk2  ] {
     if (random() < 0.2)
+    {
         sound(self, CHAN_VOICE, "knight/idle.wav", 1, ATTN_IDLE);
+    }
     ai_walk(3);
 };
 void() knight_walk2  = [ $walk2,  knight_walk3  ] { ai_walk(2); };
@@ -96,7 +98,9 @@ void() knight_walk14 = [ $walk14, knight_walk1  ] { ai_walk(3); };
 
 void() knight_run1 = [ $runb1, knight_run2 ] {
     if (random() < 0.2)
+    {
         sound(self, CHAN_VOICE, "knight/idle.wav", 1, ATTN_IDLE);
+    }
     ai_run(16);
 };
 void() knight_run2 = [ $runb2, knight_run3 ] { ai_run(20); };
@@ -109,9 +113,13 @@ void() knight_run8 = [ $runb8, knight_run1 ] { ai_run(6); };
 
 void() knight_runatk1  = [ $runattack1,  knight_runatk2  ] {
     if (random() > 0.5)
+    {
         sound(self, CHAN_WEAPON, "knight/sword2.wav", 1, ATTN_NORM);
+    }
     else
+    {
         sound(self, CHAN_WEAPON, "knight/sword1.wav", 1, ATTN_NORM);
+    }
     ai_charge(20);
 };
 void() knight_runatk2  = [ $runattack2,  knight_runatk3  ] { ai_charge_side(); };
@@ -163,7 +171,9 @@ void(entity attacker, float damage) knight_pain =
     local float r;
 
     if (self.pain_finished > time)
+    {
         return;
+    }
 
     r = random();
 
@@ -234,9 +244,13 @@ void() knight_die =
     sound(self, CHAN_VOICE, "knight/kdeath.wav", 1, ATTN_NORM);
 
     if (random() < 0.5)
+    {
         knight_die1();
+    }
     else
+    {
         knight_dieb1();
+    }
 };
 
 

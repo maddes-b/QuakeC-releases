@@ -39,16 +39,26 @@ Using a monster makes it angry at the current activator
 void() monster_use =
 {
     if (self.enemy)
+    {
         return;
+    }
     if (self.health <= 0)
+    {
         return;
+    }
 
-    if (activator.items & IT_INVISIBILITY)
+    if ((activator.items & IT_INVISIBILITY))
+    {
         return;
-    if (activator.flags & FL_NOTARGET)
+    }
+    if ((activator.flags & FL_NOTARGET))
+    {
         return;
+    }
     if (activator.classname != "player")
+    {
         return;
+    }
 
     // delay reaction so if the monster is teleported, its sound is still heard
     self.enemy = activator;
@@ -68,13 +78,19 @@ enemy as activator.
 void() monster_death_use =
 {
     // fall to ground
-    if (self.flags & FL_FLY)
+    if ((self.flags & FL_FLY))
+    {
         self.flags = self.flags - FL_FLY;
-    if (self.flags & FL_SWIM)
+    }
+    if ((self.flags & FL_SWIM))
+    {
         self.flags = self.flags - FL_SWIM;
+    }
 
     if (!self.target)
+    {
         return;
+    }
 
     activator = self.enemy;
     SUB_UseTargets();
@@ -99,7 +115,9 @@ void() walkmonster_start_go =
 
     self.ideal_yaw = self.angles * '0 1 0';
     if (!self.yaw_speed)
+    {
         self.yaw_speed = 20;
+    }
     self.view_ofs = '0 0 25';
     self.use = monster_use;
 
@@ -117,8 +135,11 @@ void() walkmonster_start_go =
             dprint("\n");
         }
         if (self.movetarget.classname == "path_corner")
+        {
             self.th_walk();
+        }
         else
+            // FIXME/Maddes: missing curly brackets, WARNING!!! logic change
             self.pausetime = 99999999;
             self.th_stand();
     }
@@ -149,7 +170,9 @@ void() flymonster_start_go =
 
     self.ideal_yaw = self.angles * '0 1 0';
     if (!self.yaw_speed)
+    {
         self.yaw_speed = 10;
+    }
     self.view_ofs = '0 0 25';
     self.use = monster_use;
 
@@ -174,8 +197,11 @@ void() flymonster_start_go =
             dprint("\n");
         }
         if (self.movetarget.classname == "path_corner")
+        {
             self.th_walk();
+        }
         else
+            // FIXME/Maddes: missing curly brackets, WARNING!!! logic change
             self.pausetime = 99999999;
             self.th_stand();
     }
@@ -209,7 +235,9 @@ void() swimmonster_start_go =
 
     self.ideal_yaw = self.angles * '0 1 0';
     if (!self.yaw_speed)
+    {
         self.yaw_speed = 10;
+    }
     self.view_ofs = '0 0 10';
     self.use = monster_use;
 

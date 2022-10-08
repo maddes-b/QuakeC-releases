@@ -70,7 +70,9 @@ void() demon1_stand13 = [ $stand13, demon1_stand1  ] { ai_stand(); };
 
 void() demon1_walk1 = [ $walk1, demon1_walk2 ] {
     if (random() < 0.2)
+    {
         sound(self, CHAN_VOICE, "demon/idle1.wav", 1, ATTN_IDLE);
+    }
     ai_walk(8);
 };
 void() demon1_walk2 = [ $walk2, demon1_walk3 ] { ai_walk(6); };
@@ -83,7 +85,9 @@ void() demon1_walk8 = [ $walk8, demon1_walk1 ] { ai_walk(10); };
 
 void() demon1_run1 = [ $run1, demon1_run2 ] {
     if (random() < 0.2)
+    {
         sound(self, CHAN_VOICE, "demon/idle1.wav", 1, ATTN_IDLE);
+    }
     ai_run(20);
 };
 void() demon1_run2 = [ $run2, demon1_run3 ] { ai_run(15); };
@@ -102,8 +106,10 @@ void() demon1_jump4  = [ $leap4,  demon1_jump5  ] {
     makevectors(self.angles);
     self.origin_z = self.origin_z + 1;
     self.velocity = v_forward * 600 + '0 0 250';
-    if (self.flags & FL_ONGROUND)
+    if ((self.flags & FL_ONGROUND))
+    {
         self.flags = self.flags - FL_ONGROUND;
+    }
 };
 void() demon1_jump5  = [ $leap5,  demon1_jump6  ] {};
 void() demon1_jump6  = [ $leap6,  demon1_jump7  ] {};
@@ -141,16 +147,22 @@ void() demon1_pain6 = [ $pain6, demon1_run1  ] {};
 void(entity attacker, float damage) demon1_pain =
 {
     if (self.touch == Demon_JumpTouch)
+    {
         return;
+    }
 
     if (self.pain_finished > time)
+    {
         return;
+    }
 
     self.pain_finished = time + 1;
     sound(self, CHAN_VOICE, "demon/dpain1.wav", 1, ATTN_NORM);
 
-    if (random() * 200 > damage)
+    if ((random() * 200) > damage)
+    {
         return; // didn't flinch
+    }
 
     demon1_pain1();
 };
@@ -268,10 +280,14 @@ float() CheckDemonJump =
     local vector dist;
     local float d;
 
-    if (self.origin_z + self.mins_z > self.enemy.origin_z + self.enemy.mins_z + 0.75 * self.enemy.size_z)
+    if ((self.origin_z + self.mins_z) > (self.enemy.origin_z + self.enemy.mins_z + (0.75 * self.enemy.size_z)))
+    {
         return FALSE;
-    if (self.origin_z + self.maxs_z < self.enemy.origin_z + self.enemy.mins_z + 0.25 * self.enemy.size_z)
+    }
+    if ((self.origin_z + self.maxs_z) < (self.enemy.origin_z + self.enemy.mins_z + (0.25 * self.enemy.size_z)))
+    {
         return FALSE;
+    }
 
     dist = self.enemy.origin - self.origin;
     dist_z = 0;
@@ -279,11 +295,15 @@ float() CheckDemonJump =
     d = vlen(dist);
 
     if (d < 100)
+    {
         return FALSE;
+    }
     if (d > 200)
     {
         if (random() < 0.9)
+        {
             return FALSE;
+        }
     }
 
     return TRUE;
@@ -322,10 +342,14 @@ void(float side) Demon_Melee =
 
     delta = self.enemy.origin - self.origin;
     if (vlen(delta) > 100)
+    {
         return;
+    }
 
     if (!CanDamage(self.enemy, self))
+    {
         return;
+    }
 
     sound(self, CHAN_WEAPON, "demon/dhit2.wav", 1, ATTN_NORM);
     ldmg = 10 + 5 * random();
@@ -341,7 +365,9 @@ void() Demon_JumpTouch =
     local float ldmg;
 
     if (self.health <= 0)
+    {
         return;
+    }
 
     if (other.takedamage)
     {
@@ -354,7 +380,7 @@ void() Demon_JumpTouch =
 
     if (!checkbottom(self))
     {
-        if (self.flags & FL_ONGROUND)
+        if ((self.flags & FL_ONGROUND))
         {
             // jump randomly to not get hung up
             //dprint("popjump\n");

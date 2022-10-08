@@ -116,7 +116,9 @@ void() old_thrash15 = [ $shake15, old_thrash16 ] {
     lightstyle(0, "m");
     self.cnt = self.cnt + 1;
     if (self.cnt != 3)
+    {
         self.think = old_thrash1;
+    }
 };
 void() old_thrash16 = [ $shake16, old_thrash17 ] { lightstyle(0, "g"); };
 void() old_thrash17 = [ $shake17, old_thrash18 ] { lightstyle(0, "c"); };
@@ -137,11 +139,15 @@ void() finale_1 =
     // find the intermission spot
     pos = find(world, classname, "info_intermission");
     if (!pos)
+    {
         error("no info_intermission");
+    }
 
     pl = find(world, classname, "misc_teleporttrain");
     if (!pl)
+    {
         error("no teleporttrain");
+    }
 
     remove(pl);
 
@@ -229,11 +235,17 @@ void() finale_4 =
 
                 r = random();
                 if (r < 0.3)
+                {
                     ThrowGib("progs/gib1.mdl", -999);
+                }
                 else if (r < 0.6)
+                {
                     ThrowGib("progs/gib2.mdl", -999);
+                }
                 else
+                {
                     ThrowGib("progs/gib3.mdl", -999);
+                }
 
                 y = y + 32;
             }

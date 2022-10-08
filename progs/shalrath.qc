@@ -48,7 +48,9 @@ void() shal_stand = [ $walk1, shal_stand ] { ai_stand(); };
 
 void() shal_walk1  = [ $walk2,  shal_walk2  ] {
     if (random() < 0.2)
+    {
         sound(self, CHAN_VOICE, "shalrath/idle.wav", 1, ATTN_IDLE);
+    }
     ai_walk(6);
 };
 void() shal_walk2  = [ $walk3,  shal_walk3  ] { ai_walk(4); };
@@ -65,7 +67,9 @@ void() shal_walk12 = [ $walk1,  shal_walk1  ] { ai_walk(5); };
 
 void() shal_run1  = [ $walk2,  shal_run2  ] {
     if (random() < 0.2)
+    {
         sound(self, CHAN_VOICE, "shalrath/idle.wav", 1, ATTN_IDLE);
+    }
     ai_run(6);
 };
 void() shal_run2  = [ $walk3,  shal_run3  ] { ai_run(4); };
@@ -109,7 +113,9 @@ void() shal_death7 = [ $death7, shal_death7 ] {};
 void(entity attacker, float damage) shalrath_pain =
 {
     if (self.pain_finished > time)
+    {
         return;
+    }
 
     sound(self, CHAN_VOICE, "shalrath/pain.wav", 1, ATTN_NORM);
     shal_pain1();
@@ -155,7 +161,9 @@ void() ShalMissile =
     dist = vlen(self.enemy.origin - self.origin);
     flytime = dist * 0.002;
     if (flytime < 0.1)
+    {
         flytime = 0.1;
+    }
 
     self.effects = self.effects | EF_MUZZLEFLASH;
     sound(self, CHAN_WEAPON, "shalrath/attack2.wav", 1, ATTN_NORM);
@@ -193,9 +201,13 @@ void() ShalHome =
 
     dir = normalize(vtemp - self.origin);
     if (skill == 3)
+    {
         self.velocity = dir * 350;
+    }
     else
+    {
         self.velocity = dir * 250;
+    }
 
     self.nextthink = time + 0.2;
     self.think = ShalHome;
@@ -205,10 +217,14 @@ void() ShalHome =
 void() ShalMissileTouch =
 {
     if (other == self.owner)
+    {
         return; // don't explode on owner
+    }
 
     if (other.classname == "monster_zombie")
+    {
         T_Damage(other, self, self, 110);
+    }
     T_RadiusDamage(self, self.owner, 40, world);
     sound(self, CHAN_WEAPON, "weapons/r_exp3.wav", 1, ATTN_NORM);
 

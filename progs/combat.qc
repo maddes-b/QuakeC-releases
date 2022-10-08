@@ -34,28 +34,42 @@ float(entity targ, entity inflictor) CanDamage =
     {
         traceline(inflictor.origin, 0.5 * (targ.absmin + targ.absmax), TRUE, self);
         if (trace_fraction == 1)
+        {
             return TRUE;
+        }
         if (trace_ent == targ)
+        {
             return TRUE;
+        }
 
         return FALSE;
     }
 
     traceline(inflictor.origin, targ.origin, TRUE, self);
     if (trace_fraction == 1)
+    {
         return TRUE;
+    }
     traceline(inflictor.origin, targ.origin + '15 15 0', TRUE, self);
     if (trace_fraction == 1)
+    {
         return TRUE;
+    }
     traceline(inflictor.origin, targ.origin + '-15 -15 0', TRUE, self);
     if (trace_fraction == 1)
+    {
         return TRUE;
+    }
     traceline(inflictor.origin, targ.origin + '-15 15 0', TRUE, self);
     if (trace_fraction == 1)
+    {
         return TRUE;
+    }
     traceline(inflictor.origin, targ.origin + '15 -15 0', TRUE, self);
     if (trace_fraction == 1)
+    {
         return TRUE;
+    }
 
     return FALSE;
 };
@@ -74,7 +88,9 @@ void(entity targ, entity attacker) Killed =
     self = targ;
 
     if (self.health < -99)
+    {
         self.health = -99; // don't let sbar look bad if a player
+    }
 
     if (self.movetype == MOVETYPE_PUSH || self.movetype == MOVETYPE_NONE)
     {
@@ -87,7 +103,7 @@ void(entity targ, entity attacker) Killed =
     self.enemy = attacker;
 
     // bump the monster counter
-    if (self.flags & FL_MONSTER)
+    if ((self.flags & FL_MONSTER))
     {
         killed_monsters = killed_monsters + 1;
         WriteByte(MSG_ALL, SVC_KILLEDMONSTER);
@@ -121,14 +137,18 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
     local float take;
 
     if (!targ.takedamage)
+    {
         return;
+    }
 
     // used by buttons and triggers to set activator for target firing
     damage_attacker = attacker;
 
     // check for quad damage powerup on the attacker
     if (attacker.super_damage_finished > time)
+    {
         damage = damage * 4;
+    }
 
     // save damage based on the target's armor level
     save = ceil(targ.armortype * damage);
@@ -145,7 +165,7 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
     // add to the damage total for clients, which will be sent as a single
     // message at the end of the frame
     // FIXME: remove after combining shotgun blasts?
-    if (targ.flags & FL_CLIENT)
+    if ((targ.flags & FL_CLIENT))
     {
         targ.dmg_take = targ.dmg_take + take;
         targ.dmg_save = targ.dmg_save + save;
@@ -153,7 +173,7 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
     }
 
     // figure momentum add
-    if ((inflictor != world) && (targ.movetype == MOVETYPE_WALK))
+    if (inflictor != world && targ.movetype == MOVETYPE_WALK)
     {
         dir = targ.origin - (inflictor.absmin + inflictor.absmax) * 0.5;
         dir = normalize(dir);
@@ -161,8 +181,10 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
     }
 
     // check for godmode or invincibility
-    if (targ.flags & FL_GODMODE)
+    if ((targ.flags & FL_GODMODE))
+    {
         return;
+    }
     if (targ.invincible_finished >= time)
     {
         if (self.invincible_sound < time)
@@ -174,8 +196,10 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
     }
 
     // team play damage avoidance
-    if ((teamplay == 1) && (targ.team > 0) && (targ.team == attacker.team))
+    if (teamplay == 1 && targ.team > 0 && targ.team == attacker.team)
+    {
         return;
+    }
 
     // do the damage
     targ.health = targ.health - take;
@@ -195,11 +219,13 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
         // get mad unless of the same class (except for soldiers)
         if (self != attacker && attacker != self.enemy)
         {
-            if ((self.classname != attacker.classname)
-                || (self.classname == "monster_army"))
+            if (self.classname != attacker.classname
+                || self.classname == "monster_army")
             {
                 if (self.enemy.classname == "player")
+                {
                     self.oldenemy = self.enemy;
+                }
                 self.enemy = attacker;
                 FoundTarget();
             }
@@ -211,7 +237,9 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
         self.th_pain(attacker, take);
         // nightmare mode monsters don't go into pain frames often
         if (skill == 3)
+        {
             self.pain_finished = time + 5;
+        }
     }
 
     self = oldself;
@@ -240,19 +268,27 @@ void(entity inflictor, entity attacker, float damage, entity ignore) T_RadiusDam
                 org = head.origin + (head.mins + head.maxs) * 0.5;
                 points = 0.5 * vlen(inflictor.origin - org);
                 if (points < 0)
+                {
                     points = 0;
+                }
                 points = damage - points;
                 if (head == attacker)
+                {
                     points = points * 0.5;
+                }
                 if (points > 0)
                 {
                     if (CanDamage(head, inflictor))
                     {
                         // shambler takes half damage from all explosions
                         if (head.classname == "monster_shambler")
+                        {
                             T_Damage(head, inflictor, attacker, points * 0.5);
+                        }
                         else
+                        {
                             T_Damage(head, inflictor, attacker, points);
+                        }
                     }
                 }
             }
@@ -280,18 +316,26 @@ void(entity attacker, float damage) T_BeamDamage =
         {
             points = 0.5 * vlen(attacker.origin - head.origin);
             if (points < 0)
+            {
                 points = 0;
+            }
             points = damage - points;
             if (head == attacker)
+            {
                 points = points * 0.5;
+            }
             if (points > 0)
             {
                 if (CanDamage(head, attacker))
                 {
                     if (head.classname == "monster_shambler")
+                    {
                         T_Damage(head, attacker, attacker, points * 0.5);
+                    }
                     else
+                    {
                         T_Damage(head, attacker, attacker, points);
+                    }
                 }
             }
         }

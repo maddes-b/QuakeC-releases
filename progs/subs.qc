@@ -36,9 +36,13 @@ just constant angles.
 void() SetMovedir =
 {
     if (self.angles == '0 -1 0')
+    {
         self.movedir = '0 0 1';
+    }
     else if (self.angles == '0 -2 0')
+    {
         self.movedir = '0 0 -1';
+    }
     else
     {
         makevectors(self.angles);
@@ -59,7 +63,9 @@ void() InitTrigger =
     // trigger angles are used for one-way touches.  An angle of 0 is assumed
     // to mean no restrictions, so use a yaw of 360 instead.
     if (self.angles != '0 0 0')
+    {
         SetMovedir();
+    }
     self.solid = SOLID_TRIGGER;
     setmodel(self, self.model); // set size and link into world
     self.movetype = MOVETYPE_NONE;
@@ -99,7 +105,9 @@ void(vector tdest, float tspeed, void() func) SUB_CalcMove =
     local float len, traveltime;
 
     if (!tspeed)
+    {
         objerror("No speed is defined!");
+    }
 
     self.think1 = func;
     self.finaldest = tdest;
@@ -147,7 +155,9 @@ void() SUB_CalcMoveDone =
     self.velocity = '0 0 0';
     self.nextthink = -1;
     if (self.think1)
+    {
         self.think1();
+    }
 };
 
 
@@ -178,7 +188,9 @@ void(vector destangle, float tspeed, void() func) SUB_CalcAngleMove =
     local float len, traveltime;
 
     if (!tspeed)
+    {
         objerror("No speed is defined!");
+    }
 
     // set destdelta to the vector needed to move
     destdelta = destangle - self.angles;
@@ -212,7 +224,9 @@ void() SUB_CalcAngleMoveDone =
     self.avelocity = '0 0 0';
     self.nextthink = -1;
     if (self.think1)
+    {
         self.think1();
+    }
 };
 
 
@@ -273,7 +287,9 @@ void() SUB_UseTargets =
     {
         centerprint(activator, self.message);
         if (!self.noise)
+        {
             sound(activator, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
+        }
     }
 
     //
@@ -286,7 +302,9 @@ void() SUB_UseTargets =
         {
             t = find(t, targetname, self.killtarget);
             if (!t)
+            {
                 return;
+            }
 
             remove(t);
         } while (TRUE);
@@ -314,7 +332,9 @@ void() SUB_UseTargets =
             if (self.use != SUB_Null)
             {
                 if (self.use)
+                {
                     self.use();
+                }
             }
             self = stemp;
             other = otemp;
@@ -332,20 +352,28 @@ void(float normal) SUB_AttackFinished =
 {
     self.cnt = 0; // refire count for nightmare
     if (skill != 3)
+    {
         self.attack_finished = time + normal;
+    }
 };
 
 
 void(void() thinkst) SUB_CheckRefire =
 {
     if (skill != 3)
+    {
         return;
+    }
 
     if (self.cnt == 1)
+    {
         return;
+    }
 
     if (!visible(self.enemy))
+    {
         return;
+    }
 
     self.cnt = 1;
     self.think = thinkst;

@@ -65,16 +65,22 @@ void() dog_bite =
     local float ldmg;
 
     if (!self.enemy)
+    {
         return;
+    }
 
     ai_charge(10);
 
     if (!CanDamage(self.enemy, self))
+    {
         return;
+    }
 
     delta = self.enemy.origin - self.origin;
     if (vlen(delta) > 100)
+    {
         return;
+    }
 
     ldmg = (random() + random() + random()) * 8;
     T_Damage(self.enemy, self, self, ldmg);
@@ -86,7 +92,9 @@ void() Dog_JumpTouch =
     local float ldmg;
 
     if (self.health <= 0)
+    {
         return;
+    }
 
     if (other.takedamage)
     {
@@ -99,7 +107,7 @@ void() Dog_JumpTouch =
 
     if (!checkbottom(self))
     {
-        if (self.flags & FL_ONGROUND)
+        if ((self.flags & FL_ONGROUND))
         {
             // jump randomly to not get hung up
             //dprint("popjump\n");
@@ -133,7 +141,9 @@ void() dog_stand9 = [ $stand9, dog_stand1 ] { ai_stand(); };
 
 void() dog_walk1 = [ $walk1, dog_walk2 ] {
     if (random() < 0.2)
+    {
         sound(self, CHAN_VOICE, "dog/idle.wav", 1, ATTN_IDLE);
+    }
     ai_walk(8);
 };
 void() dog_walk2 = [ $walk2, dog_walk3 ] { ai_walk(8); };
@@ -146,7 +156,9 @@ void() dog_walk8 = [ $walk8, dog_walk1 ] { ai_walk(8); };
 
 void() dog_run1  = [ $run1,  dog_run2  ] {
     if (random() < 0.2)
+    {
         sound(self, CHAN_VOICE, "dog/idle.wav", 1, ATTN_IDLE);
+    }
     ai_run(16);
 };
 void() dog_run2  = [ $run2,  dog_run3  ] { ai_run(32); };
@@ -178,8 +190,10 @@ void() dog_leap2 = [ $leap2, dog_leap3 ] {
     makevectors(self.angles);
     self.origin_z = self.origin_z + 1;
     self.velocity = v_forward * 300 + '0 0 200';
-    if (self.flags & FL_ONGROUND)
+    if ((self.flags & FL_ONGROUND))
+    {
         self.flags = self.flags - FL_ONGROUND;
+    }
 };
 void() dog_leap3 = [ $leap3, dog_leap4 ] {};
 void() dog_leap4 = [ $leap4, dog_leap5 ] {};
@@ -218,9 +232,13 @@ void(entity attacker, float damage) dog_pain =
     sound(self, CHAN_VOICE, "dog/dpain1.wav", 1, ATTN_NORM);
 
     if (random() > 0.5)
+    {
         dog_pain1();
+    }
     else
+    {
         dog_painb1();
+    }
 };
 
 
@@ -262,9 +280,13 @@ void() dog_die =
     self.solid = SOLID_NOT;
 
     if (random() > 0.5)
+    {
         dog_die1();
+    }
     else
+    {
         dog_dieb1();
+    }
 };
 
 
@@ -300,10 +322,14 @@ float() CheckDogJump =
     local vector dist;
     local float d;
 
-    if (self.origin_z + self.mins_z > self.enemy.origin_z + self.enemy.mins_z + 0.75 * self.enemy.size_z)
+    if ((self.origin_z + self.mins_z) > (self.enemy.origin_z + self.enemy.mins_z + (0.75 * self.enemy.size_z)))
+    {
         return FALSE;
-    if (self.origin_z + self.maxs_z < self.enemy.origin_z + self.enemy.mins_z + 0.25 * self.enemy.size_z)
+    }
+    if ((self.origin_z + self.maxs_z) < (self.enemy.origin_z + self.enemy.mins_z + (0.25 * self.enemy.size_z)))
+    {
         return FALSE;
+    }
 
     dist = self.enemy.origin - self.origin;
     dist_z = 0;
@@ -311,9 +337,13 @@ float() CheckDogJump =
     d = vlen(dist);
 
     if (d < 80)
+    {
         return FALSE;
+    }
     if (d > 150)
+    {
         return FALSE;
+    }
 
     return TRUE;
 };

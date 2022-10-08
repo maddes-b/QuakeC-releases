@@ -120,12 +120,14 @@ void() Tar_JumpTouch =
         }
     }
     else
+    {
         sound(self, CHAN_WEAPON, "blob/land1.wav", 1, ATTN_NORM);
+    }
 
 
     if (!checkbottom(self))
     {
-        if (self.flags & FL_ONGROUND)
+        if ((self.flags & FL_ONGROUND))
         {
             // jump randomly to not get hung up
             //dprint("popjump\n");
@@ -173,8 +175,10 @@ void() tbaby_jump5 = [ $jump5, tbaby_jump6 ] {
     self.origin_z = self.origin_z + 1;
     self.velocity = v_forward * 600 + '0 0 200';
     self.velocity_z = self.velocity_z + random() * 150;
-    if (self.flags & FL_ONGROUND)
+    if ((self.flags & FL_ONGROUND))
+    {
         self.flags = self.flags - FL_ONGROUND;
+    }
     self.cnt = 0;
 };
 void() tbaby_jump6 = [ $jump6, tbaby_fly1  ] {};

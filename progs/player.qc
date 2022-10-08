@@ -112,13 +112,17 @@ void() player_stand1 = [ $axstnd1, player_stand1 ] {
     if (self.weapon == IT_AXE)
     {
         if (self.walkframe >= 12)
+        {
             self.walkframe = 0;
+        }
         self.frame = $axstnd1 + self.walkframe;
     }
     else
     {
         if (self.walkframe >= 5)
+        {
             self.walkframe = 0;
+        }
         self.frame = $stand1 + self.walkframe;
     }
     self.walkframe = self.walkframe + 1;
@@ -137,13 +141,17 @@ void() player_run = [ $rockrun1, player_run ] {
     if (self.weapon == IT_AXE)
     {
         if (self.walkframe == 6)
+        {
             self.walkframe = 0;
+        }
         self.frame = $axrun1 + self.walkframe;
     }
     else
     {
         if (self.walkframe == 6)
+        {
             self.walkframe = 0;
+        }
         self.frame = self.frame + self.walkframe;
     }
     self.walkframe = self.walkframe + 1;
@@ -189,7 +197,9 @@ void() player_nail1 = [ $nailatt1, player_nail2 ] {
 
     self.weaponframe = self.weaponframe + 1;
     if (self.weaponframe == 9)
+    {
         self.weaponframe = 1;
+    }
 
     SuperDamageSound();
     W_FireSpikes(4);
@@ -206,7 +216,9 @@ void() player_nail2 = [ $nailatt2, player_nail1 ] {
 
     self.weaponframe = self.weaponframe + 1;
     if (self.weaponframe == 9)
+    {
         self.weaponframe = 1;
+    }
 
     SuperDamageSound();
     W_FireSpikes(-4);
@@ -226,7 +238,9 @@ void() player_light1 = [ $light1, player_light2 ] {
 
     self.weaponframe = self.weaponframe + 1;
     if (self.weaponframe == 5)
+    {
         self.weaponframe = 1;
+    }
 
     SuperDamageSound();
     W_FireLightning();
@@ -243,7 +257,9 @@ void() player_light2 = [ $light2, player_light1 ] {
 
     self.weaponframe = self.weaponframe + 1;
     if (self.weaponframe == 5)
+    {
         self.weaponframe = 1;
+    }
 
     SuperDamageSound();
     W_FireLightning();
@@ -267,7 +283,9 @@ void() PainSound =
     local float rs;
 
     if (self.health < 0)
+    {
         return;
+    }
 
     if (damage_attacker.classname == "teledeath")
     {
@@ -280,9 +298,13 @@ void() PainSound =
     {
         DeathBubbles(1);
         if (random() > 0.5)
+        {
             sound(self, CHAN_VOICE, "player/drown1.wav", 1, ATTN_NORM);
+        }
         else
+        {
             sound(self, CHAN_VOICE, "player/drown2.wav", 1, ATTN_NORM);
+        }
         return;
     }
 
@@ -291,18 +313,26 @@ void() PainSound =
     {
         // FIX ME put in some steam here
         if (random() > 0.5)
+        {
             sound(self, CHAN_VOICE, "player/lburn1.wav", 1, ATTN_NORM);
+        }
         else
+        {
             sound(self, CHAN_VOICE, "player/lburn2.wav", 1, ATTN_NORM);
+        }
         return;
     }
 
     if (self.watertype == CONTENT_LAVA)
     {
         if (random() > 0.5)
+        {
             sound(self, CHAN_VOICE, "player/lburn1.wav", 1, ATTN_NORM);
+        }
         else
+        {
             sound(self, CHAN_VOICE, "player/lburn2.wav", 1, ATTN_NORM);
+        }
         return;
     }
 
@@ -328,17 +358,29 @@ void() PainSound =
 
     self.noise = "";
     if (rs == 1)
+    {
         self.noise = "player/pain1.wav";
+    }
     else if (rs == 2)
+    {
         self.noise = "player/pain2.wav";
+    }
     else if (rs == 3)
+    {
         self.noise = "player/pain3.wav";
+    }
     else if (rs == 4)
+    {
         self.noise = "player/pain4.wav";
+    }
     else if (rs == 5)
+    {
         self.noise = "player/pain5.wav";
+    }
     else
+    {
         self.noise = "player/pain6.wav";
+    }
 
     sound(self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
     return;
@@ -362,14 +404,22 @@ void() player_axpain6 = [ $axpain6, player_run     ] {};
 void(entity attacker, float damage) player_pain =
 {
     if (self.weaponframe)
+    {
         return;
+    }
     if (self.invisible_finished > time)
+    {
         return; // eyes don't have pain frames
+    }
 
     if (self.weapon == IT_AXE)
+    {
         player_axpain1();
+    }
     else
+    {
         player_pain1();
+    }
 };
 
 
@@ -385,7 +435,9 @@ void() DeathBubblesSpawn =
     local entity bubble;
 
     if (self.owner.waterlevel != 3)
+    {
         return;
+    }
 
     bubble = spawn();
     setmodel(bubble, "progs/s_bubble.spr");
@@ -403,7 +455,9 @@ void() DeathBubblesSpawn =
     self.think = DeathBubblesSpawn;
     self.air_finished = self.air_finished + 1;
     if (self.air_finished >= self.bubble_count)
+    {
         remove(self);
+    }
 };
 
 
@@ -438,15 +492,25 @@ void() DeathSound =
 
     rs = rint((random() * 4) + 1);
     if (rs == 1)
+    {
         self.noise = "player/death1.wav";
+    }
     else if (rs == 2)
+    {
         self.noise = "player/death2.wav";
+    }
     else if (rs == 3)
+    {
         self.noise = "player/death3.wav";
+    }
     else if (rs == 4)
+    {
         self.noise = "player/death4.wav";
+    }
     else if (rs == 5)
+    {
         self.noise = "player/death5.wav";
+    }
 
     sound(self, CHAN_VOICE, self.noise, 1, ATTN_NONE);
     return;
@@ -480,7 +544,9 @@ vector(float dm) VelocityForDamage =
         v = v * 2;
     }
     else
+    {
         v = v * 10;
+    }
 
     return v;
 };
@@ -547,9 +613,13 @@ void() GibPlayer =
     }
 
     if (random() < 0.5)
+    {
         sound(self, CHAN_VOICE, "player/gib.wav", 1, ATTN_NONE);
+    }
     else
+    {
         sound(self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NONE);
+    }
 };
 
 
@@ -565,7 +635,9 @@ void() PlayerDie =
     self.modelindex = modelindex_player; // don't use eyes
 
     if (deathmatch || coop)
+    {
         DropBackpack();
+    }
 
     self.weaponmodel = "";
     self.view_ofs = '0 0 -8';
@@ -574,7 +646,9 @@ void() PlayerDie =
     self.flags = self.flags - (self.flags & FL_ONGROUND);
     self.movetype = MOVETYPE_TOSS;
     if (self.velocity_z < 10)
+    {
         self.velocity_z = self.velocity_z + random() * 300;
+    }
 
     if (self.health < -40)
     {
@@ -595,17 +669,29 @@ void() PlayerDie =
 
     i = cvar("temp1");
     if (!i)
+    {
         i = 1 + floor(random() * 6);
+    }
     if (i == 1)
+    {
         player_diea1();
+    }
     else if (i == 2)
+    {
         player_dieb1();
+    }
     else if (i == 3)
+    {
         player_diec1();
+    }
     else if (i == 4)
+    {
         player_died1();
+    }
     else
+    {
         player_diee1();
+    }
 };
 
 
@@ -613,7 +699,9 @@ void() set_suicide_frame =
 {
     // used by kill command and disconnect command
     if (self.model != "progs/player.mdl")
+    {
         return; // already gibbed
+    }
 
     self.frame = $deatha11;
     self.solid = SOLID_NOT;

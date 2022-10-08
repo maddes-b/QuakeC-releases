@@ -92,7 +92,9 @@ The number of seconds to spend standing or bowing for path_stand or path_bow
 void() movetarget_f =
 {
     if (!self.targetname)
+    {
         objerror("monster_movetarget: no targetname");
+    }
 
     self.solid = SOLID_TRIGGER;
     self.touch = t_movetarget;
@@ -122,16 +124,22 @@ void() t_movetarget =
     local entity temp;
 
     if (other.movetarget != self)
+    {
         return;
+    }
     if (other.enemy)
+    {
         return; // fighting, not following a path
+    }
 
     temp = self;
     self = other;
     other = temp;
 
     if (self.classname == "monster_ogre")
+    {
         sound(self, CHAN_VOICE, "ogre/ogdrag.wav", 1, ATTN_IDLE); // play chainsaw drag sound
+    }
 
     //dprint("t_movetarget\n");
     self.goalentity = self.movetarget = find(world, targetname, other.target);
@@ -168,11 +176,17 @@ float(entity targ) range =
 
     r = vlen(spot1 - spot2);
     if (r < 120)
+    {
         return RANGE_MELEE;
+    }
     if (r < 500)
+    {
         return RANGE_NEAR;
+    }
     if (r < 1000)
+    {
         return RANGE_MID;
+    }
 
     return RANGE_FAR;
 };
@@ -194,10 +208,14 @@ float(entity targ) visible =
     traceline(spot1, spot2, TRUE, self); // see through other monsters
 
     if (trace_inopen && trace_inwater)
+    {
         return FALSE; // sight line crossed contents
+    }
 
     if (trace_fraction == 1)
+    {
         return TRUE;
+    }
 
     return FALSE;
 };
@@ -251,29 +269,39 @@ void() ChangeYaw =
     ideal = self.ideal_yaw;
 
     if (current_yaw == ideal)
+    {
         return;
+    }
 
     move = ideal - current_yaw;
     if (ideal > current_yaw)
     {
         if (move > 180)
+        {
             move = move - 360;
+        }
     }
     else
     {
         if (move < -180)
+        {
             move = move + 360;
+        }
     }
 
     if (move > 0)
     {
         if (move > self.yaw_speed)
+        {
             move = self.yaw_speed;
+        }
     }
     else
     {
-        if (move < 0 - self.yaw_speed)
+        if (move < (0 - self.yaw_speed))
+        {
             move = 0 - self.yaw_speed;
+        }
     }
 
     current_yaw = anglemod(current_yaw + move);
@@ -300,41 +328,73 @@ void() SightSound =
     local float rsnd;
 
     if (self.classname == "monster_ogre")
+    {
         sound(self, CHAN_VOICE, "ogre/ogwake.wav", 1, ATTN_NORM);
+    }
     else if (self.classname == "monster_knight")
+    {
         sound(self, CHAN_VOICE, "knight/ksight.wav", 1, ATTN_NORM);
+    }
     else if (self.classname == "monster_shambler")
+    {
         sound(self, CHAN_VOICE, "shambler/ssight.wav", 1, ATTN_NORM);
+    }
     else if (self.classname == "monster_demon1")
+    {
         sound(self, CHAN_VOICE, "demon/sight2.wav", 1, ATTN_NORM);
+    }
     else if (self.classname == "monster_wizard")
+    {
         sound(self, CHAN_VOICE, "wizard/wsight.wav", 1, ATTN_NORM);
+    }
     else if (self.classname == "monster_zombie")
+    {
         sound(self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_NORM);
+    }
     else if (self.classname == "monster_dog")
+    {
         sound(self, CHAN_VOICE, "dog/dsight.wav", 1, ATTN_NORM);
+    }
     else if (self.classname == "monster_hell_knight")
+    {
         sound(self, CHAN_VOICE, "hknight/sight1.wav", 1, ATTN_NORM);
+    }
     else if (self.classname == "monster_tarbaby")
+    {
         sound(self, CHAN_VOICE, "blob/sight1.wav", 1, ATTN_NORM);
+    }
     else if (self.classname == "monster_vomit")
+    {
         sound(self, CHAN_VOICE, "vomitus/v_sight1.wav", 1, ATTN_NORM);
+    }
     else if (self.classname == "monster_enforcer")
     {
         rsnd = rint(random() * 3);
         if (rsnd == 1)
+        {
             sound(self, CHAN_VOICE, "enforcer/sight1.wav", 1, ATTN_NORM);
+        }
         else if (rsnd == 2)
+        {
             sound(self, CHAN_VOICE, "enforcer/sight2.wav", 1, ATTN_NORM);
+        }
         else if (rsnd == 0)
+        {
             sound(self, CHAN_VOICE, "enforcer/sight3.wav", 1, ATTN_NORM);
+        }
         else
+        {
             sound(self, CHAN_VOICE, "enforcer/sight4.wav", 1, ATTN_NORM);
+        }
     }
     else if (self.classname == "monster_army")
+    {
         sound(self, CHAN_VOICE, "soldier/sight1.wav", 1, ATTN_NORM);
+    }
     else if (self.classname == "monster_shalrath")
+    {
         sound(self, CHAN_VOICE, "shalrath/sight.wav", 1, ATTN_NORM);
+    }
 };
 
 
@@ -382,42 +442,60 @@ float() FindTarget =
     // spawnflags & 3 is a big hack, because zombie crucified used the first
     // spawn flag prior to the ambush flag, and I forgot about it, so the second
     // spawn flag works as well
-    if (sight_entity_time >= time - 0.1 && !(self.spawnflags & 3))
+    if (sight_entity_time >= (time - 0.1) && !(self.spawnflags & 3))
     {
         client = sight_entity;
         if (client.enemy == self.enemy)
+        {
             return;
+        }
     }
     else
     {
         client = checkclient();
         if (!client)
+        {
             return FALSE; // current check entity isn't in PVS
+        }
     }
 
     if (client == self.enemy)
+    {
         return FALSE;
-    if (client.flags & FL_NOTARGET)
+    }
+    if ((client.flags & FL_NOTARGET))
+    {
         return FALSE;
-    if (client.items & IT_INVISIBILITY)
+    }
+    if ((client.items & IT_INVISIBILITY))
+    {
         return FALSE;
+    }
 
     r = range(client);
     if (r == RANGE_FAR)
+    {
         return FALSE;
+    }
 
     if (!visible(client))
+    {
         return FALSE;
+    }
 
     if (r == RANGE_NEAR)
     {
         if (client.show_hostile < time && !infront(client))
+        {
             return FALSE;
+        }
     }
     else if (r == RANGE_MID)
     {
         if ( /* client.show_hostile < time || */ !infront(client))
+        {
             return FALSE;
+        }
     }
 
     //
@@ -507,7 +585,9 @@ void(float dist) ai_walk =
 
     // check for noticing a player
     if (FindTarget())
+    {
         return;
+    }
 
     movetogoal(dist);
 };
@@ -523,7 +603,9 @@ The monster is staying in one place for a while, with slight angle turns
 void() ai_stand =
 {
     if (FindTarget())
+    {
         return;
+    }
 
     if (time > self.pausetime)
     {
@@ -545,7 +627,9 @@ don't move, but turn towards ideal_yaw
 void() ai_turn =
 {
     if (FindTarget())
+    {
         return;
+    }
 
     ChangeYaw();
 };
@@ -568,7 +652,7 @@ void(vector dest3) ChooseTurn =
     newdir_y = 0 - trace_plane_normal_x;
     newdir_z = 0;
 
-    if (dir * newdir > 0)
+    if ((dir * newdir) > 0)
     {
         dir_x = 0 - trace_plane_normal_y;
         dir_y = trace_plane_normal_x;
@@ -595,7 +679,9 @@ float() FacingIdeal =
 
     delta = anglemod(self.angles_y - self.ideal_yaw);
     if (delta > 45 && delta < 315)
+    {
         return FALSE;
+    }
 
     return TRUE;
 };
@@ -606,20 +692,34 @@ float() FacingIdeal =
 float() CheckAnyAttack =
 {
     if (!enemy_vis)
+    {
         return;
+    }
 
     if (self.classname == "monster_army")
+    {
         return SoldierCheckAttack();
+    }
     if (self.classname == "monster_ogre")
+    {
         return OgreCheckAttack();
+    }
     if (self.classname == "monster_shambler")
+    {
         return ShamCheckAttack();
+    }
     if (self.classname == "monster_demon1")
+    {
         return DemonCheckAttack();
+    }
     if (self.classname == "monster_dog")
+    {
         return DogCheckAttack();
+    }
     if (self.classname == "monster_wizard")
+    {
         return WizardCheckAttack();
+    }
 
     return CheckAttack();
 };
@@ -678,12 +778,18 @@ void() ai_run_slide =
     self.ideal_yaw = enemy_yaw;
     ChangeYaw();
     if (self.lefty)
+    {
         ofs = 90;
+    }
     else
+    {
         ofs = -90;
+    }
 
     if (walkmove(self.ideal_yaw + ofs, movedist))
+    {
         return;
+    }
 
     self.lefty = 1 - self.lefty;
 
@@ -714,9 +820,13 @@ void(float dist) ai_run =
         else
         {
             if (self.movetarget)
+            {
                 self.th_walk();
+            }
             else
+            {
                 self.th_stand();
+            }
             return;
         }
     }
@@ -726,13 +836,17 @@ void(float dist) ai_run =
     // check knowledge of enemy
     enemy_vis = visible(self.enemy);
     if (enemy_vis)
+    {
         self.search_time = time + 5;
+    }
 
     // look for other coop players
     if (coop && self.search_time < time)
     {
         if (FindTarget())
+        {
             return;
+        }
     }
 
     enemy_infront = infront(self.enemy);
@@ -754,7 +868,9 @@ void(float dist) ai_run =
     }
 
     if (CheckAnyAttack())
+    {
         return; // beginning an attack
+    }
 
     if (self.attack_state == AS_SLIDING)
     {

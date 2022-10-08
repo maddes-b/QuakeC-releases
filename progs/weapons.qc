@@ -57,7 +57,9 @@ void() W_FireAxe =
     source = self.origin + '0 0 16';
     traceline(source, source + v_forward * 64, FALSE, self);
     if (trace_fraction == 1.0)
+    {
         return;
+    }
 
     org = trace_endpos - v_forward * 4;
 
@@ -186,7 +188,9 @@ void() ClearMultiDamage =
 void() ApplyMultiDamage =
 {
     if (!multi_ent)
+    {
         return;
+    }
 
     T_Damage(multi_ent, self, self, multi_damage);
 };
@@ -195,7 +199,9 @@ void() ApplyMultiDamage =
 void(entity hit, float damage) AddMultiDamage =
 {
     if (!hit)
+    {
         return;
+    }
 
     if (hit != multi_ent)
     {
@@ -204,7 +210,9 @@ void(entity hit, float damage) AddMultiDamage =
         multi_ent = hit;
     }
     else
+    {
         multi_damage = multi_damage + damage;
+    }
 };
 
 
@@ -272,7 +280,9 @@ void(float shotcount, vector dir, vector spread) FireBullets =
 
         traceline(src, src + direction * 2048, FALSE, self);
         if (trace_fraction != 1.0)
+        {
             TraceAttack(4, direction);
+        }
 
         shotcount = shotcount - 1;
     }
@@ -355,7 +365,9 @@ void() T_MissileTouch =
     local float damg;
 
     if (other == self.owner)
+    {
         return; // don't explode on owner
+    }
 
     if (pointcontents(self.origin) == CONTENT_SKY)
     {
@@ -368,7 +380,9 @@ void() T_MissileTouch =
     if (other.health)
     {
         if (other.classname == "monster_shambler")
+        {
             damg = damg * 0.5; // mostly immune
+        }
         T_Damage(other, self, self.owner, damg);
     }
 
@@ -462,7 +476,9 @@ void(vector p1, vector p2, entity from, float damage) LightningDamage =
         if (self.classname == "player")
         {
             if (other.classname == "player")
+            {
                 trace_ent.velocity_z = trace_ent.velocity_z + 400;
+            }
         }
     }
     e1 = trace_ent;
@@ -549,7 +565,9 @@ void() GrenadeExplode =
 void() GrenadeTouch =
 {
     if (other == self.owner)
+    {
         return; // don't explode on owner
+    }
 
     if (other.takedamage == DAMAGE_AIM)
     {
@@ -560,7 +578,9 @@ void() GrenadeTouch =
     sound(self, CHAN_WEAPON, "weapons/bounce.wav", 1, ATTN_NORM); // bounce sound
 
     if (self.velocity == '0 0 0')
+    {
         self.avelocity = '0 0 0';
+    }
 };
 
 
@@ -588,7 +608,9 @@ void() W_FireGrenade =
     // set missile speed
     makevectors(self.v_angle);
     if (self.v_angle_x)
+    {
         missile.velocity = v_forward * 600 + v_up * 200 + crandom() * v_right * 10 + crandom() * v_up * 10;
+    }
     else
     {
         missile.velocity = aim(self, 10000);
@@ -693,9 +715,13 @@ void(float ox) W_FireSpikes =
 void() spike_touch =
 {
     if (other == self.owner)
+    {
         return;
+    }
     if (other.solid == SOLID_TRIGGER)
+    {
         return; // trigger field, do nothing
+    }
 
     if (pointcontents(self.origin) == CONTENT_SKY)
     {
@@ -713,11 +739,17 @@ void() spike_touch =
     {
         WriteByte(MSG_BROADCAST, SVC_TEMPENTITY);
         if (self.classname == "wizspike")
+        {
             WriteByte(MSG_BROADCAST, TE_WIZSPIKE);
+        }
         else if (self.classname == "knightspike")
+        {
             WriteByte(MSG_BROADCAST, TE_KNIGHTSPIKE);
+        }
         else
+        {
             WriteByte(MSG_BROADCAST, TE_SPIKE);
+        }
         WriteCoord(MSG_BROADCAST, self.origin_x);
         WriteCoord(MSG_BROADCAST, self.origin_y);
         WriteCoord(MSG_BROADCAST, self.origin_z);
@@ -730,9 +762,13 @@ void() spike_touch =
 void() superspike_touch =
 {
     if (other == self.owner)
+    {
         return;
+    }
     if (other.solid == SOLID_TRIGGER)
+    {
         return; // trigger field, do nothing
+    }
 
     if (pointcontents(self.origin) == CONTENT_SKY)
     {
@@ -844,20 +880,34 @@ float() W_BestWeapon =
     it = self.items;
 
     if (self.ammo_cells >= 1 && (it & IT_LIGHTNING))
+    {
         return IT_LIGHTNING;
+    }
     if (self.ammo_nails >= 2 && (it & IT_SUPER_NAILGUN))
+    {
         return IT_SUPER_NAILGUN;
+    }
     if (self.ammo_shells >= 2 && (it & IT_SUPER_SHOTGUN))
+    {
         return IT_SUPER_SHOTGUN;
+    }
     if (self.ammo_nails >= 1 && (it & IT_NAILGUN))
+    {
         return IT_NAILGUN;
+    }
     if (self.ammo_shells >= 1 && (it & IT_SHOTGUN))
+    {
         return IT_SHOTGUN;
+    }
     /*
     if (self.ammo_rockets >= 1 && (it & IT_ROCKET_LAUNCHER))
+    {
         return IT_ROCKET_LAUNCHER;
+    }
     if (self.ammo_rockets >= 1 && (it & IT_GRENADE_LAUNCHER))
+    {
         return IT_GRENADE_LAUNCHER;
+    }
     */
 
     return IT_AXE;
@@ -867,10 +917,14 @@ float() W_BestWeapon =
 float() W_CheckNoAmmo =
 {
     if (self.currentammo > 0)
+    {
         return TRUE; // has at least one ammo
+    }
 
     if (self.weapon == IT_AXE)
+    {
         return TRUE; // weapon doesn't need ammo
+    }
 
     self.weapon = W_BestWeapon();
 
@@ -893,7 +947,9 @@ void() W_Attack =
     local float r;
 
     if (!W_CheckNoAmmo())
+    {
         return;
+    }
 
     makevectors(self.v_angle); // calculate forward angle for velocity
     self.show_hostile = time + 1; // wake monsters up
@@ -903,13 +959,21 @@ void() W_Attack =
         sound(self, CHAN_WEAPON, "weapons/ax1.wav", 1, ATTN_NORM);
         r = random();
         if (r < 0.25)
+        {
             player_axe1();
+        }
         else if (r < 0.5)
+        {
             player_axeb1();
+        }
         else if (r < 0.75)
+        {
             player_axec1();
+        }
         else
+        {
             player_axed1();
+        }
         self.attack_finished = time + 0.5;
     }
     else if (self.weapon == IT_SHOTGUN)
@@ -973,43 +1037,57 @@ void() W_ChangeWeapon =
     {
         fl = IT_SHOTGUN;
         if (self.ammo_shells < 1)
+        {
             am = TRUE;
+        }
     }
     else if (self.impulse == 3)
     {
         fl = IT_SUPER_SHOTGUN;
         if (self.ammo_shells < 2)
+        {
             am = TRUE;
+        }
     }
     else if (self.impulse == 4)
     {
         fl = IT_NAILGUN;
         if (self.ammo_nails < 1)
+        {
             am = TRUE;
+        }
     }
     else if (self.impulse == 5)
     {
         fl = IT_SUPER_NAILGUN;
         if (self.ammo_nails < 2)
+        {
             am = TRUE;
+        }
     }
     else if (self.impulse == 6)
     {
         fl = IT_GRENADE_LAUNCHER;
         if (self.ammo_rockets < 1)
+        {
             am = TRUE;
+        }
     }
     else if (self.impulse == 7)
     {
         fl = IT_ROCKET_LAUNCHER;
         if (self.ammo_rockets < 1)
+        {
             am = TRUE;
+        }
     }
     else if (self.impulse == 8)
     {
         fl = IT_LIGHTNING;
         if (self.ammo_cells < 1)
+        {
             am = TRUE;
+        }
     }
 
     self.impulse = 0;
@@ -1044,7 +1122,9 @@ CheatCommand
 void() CheatCommand =
 {
     if (deathmatch || coop)
+    {
         return;
+    }
 
     self.ammo_rockets = 100;
     self.ammo_nails = 200;
@@ -1094,43 +1174,57 @@ void() CycleWeaponCommand =
         {
             self.weapon = IT_SHOTGUN;
             if (self.ammo_shells < 1)
+            {
                 am = TRUE;
+            }
         }
         else if (self.weapon == IT_SHOTGUN)
         {
             self.weapon = IT_SUPER_SHOTGUN;
             if (self.ammo_shells < 2)
+            {
                 am = TRUE;
+            }
         }
         else if (self.weapon == IT_SUPER_SHOTGUN)
         {
             self.weapon = IT_NAILGUN;
             if (self.ammo_nails < 1)
+            {
                 am = TRUE;
+            }
         }
         else if (self.weapon == IT_NAILGUN)
         {
             self.weapon = IT_SUPER_NAILGUN;
             if (self.ammo_nails < 2)
+            {
                 am = TRUE;
+            }
         }
         else if (self.weapon == IT_SUPER_NAILGUN)
         {
             self.weapon = IT_GRENADE_LAUNCHER;
             if (self.ammo_rockets < 1)
+            {
                 am = TRUE;
+            }
         }
         else if (self.weapon == IT_GRENADE_LAUNCHER)
         {
             self.weapon = IT_ROCKET_LAUNCHER;
             if (self.ammo_rockets < 1)
+            {
                 am = TRUE;
+            }
         }
         else if (self.weapon == IT_ROCKET_LAUNCHER)
         {
             self.weapon = IT_LIGHTNING;
             if (self.ammo_cells < 1)
+            {
                 am = TRUE;
+            }
         }
 
         if ((self.items & self.weapon) && am == FALSE)
@@ -1158,7 +1252,9 @@ void() ServerflagsCommand =
 void() QuadCheat =
 {
     if (deathmatch || coop)
+    {
         return;
+    }
 
     self.super_time = 1;
     self.super_damage_finished = time + 30;
@@ -1175,15 +1271,25 @@ ImpulseCommands
 void() ImpulseCommands =
 {
     if (self.impulse >= 1 && self.impulse <= 8)
+    {
         W_ChangeWeapon();
+    }
     else if (self.impulse == 9)
+    {
         CheatCommand();
+    }
     else if (self.impulse == 10)
+    {
         CycleWeaponCommand();
+    }
     else if (self.impulse == 11)
+    {
         ServerflagsCommand();
+    }
     else if (self.impulse == 255)
+    {
         QuadCheat();
+    }
 
     self.impulse = 0;
 };
@@ -1199,7 +1305,9 @@ Called every frame so impulse events can be handled as well as possible
 void() W_WeaponFrame =
 {
     if (time < self.attack_finished)
+    {
         return;
+    }
 
     ImpulseCommands();
 

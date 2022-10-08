@@ -44,7 +44,9 @@ void() button_return =
     SUB_CalcMove(self.pos1, self.speed, button_done);
     self.frame = 0; // use normal textures
     if (self.health)
+    {
         self.takedamage = DAMAGE_YES; // can be shot again
+    }
 };
 
 
@@ -57,7 +59,9 @@ void() button_blocked =
 void() button_fire =
 {
     if (self.state == STATE_UP || self.state == STATE_TOP)
+    {
         return;
+    }
 
     sound(self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
 
@@ -76,7 +80,9 @@ void() button_use =
 void() button_touch =
 {
     if (other.classname != "player")
+    {
         return;
+    }
 
     self.enemy = other;
     button_fire();
@@ -146,14 +152,22 @@ void() func_button =
         self.takedamage = DAMAGE_YES;
     }
     else
+    {
         self.touch = button_touch;
+    }
 
     if (!self.speed)
+    {
         self.speed = 40;
+    }
     if (!self.wait)
+    {
         self.wait = 1;
+    }
     if (!self.lip)
+    {
         self.lip = 4;
+    }
 
     self.state = STATE_BOTTOM;
 

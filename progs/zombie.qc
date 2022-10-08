@@ -95,7 +95,9 @@ void() zombie_stand15 = [ $stand15, zombie_stand1  ] { ai_stand(); };
 
 void() zombie_cruc1 = [ $cruc_1, zombie_cruc2 ] {
     if (random() < 0.1)
+    {
         sound(self, CHAN_VOICE, "zombie/idle_w2.wav", 1, ATTN_STATIC);
+    }
 };
 void() zombie_cruc2 = [ $cruc_2, zombie_cruc3 ] { self.nextthink = time + 0.1 + random() * 0.1; };
 void() zombie_cruc3 = [ $cruc_3, zombie_cruc4 ] { self.nextthink = time + 0.1 + random() * 0.1; };
@@ -124,7 +126,9 @@ void() zombie_walk18 = [ $walk18, zombie_walk19 ] { ai_walk(0); };
 void() zombie_walk19 = [ $walk19, zombie_walk1  ] {
     ai_walk(0);
     if (random() < 0.2)
+    {
         sound(self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_IDLE);
+    }
 };
 
 void() zombie_run1  = [ $run1,  zombie_run2  ] { ai_run(1); self.inpain = 0; };
@@ -147,9 +151,13 @@ void() zombie_run17 = [ $run17, zombie_run18 ] { ai_run(3); };
 void() zombie_run18 = [ $run18, zombie_run1  ] {
     ai_run(8);
     if (random() < 0.2)
+    {
         sound(self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_IDLE);
+    }
     else if (random() > 0.8)
+    {
         sound(self, CHAN_VOICE, "zombie/z_idle1.wav", 1, ATTN_IDLE);
+    }
 };
 
 /*
@@ -163,7 +171,9 @@ ATTACKS
 void() ZombieGrenadeTouch =
 {
     if (other == self.owner)
+    {
         return; // don't explode on owner
+    }
 
     if (other.takedamage)
     {
@@ -271,11 +281,17 @@ void() zombie_missile =
     r = random();
 
     if (r < 0.3)
+    {
         zombie_atta1();
+    }
     else if (r < 0.6)
+    {
         zombie_attb1();
+    }
     else
+    {
         zombie_attc1();
+    }
 };
 
 
@@ -440,10 +456,14 @@ void(entity attacker, float damage) zombie_pain =
     self.health = 60; // always reset health
 
     if (damage < 9)
+    {
         return; // totally ignore
+    }
 
     if (self.inpain == 2)
+    {
         return; // down on ground, so don't reset any counters
+    }
 
     // go down immediately if a big enough hit
     if (damage >= 25)
@@ -473,13 +493,21 @@ void(entity attacker, float damage) zombie_pain =
 
     r = random();
     if (r < 0.25)
+    {
         zombie_paina1();
+    }
     else if (r < 0.5)
+    {
         zombie_painb1();
+    }
     else if (r < 0.75)
+    {
         zombie_painc1();
+    }
     else
+    {
         zombie_paind1();
+    }
 };
 
 
@@ -527,11 +555,13 @@ void() monster_zombie =
     self.th_die = zombie_die;
     self.th_missile = zombie_missile;
 
-    if (self.spawnflags & SPAWN_CRUCIFIED)
+    if ((self.spawnflags & SPAWN_CRUCIFIED))
     {
         self.movetype = MOVETYPE_NONE;
         zombie_cruc1();
     }
     else
+    {
         walkmonster_start();
+    }
 };

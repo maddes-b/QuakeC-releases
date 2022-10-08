@@ -40,7 +40,7 @@ float START_OFF = 1;
 
 void() light_use =
 {
-    if (self.spawnflags & START_OFF)
+    if ((self.spawnflags & START_OFF))
     {
         lightstyle(self.style, "m");
         self.spawnflags = self.spawnflags - START_OFF;
@@ -71,10 +71,14 @@ void() light =
     if (self.style >= 32)
     {
         self.use = light_use;
-        if (self.spawnflags & START_OFF)
+        if ((self.spawnflags & START_OFF))
+        {
             lightstyle(self.style, "a");
+        }
         else
+        {
             lightstyle(self.style, "m");
+        }
     }
 };
 
@@ -91,10 +95,14 @@ void() light_fluoro =
     if (self.style >= 32)
     {
         self.use = light_use;
-        if (self.spawnflags & START_OFF)
+        if ((self.spawnflags & START_OFF))
+        {
             lightstyle(self.style, "a");
+        }
         else
+        {
             lightstyle(self.style, "m");
+        }
     }
 
     precache_sound("ambience/fl_hum1.wav");
@@ -111,7 +119,9 @@ Makes sparking, broken fluorescent sound
 void() light_fluorospark =
 {
     if (!self.style)
+    {
         self.style = 10;
+    }
 
     precache_sound("ambience/buzz1.wav");
     ambientsound(self.origin, "ambience/buzz1.wav", 0.5, ATTN_STATIC);
@@ -205,7 +215,9 @@ void() misc_fireball =
     self.nextthink = time + (random() * 5);
     self.think = fire_fly;
     if (!self.speed)
+    {
         self.speed == 1000;
+    }
 };
 
 
@@ -275,7 +287,7 @@ void() misc_explobox =
     self.origin_z = self.origin_z + 2;
     oldz = self.origin_z;
     droptofloor();
-    if (oldz - self.origin_z > 250)
+    if ((oldz - self.origin_z) > 250)
     {
         dprint("item fell out of level at ");
         dprint(vtos(self.origin));
@@ -304,7 +316,7 @@ void() misc_explobox2 =
     self.origin_z = self.origin_z + 2;
     oldz = self.origin_z;
     droptofloor();
-    if (oldz - self.origin_z > 250)
+    if ((oldz - self.origin_z) > 250)
     {
         dprint("item fell out of level at ");
         dprint(vtos(self.origin));
@@ -321,7 +333,7 @@ float SPAWNFLAG_LASER = 2;
 
 void() spikeshooter_use =
 {
-    if (self.spawnflags & SPAWNFLAG_LASER)
+    if ((self.spawnflags & SPAWNFLAG_LASER))
     {
         sound(self, CHAN_VOICE, "enforcer/enfire.wav", 1, ATTN_NORM);
         LaunchLaser(self.origin, self.movedir);
@@ -331,8 +343,10 @@ void() spikeshooter_use =
         sound(self, CHAN_VOICE, "weapons/spike2.wav", 1, ATTN_NORM);
         launch_spike(self.origin, self.movedir);
         newmis.velocity = self.movedir * 500;
-        if (self.spawnflags & SPAWNFLAG_SUPERSPIKE)
+        if ((self.spawnflags & SPAWNFLAG_SUPERSPIKE))
+        {
             newmis.touch = superspike_touch;
+        }
     }
 };
 
@@ -353,7 +367,7 @@ void() trap_spikeshooter =
 {
     SetMovedir();
     self.use = spikeshooter_use;
-    if (self.spawnflags & SPAWNFLAG_LASER)
+    if ((self.spawnflags & SPAWNFLAG_LASER))
     {
         precache_model2("progs/laser.mdl");
 
@@ -361,7 +375,9 @@ void() trap_spikeshooter =
         precache_sound2("enforcer/enfstop.wav");
     }
     else
+    {
         precache_sound("weapons/spike2.wav");
+    }
 };
 
 
@@ -375,7 +391,9 @@ void() trap_shooter =
     trap_spikeshooter();
 
     if (self.wait == 0)
+    {
         self.wait = 1;
+    }
     self.nextthink = self.nextthink + self.wait + self.ltime;
     self.think = shooter_think;
 };
@@ -450,7 +468,9 @@ void() bubble_split =
     self.frame = 1;
     self.cnt = 10;
     if (self.waterlevel != 3)
+    {
         remove(self);
+    }
 };
 
 
@@ -472,28 +492,44 @@ void() bubble_bob =
 
     self.cnt = self.cnt + 1;
     if (self.cnt == 4)
+    {
         bubble_split();
+    }
     else if (self.cnt == 20)
+    {
         remove(self);
+    }
 
     rnd1 = self.velocity_x + (-10 + (random() * 20));
     rnd2 = self.velocity_y + (-10 + (random() * 20));
     rnd3 = self.velocity_z + 10 + random() * 10;
 
     if (rnd1 > 10)
+    {
         rnd1 = 5;
+    }
     else if (rnd1 < -10)
+    {
         rnd1 = -5;
+    }
 
     if (rnd2 > 10)
+    {
         rnd2 = 5;
+    }
     else if (rnd2 < -10)
+    {
         rnd2 = -5;
+    }
 
     if (rnd3 < 10)
+    {
         rnd3 = 15;
+    }
     else if (rnd3 > 30)
+    {
         rnd3 = 25;
+    }
 
     self.velocity_x = rnd1;
     self.velocity_y = rnd2;
@@ -566,7 +602,9 @@ This bmodel will appear if the episode has already been completed, so players ca
 void() func_episodegate =
 {
     if (!(serverflags & self.spawnflags))
+    {
         return; // can still enter episode
+    }
 
     self.angles = '0 0 0';
     self.movetype = MOVETYPE_PUSH; // so it doesn't get pushed by anything
@@ -582,7 +620,9 @@ This bmodel appears unless players have all of the episode sigils.
 void() func_bossgate =
 {
     if ((serverflags & 15) == 15)
+    {
         return; // all episodes completed
+    }
 
     self.angles = '0 0 0';
     self.movetype = MOVETYPE_PUSH; // so it doesn't get pushed by anything

@@ -31,7 +31,9 @@ void() test_teleport =
     self.solid = SOLID_TRIGGER;
 
     if (!self.target)
+    {
         objerror("no target\n");
+    }
 };
 
 

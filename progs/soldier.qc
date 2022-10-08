@@ -76,7 +76,9 @@ void() army_stand8 = [ $stand8, army_stand1 ] { ai_stand(); };
 
 void() army_walk1  = [ $prowl_1,  army_walk2  ] {
     if (random() < 0.2)
+    {
         sound(self, CHAN_VOICE, "soldier/idle.wav", 1, ATTN_IDLE);
+    }
     ai_walk(1);
 };
 void() army_walk2  = [ $prowl_2,  army_walk3  ] { ai_walk(1); };
@@ -105,7 +107,9 @@ void() army_walk24 = [ $prowl_24, army_walk1  ] { ai_walk(1); };
 
 void() army_run1 = [ $run1, army_run2 ] {
     if (random() < 0.2)
+    {
         sound(self, CHAN_VOICE, "soldier/idle.wav", 1, ATTN_IDLE);
+    }
     ai_run(11);
 };
 void() army_run2 = [ $run2, army_run3 ] { ai_run(15); };
@@ -171,7 +175,9 @@ void(entity attacker, float damage) army_pain =
     local float r;
 
     if (self.pain_finished > time)
+    {
         return;
+    }
 
     r = random();
 
@@ -263,9 +269,13 @@ void() army_die =
     // regular death
     sound(self, CHAN_VOICE, "soldier/death1.wav", 1, ATTN_NORM);
     if (random() < 0.5)
+    {
         army_die1();
+    }
     else
+    {
         army_cdie1();
+    }
 };
 
 
