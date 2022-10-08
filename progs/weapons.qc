@@ -1262,37 +1262,49 @@ void() CycleWeaponReverseCommand =
         {
             self.weapon = IT_ROCKET_LAUNCHER;
             if (self.ammo_rockets < 1)
+            {
                 am = TRUE;
+            }
         }
         else if (self.weapon == IT_ROCKET_LAUNCHER)
         {
             self.weapon = IT_GRENADE_LAUNCHER;
             if (self.ammo_rockets < 1)
+            {
                 am = TRUE;
+            }
         }
         else if (self.weapon == IT_GRENADE_LAUNCHER)
         {
             self.weapon = IT_SUPER_NAILGUN;
             if (self.ammo_nails < 2)
+            {
                 am = TRUE;
+            }
         }
         else if (self.weapon == IT_SUPER_NAILGUN)
         {
             self.weapon = IT_NAILGUN;
             if (self.ammo_nails < 1)
+            {
                 am = TRUE;
+            }
         }
         else if (self.weapon == IT_NAILGUN)
         {
             self.weapon = IT_SUPER_SHOTGUN;
             if (self.ammo_shells < 2)
+            {
                 am = TRUE;
+            }
         }
         else if (self.weapon == IT_SUPER_SHOTGUN)
         {
             self.weapon = IT_SHOTGUN;
             if (self.ammo_shells < 1)
+            {
                 am = TRUE;
+            }
         }
         else if (self.weapon == IT_SHOTGUN)
         {
@@ -1302,7 +1314,9 @@ void() CycleWeaponReverseCommand =
         {
             self.weapon = IT_LIGHTNING;
             if (self.ammo_cells < 1)
+            {
                 am = TRUE;
+            }
         }
 
         if ((it & self.weapon) && am == FALSE)
@@ -1365,7 +1379,9 @@ void() ImpulseCommands =
         ServerflagsCommand();
     }
     else if (self.impulse == 12)
+    {
         CycleWeaponReverseCommand();
+    }
     else if (self.impulse == 255)
     {
         QuadCheat();

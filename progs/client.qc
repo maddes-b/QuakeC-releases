@@ -1365,16 +1365,24 @@ void(entity targ, entity attacker) ClientObituary =
                 }
                 return;
             }
-            else if ((teamplay == 2) && (targ.team > 0) && (targ.team == attacker.team))
+            else if (teamplay == 2 && targ.team > 0 && targ.team == attacker.team)
             {
                 if (rnum < 0.25)
+                {
                     deathstring = " mows down a teammate\n";
+                }
                 else if (rnum < 0.50)
+                {
                     deathstring = " checks his glasses\n";
+                }
                 else if (rnum < 0.75)
+                {
                     deathstring = " gets a frag for the other team\n";
+                }
                 else
+                {
                     deathstring = " loses another friend\n";
+                }
                 bprint(attacker.netname);
                 bprint(deathstring);
 

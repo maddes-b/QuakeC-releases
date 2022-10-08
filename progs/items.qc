@@ -1412,9 +1412,13 @@ void() BackpackTouch =
 
     // change to the weapon
     if (!deathmatch)
+    {
         self.weapon = new;
+    }
     else
+    {
         Deathmatch_Weapon(old, new);
+    }
 
     W_SetCurrentAmmo();
 };
