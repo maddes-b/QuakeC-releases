@@ -42,8 +42,7 @@ void() info_intermission =
 void() SetChangeParms =
 {
     // remove items
-    self.items = self.items - (self.items &
-                               (IT_KEY1 | IT_KEY2 | IT_INVISIBILITY | IT_INVULNERABILITY | IT_SUIT | IT_QUAD));
+    self.items = self.items - (self.items & (IT_KEY1 | IT_KEY2 | IT_INVISIBILITY | IT_INVULNERABILITY | IT_SUIT | IT_QUAD));
 
     // cap super health
     if (self.health > 100)
@@ -115,7 +114,8 @@ entity() FindIntermission =
     // look for info_intermission first
     spot = find(world, classname, "info_intermission");
     if (spot)
-    { // pick a random one
+    {
+        // pick a random one
         cyc = random() * 4;
         while (cyc > 1)
         {
@@ -223,7 +223,8 @@ void() ExitIntermission =
     if (intermission_running == 3)
     {
         if (!cvar("registered"))
-        { // shareware episode has been completed, go to sell screen
+        {
+            // shareware episode has been completed, go to sell screen
             WriteByte(MSG_ALL, SVC_SELLSCREEN);
             return;
         }
@@ -315,7 +316,8 @@ void() changelevel_touch =
     SUB_UseTargets();
 
     if ((self.spawnflags & 1) && (deathmatch == 0))
-    { // NO_INTERMISSION
+    {
+        // NO_INTERMISSION
         GotoNextMap();
         return;
     }
@@ -373,7 +375,8 @@ void() respawn =
         PutClientInServer();
     }
     else
-    { // restart the entire server
+    {
+        // restart the entire server
         localcmd("restart\n");
     }
 };
@@ -438,7 +441,8 @@ entity() SelectSpawnPoint =
     }
 
     if (serverflags)
-    { // return with a rune to start
+    {
+        // return with a rune to start
         spot = find(world, classname, "info_player_start2");
         if (spot)
             return spot;
@@ -664,7 +668,8 @@ void() NextLevel =
     // find a trigger_changelevel
     o = find(world, classname, "trigger_changelevel");
     if (!o || mapname == "start")
-    { // go back to same map if no trigger_changelevel
+    {
+        // go back to same map if no trigger_changelevel
         o = spawn();
         o.map = mapname;
     }
@@ -835,7 +840,8 @@ void() WaterMove =
         self.dmg = 2;
     }
     else if (self.air_finished < time)
-    { // drown!
+    {
+        // drown!
         if (self.pain_finished < time)
         {
             self.dmg = self.dmg + 2;
@@ -858,7 +864,8 @@ void() WaterMove =
     }
 
     if (self.watertype == CONTENT_LAVA)
-    { // do damage
+    {
+        // do damage
         if (self.dmgtime < time)
         {
             if (self.radsuit_finished > time)
@@ -870,7 +877,8 @@ void() WaterMove =
         }
     }
     else if (self.watertype == CONTENT_SLIME)
-    { // do damage
+    {
+        // do damage
         if (self.dmgtime < time && self.radsuit_finished < time)
         {
             self.dmgtime = time + 1;
@@ -910,13 +918,15 @@ void() CheckWaterJump =
     end = start + v_forward * 24;
     traceline(start, end, TRUE, self);
     if (trace_fraction < 1)
-    { // solid at waist
+    {
+        // solid at waist
         start_z = start_z + self.maxs_z - 8;
         end = start + v_forward * 24;
         self.movedir = trace_plane_normal * -50;
         traceline(start, end, TRUE, self);
         if (trace_fraction == 1)
-        { // open at eye level
+        {
+            // open at eye level
             self.flags = self.flags | FL_WATERJUMP;
             self.velocity_z = 225;
             self.flags = self.flags - (self.flags & FL_JUMPRELEASED);
@@ -1014,7 +1024,8 @@ void() CheckPowerups =
         }
 
         if (self.invisible_finished < time)
-        { // just stopped
+        {
+            // just stopped
             self.items = self.items - IT_INVISIBILITY;
             self.invisible_finished = 0;
             self.invisible_time = 0;
@@ -1048,7 +1059,8 @@ void() CheckPowerups =
         }
 
         if (self.invincible_finished < time)
-        { // just stopped
+        {
+            // just stopped
             self.items = self.items - IT_INVULNERABILITY;
             self.invincible_time = 0;
             self.invincible_finished = 0;
@@ -1080,7 +1092,8 @@ void() CheckPowerups =
         }
 
         if (self.super_damage_finished < time)
-        { // just stopped
+        {
+            // just stopped
             self.items = self.items - IT_QUAD;
             self.super_damage_finished = 0;
             self.super_time = 0;
@@ -1114,7 +1127,8 @@ void() CheckPowerups =
         }
 
         if (self.radsuit_finished < time)
-        { // just stopped
+        {
+            // just stopped
             self.items = self.items - IT_SUIT;
             self.rad_time = 0;
             self.radsuit_finished = 0;

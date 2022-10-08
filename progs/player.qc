@@ -99,8 +99,7 @@ PLAYER
 ==============================================================================
 */
 
-void() player_stand1 = [ $axstnd1, player_stand1 ]
-{
+void() player_stand1 = [ $axstnd1, player_stand1 ] {
     self.weaponframe = 0;
 
     if (self.velocity_x || self.velocity_y)
@@ -125,8 +124,7 @@ void() player_stand1 = [ $axstnd1, player_stand1 ]
     self.walkframe = self.walkframe + 1;
 };
 
-void() player_run = [ $rockrun1, player_run ]
-{
+void() player_run = [ $rockrun1, player_run ] {
     self.weaponframe = 0;
 
     if (!self.velocity_x && !self.velocity_y)
@@ -151,8 +149,7 @@ void() player_run = [ $rockrun1, player_run ]
     self.walkframe = self.walkframe + 1;
 };
 
-void() player_shot1 = [ $shotatt1, player_shot2 ] { self.weaponframe = 1;
-    self.effects = self.effects | EF_MUZZLEFLASH; };
+void() player_shot1 = [ $shotatt1, player_shot2 ] { self.weaponframe = 1; self.effects = self.effects | EF_MUZZLEFLASH; };
 void() player_shot2 = [ $shotatt2, player_shot3 ] { self.weaponframe = 2; };
 void() player_shot3 = [ $shotatt3, player_shot4 ] { self.weaponframe = 3; };
 void() player_shot4 = [ $shotatt4, player_shot5 ] { self.weaponframe = 4; };
@@ -181,12 +178,14 @@ void() player_axed4 = [ $axattd4, player_run   ] { self.weaponframe = 8; };
 
 //============================================================================
 
-void() player_nail1 = [ $nailatt1, player_nail2 ]
-{
+void() player_nail1 = [ $nailatt1, player_nail2 ] {
     self.effects = self.effects | EF_MUZZLEFLASH;
 
     if (!self.button0)
-    { player_run(); return; }
+    {
+        player_run();
+        return;
+    }
 
     self.weaponframe = self.weaponframe + 1;
     if (self.weaponframe == 9)
@@ -196,12 +195,14 @@ void() player_nail1 = [ $nailatt1, player_nail2 ]
     W_FireSpikes(4);
     self.attack_finished = time + 0.2;
 };
-void() player_nail2 = [ $nailatt2, player_nail1 ]
-{
+void() player_nail2 = [ $nailatt2, player_nail1 ] {
     self.effects = self.effects | EF_MUZZLEFLASH;
 
     if (!self.button0)
-    { player_run(); return; }
+    {
+        player_run();
+        return;
+    }
 
     self.weaponframe = self.weaponframe + 1;
     if (self.weaponframe == 9)
@@ -214,12 +215,14 @@ void() player_nail2 = [ $nailatt2, player_nail1 ]
 
 //============================================================================
 
-void() player_light1 = [ $light1, player_light2 ]
-{
+void() player_light1 = [ $light1, player_light2 ] {
     self.effects = self.effects | EF_MUZZLEFLASH;
 
     if (!self.button0)
-    { player_run(); return; }
+    {
+        player_run();
+        return;
+    }
 
     self.weaponframe = self.weaponframe + 1;
     if (self.weaponframe == 5)
@@ -229,12 +232,14 @@ void() player_light1 = [ $light1, player_light2 ]
     W_FireLightning();
     self.attack_finished = time + 0.2;
 };
-void() player_light2 = [ $light2, player_light1 ]
-{
+void() player_light2 = [ $light2, player_light1 ] {
     self.effects = self.effects | EF_MUZZLEFLASH;
 
     if (!self.button0)
-    { player_run(); return; }
+    {
+        player_run();
+        return;
+    }
 
     self.weaponframe = self.weaponframe + 1;
     if (self.weaponframe == 5)
@@ -248,8 +253,7 @@ void() player_light2 = [ $light2, player_light1 ]
 
 //============================================================================
 
-void() player_rocket1 = [ $rockatt1, player_rocket2 ] { self.weaponframe = 1;
-    self.effects = self.effects | EF_MUZZLEFLASH; };
+void() player_rocket1 = [ $rockatt1, player_rocket2 ] { self.weaponframe = 1; self.effects = self.effects | EF_MUZZLEFLASH; };
 void() player_rocket2 = [ $rockatt2, player_rocket3 ] { self.weaponframe = 2; };
 void() player_rocket3 = [ $rockatt3, player_rocket4 ] { self.weaponframe = 3; };
 void() player_rocket4 = [ $rockatt4, player_rocket5 ] { self.weaponframe = 4; };
@@ -606,7 +610,8 @@ void() PlayerDie =
 
 
 void() set_suicide_frame =
-{ // used by kill command and disconnect command
+{
+    // used by kill command and disconnect command
     if (self.model != "progs/player.mdl")
         return; // already gibbed
 

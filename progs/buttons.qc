@@ -49,7 +49,8 @@ void() button_return =
 
 
 void() button_blocked =
-{ // do nothing, just don't come all the way back out
+{
+    // do nothing, just don't come all the way back out
 };
 
 

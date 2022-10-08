@@ -77,7 +77,8 @@ void() multi_trigger =
         self.nextthink = time + self.wait;
     }
     else
-    { // we can't just remove(self) here, because this is a touch function
+    {
+        // we can't just remove(self) here, because this is a touch function
         // called while C code is looping through area links...
         self.touch = SUB_Null;
         self.nextthink = time + 0.1;
@@ -252,8 +253,7 @@ void() counter_use =
 
     if (self.count != 0)
     {
-        if (activator.classname == "player"
-        && (self.spawnflags & SPAWNFLAG_NOMESSAGE) == 0)
+        if (activator.classname == "player" && (self.spawnflags & SPAWNFLAG_NOMESSAGE) == 0)
         {
             if (self.count >= 4)
                 centerprint(activator, "There are more to go...");
@@ -267,8 +267,7 @@ void() counter_use =
         return;
     }
 
-    if (activator.classname == "player"
-    && (self.spawnflags & SPAWNFLAG_NOMESSAGE) == 0)
+    if (activator.classname == "player" && (self.spawnflags & SPAWNFLAG_NOMESSAGE) == 0)
         centerprint(activator, "Sequence completed!");
 
     self.enemy = activator;
@@ -352,7 +351,8 @@ void() tdeath_touch =
         if (other.invincible_finished > time)
             self.classname = "teledeath2";
         if (self.owner.classname != "player")
-        { // other monsters explode themselves
+        {
+            // other monsters explode themselves
             T_Damage(self.owner, self, self, 50000);
             return;
         }

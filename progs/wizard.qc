@@ -137,7 +137,8 @@ float() WizardCheckAttack =
     traceline(spot1, spot2, FALSE, self);
 
     if (trace_ent != targ)
-    { // don't have a clear shot, so move to a side
+    {
+        // don't have a clear shot, so move to a side
         if (self.attack_state != AS_STRAIGHT)
         {
             self.attack_state = AS_STRAIGHT;
@@ -293,8 +294,7 @@ void() wiz_stand6 = [ $hover6, wiz_stand7 ] { ai_stand(); };
 void() wiz_stand7 = [ $hover7, wiz_stand8 ] { ai_stand(); };
 void() wiz_stand8 = [ $hover8, wiz_stand1 ] { ai_stand(); };
 
-void() wiz_walk1 = [ $hover1, wiz_walk2 ] { ai_walk(8);
-    Wiz_idlesound(); };
+void() wiz_walk1 = [ $hover1, wiz_walk2 ] { ai_walk(8); Wiz_idlesound(); };
 void() wiz_walk2 = [ $hover2, wiz_walk3 ] { ai_walk(8); };
 void() wiz_walk3 = [ $hover3, wiz_walk4 ] { ai_walk(8); };
 void() wiz_walk4 = [ $hover4, wiz_walk5 ] { ai_walk(8); };
@@ -303,8 +303,7 @@ void() wiz_walk6 = [ $hover6, wiz_walk7 ] { ai_walk(8); };
 void() wiz_walk7 = [ $hover7, wiz_walk8 ] { ai_walk(8); };
 void() wiz_walk8 = [ $hover8, wiz_walk1 ] { ai_walk(8); };
 
-void() wiz_side1 = [ $hover1, wiz_side2 ] { ai_run(8);
-    Wiz_idlesound(); };
+void() wiz_side1 = [ $hover1, wiz_side2 ] { ai_run(8); Wiz_idlesound(); };
 void() wiz_side2 = [ $hover2, wiz_side3 ] { ai_run(8); };
 void() wiz_side3 = [ $hover3, wiz_side4 ] { ai_run(8); };
 void() wiz_side4 = [ $hover4, wiz_side5 ] { ai_run(8); };
@@ -313,9 +312,7 @@ void() wiz_side6 = [ $hover6, wiz_side7 ] { ai_run(8); };
 void() wiz_side7 = [ $hover7, wiz_side8 ] { ai_run(8); };
 void() wiz_side8 = [ $hover8, wiz_side1 ] { ai_run(8); };
 
-void() wiz_run1  = [ $fly1,  wiz_run2  ] { ai_run(16);
-    Wiz_idlesound();
-};
+void() wiz_run1  = [ $fly1,  wiz_run2  ] { ai_run(16); Wiz_idlesound(); };
 void() wiz_run2  = [ $fly2,  wiz_run3  ] { ai_run(16); };
 void() wiz_run3  = [ $fly3,  wiz_run4  ] { ai_run(16); };
 void() wiz_run4  = [ $fly4,  wiz_run5  ] { ai_run(16); };
@@ -339,7 +336,11 @@ void() wiz_fast6  = [ $magatt6, wiz_fast7  ] { ai_face(); };
 void() wiz_fast7  = [ $magatt5, wiz_fast8  ] { ai_face(); };
 void() wiz_fast8  = [ $magatt4, wiz_fast9  ] { ai_face(); };
 void() wiz_fast9  = [ $magatt3, wiz_fast10 ] { ai_face(); };
-void() wiz_fast10 = [ $magatt2, wiz_run1   ] { ai_face(); SUB_AttackFinished(2); WizardAttackFinished(); };
+void() wiz_fast10 = [ $magatt2, wiz_run1   ] {
+    ai_face();
+    SUB_AttackFinished(2);
+    WizardAttackFinished();
+};
 
 void() wiz_pain1 = [ $pain1, wiz_pain2 ] {};
 void() wiz_pain2 = [ $pain2, wiz_pain3 ] {};

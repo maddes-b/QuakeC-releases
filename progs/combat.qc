@@ -77,7 +77,8 @@ void(entity targ, entity attacker) Killed =
         self.health = -99; // don't let sbar look bad if a player
 
     if (self.movetype == MOVETYPE_PUSH || self.movetype == MOVETYPE_NONE)
-    { // doors, triggers, etc
+    {
+        // doors, triggers, etc
         self.th_die();
         self = oself;
         return;
@@ -195,7 +196,7 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
         if (self != attacker && attacker != self.enemy)
         {
             if ((self.classname != attacker.classname)
-            || (self.classname == "monster_army"))
+                || (self.classname == "monster_army"))
             {
                 if (self.enemy.classname == "player")
                     self.oldenemy = self.enemy;
@@ -246,7 +247,8 @@ void(entity inflictor, entity attacker, float damage, entity ignore) T_RadiusDam
                 if (points > 0)
                 {
                     if (CanDamage(head, inflictor))
-                    { // shambler takes half damage from all explosions
+                    {
+                        // shambler takes half damage from all explosions
                         if (head.classname == "monster_shambler")
                             T_Damage(head, inflictor, attacker, points * 0.5);
                         else

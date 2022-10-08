@@ -225,7 +225,8 @@ void() ogre_walk14 = [ $walk14, ogre_walk15 ] { ai_walk(3); };
 void() ogre_walk15 = [ $walk15, ogre_walk16 ] { ai_walk(3); };
 void() ogre_walk16 = [ $walk16, ogre_walk1  ] { ai_walk(4); };
 
-void() ogre_run1 = [ $run1, ogre_run2 ] { ai_run(9);
+void() ogre_run1 = [ $run1, ogre_run2 ] {
+    ai_run(9);
     if (random() < 0.2)
         sound(self, CHAN_VOICE, "ogre/ogidle2.wav", 1, ATTN_IDLE);
 };
@@ -237,13 +238,15 @@ void() ogre_run6 = [ $run6, ogre_run7 ] { ai_run(4); };
 void() ogre_run7 = [ $run7, ogre_run8 ] { ai_run(13); };
 void() ogre_run8 = [ $run8, ogre_run1 ] { ai_run(24); };
 
-void() ogre_swing1  = [ $swing1,  ogre_swing2  ] { ai_charge(11);
-    sound(self, CHAN_WEAPON, "ogre/ogsawatk.wav", 1, ATTN_NORM);
-};
+void() ogre_swing1  = [ $swing1,  ogre_swing2  ] { ai_charge(11); sound(self, CHAN_WEAPON, "ogre/ogsawatk.wav", 1, ATTN_NORM); };
 void() ogre_swing2  = [ $swing2,  ogre_swing3  ] { ai_charge(1); };
 void() ogre_swing3  = [ $swing3,  ogre_swing4  ] { ai_charge(4); };
 void() ogre_swing4  = [ $swing4,  ogre_swing5  ] { ai_charge(13); };
-void() ogre_swing5  = [ $swing5,  ogre_swing6  ] { ai_charge(9); chainsaw(0); self.angles_y = self.angles_y + random() * 25; };
+void() ogre_swing5  = [ $swing5,  ogre_swing6  ] {
+    ai_charge(9);
+    chainsaw(0);
+    self.angles_y = self.angles_y + random() * 25;
+};
 void() ogre_swing6  = [ $swing6,  ogre_swing7  ] { chainsaw(200); self.angles_y = self.angles_y + random() * 25; };
 void() ogre_swing7  = [ $swing7,  ogre_swing8  ] { chainsaw(0); self.angles_y = self.angles_y + random() * 25; };
 void() ogre_swing8  = [ $swing8,  ogre_swing9  ] { chainsaw(0); self.angles_y = self.angles_y + random() * 25; };
@@ -254,9 +257,7 @@ void() ogre_swing12 = [ $swing12, ogre_swing13 ] { ai_charge(3); };
 void() ogre_swing13 = [ $swing13, ogre_swing14 ] { ai_charge(8); };
 void() ogre_swing14 = [ $swing14, ogre_run1    ] { ai_charge(9); };
 
-void() ogre_smash1  = [ $smash1,  ogre_smash2  ] { ai_charge(6);
-    sound(self, CHAN_WEAPON, "ogre/ogsawatk.wav", 1, ATTN_NORM);
-};
+void() ogre_smash1  = [ $smash1,  ogre_smash2  ] { ai_charge(6); sound(self, CHAN_WEAPON, "ogre/ogsawatk.wav", 1, ATTN_NORM); };
 void() ogre_smash2  = [ $smash2,  ogre_smash3  ] { ai_charge(0); };
 void() ogre_smash3  = [ $smash3,  ogre_smash4  ] { ai_charge(0); };
 void() ogre_smash4  = [ $smash4,  ogre_smash5  ] { ai_charge(1); };
@@ -266,8 +267,11 @@ void() ogre_smash7  = [ $smash7,  ogre_smash8  ] { ai_charge(4); chainsaw(0); };
 void() ogre_smash8  = [ $smash8,  ogre_smash9  ] { ai_charge(10); chainsaw(0); };
 void() ogre_smash9  = [ $smash9,  ogre_smash10 ] { ai_charge(13); chainsaw(0); };
 void() ogre_smash10 = [ $smash10, ogre_smash11 ] { chainsaw(1); };
-void() ogre_smash11 = [ $smash11, ogre_smash12 ] { ai_charge(2); chainsaw(0);
-    self.nextthink = self.nextthink + random() * 0.2; }; // slight variation
+void() ogre_smash11 = [ $smash11, ogre_smash12 ] {
+    ai_charge(2);
+    chainsaw(0);
+    self.nextthink = self.nextthink + random() * 0.2; // slight variation
+};
 void() ogre_smash12 = [ $smash12, ogre_smash13 ] { ai_charge(); };
 void() ogre_smash13 = [ $smash13, ogre_smash14 ] { ai_charge(4); };
 void() ogre_smash14 = [ $smash14, ogre_run1    ] { ai_charge(12); };
@@ -372,9 +376,11 @@ void(entity attacker, float damage) ogre_pain =
 
 void() ogre_die1  = [ $death1,  ogre_die2  ] {};
 void() ogre_die2  = [ $death2,  ogre_die3  ] {};
-void() ogre_die3  = [ $death3,  ogre_die4  ]
-{ self.solid = SOLID_NOT;
-    self.ammo_rockets = 2; DropBackpack(); };
+void() ogre_die3  = [ $death3,  ogre_die4  ] {
+    self.solid = SOLID_NOT;
+    self.ammo_rockets = 2;
+    DropBackpack();
+};
 void() ogre_die4  = [ $death4,  ogre_die5  ] {};
 void() ogre_die5  = [ $death5,  ogre_die6  ] {};
 void() ogre_die6  = [ $death6,  ogre_die7  ] {};
@@ -389,9 +395,11 @@ void() ogre_die14 = [ $death14, ogre_die14 ] {};
 
 void() ogre_bdie1  = [ $bdeath1,  ogre_bdie2  ] {};
 void() ogre_bdie2  = [ $bdeath2,  ogre_bdie3  ] { ai_forward(5); };
-void() ogre_bdie3  = [ $bdeath3,  ogre_bdie4  ]
-{ self.solid = SOLID_NOT;
-    self.ammo_rockets = 2; DropBackpack(); };
+void() ogre_bdie3  = [ $bdeath3,  ogre_bdie4  ] {
+    self.solid = SOLID_NOT;
+    self.ammo_rockets = 2;
+    DropBackpack();
+};
 void() ogre_bdie4  = [ $bdeath4,  ogre_bdie5  ] { ai_forward(1); };
 void() ogre_bdie5  = [ $bdeath5,  ogre_bdie6  ] { ai_forward(3); };
 void() ogre_bdie6  = [ $bdeath6,  ogre_bdie7  ] { ai_forward(7); };

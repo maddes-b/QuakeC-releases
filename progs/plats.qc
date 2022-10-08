@@ -293,7 +293,8 @@ void() func_train_find =
     self.target = targ.target;
     setorigin(self, targ.origin - self.mins);
     if (!self.targetname)
-    { // not triggered, so start immediately
+    {
+        // not triggered, so start immediately
         self.nextthink = self.ltime + 0.1;
         self.think = train_next;
     }

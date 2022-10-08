@@ -145,8 +145,7 @@ void() item_health =
         self.healamount = 15;
         self.healtype = 0;
     }
-    else
-    if (self.spawnflags & H_MEGA)
+    else if (self.spawnflags & H_MEGA)
     {
         precache_model("maps/b_bh100.bsp");
         precache_sound("items/r_item2.wav");
@@ -1103,8 +1102,8 @@ void() powerup_touch =
     {
         self.mdl = self.model;
 
-        if ((self.classname == "item_artifact_invulnerability") ||
-            (self.classname == "item_artifact_invisibility"))
+        if ((self.classname == "item_artifact_invulnerability")
+            || (self.classname == "item_artifact_invisibility"))
             self.nextthink = time + 60 * 5;
         else
             self.nextthink = time + 60;

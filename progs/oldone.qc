@@ -112,7 +112,8 @@ void() old_thrash11 = [ $shake11, old_thrash12 ] { lightstyle(0, "g"); };
 void() old_thrash12 = [ $shake12, old_thrash13 ] { lightstyle(0, "i"); };
 void() old_thrash13 = [ $shake13, old_thrash14 ] { lightstyle(0, "k"); };
 void() old_thrash14 = [ $shake14, old_thrash15 ] { lightstyle(0, "m"); };
-void() old_thrash15 = [ $shake15, old_thrash16 ] { lightstyle(0, "m");
+void() old_thrash15 = [ $shake15, old_thrash16 ] {
+    lightstyle(0, "m");
     self.cnt = self.cnt + 1;
     if (self.cnt != 3)
         self.think = old_thrash1;

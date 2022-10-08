@@ -73,7 +73,8 @@ float() CheckAttack =
         return FALSE; // sight line crossed contents
 
     if (enemy_range == RANGE_MELEE)
-    { // melee attack
+    {
+        // melee attack
         if (self.th_melee)
         {
             if (self.classname == "monster_knight")

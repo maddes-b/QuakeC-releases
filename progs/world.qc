@@ -369,7 +369,8 @@ BODY QUEUE
 entity bodyqueue_head;
 
 void() bodyqueue =
-{ // just here so spawn functions don't complain after the world
+{
+    // just here so spawn functions don't complain after the world
     // creates bodyqueues
 };
 

@@ -100,7 +100,8 @@ void() door_go_up =
         return; // already going up
 
     if (self.state == STATE_TOP)
-    { // reset top wait time
+    {
+        // reset top wait time
         self.nextthink = self.ltime + self.wait;
         return;
     }

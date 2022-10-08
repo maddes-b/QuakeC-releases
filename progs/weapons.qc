@@ -68,7 +68,8 @@ void() W_FireAxe =
         T_Damage(trace_ent, self, self, 20);
     }
     else
-    { // hit wall
+    {
+        // hit wall
         sound(self, CHAN_WEAPON, "player/axhit2.wav", 1, ATTN_NORM);
         WriteByte(MSG_BROADCAST, SVC_TEMPENTITY);
         WriteByte(MSG_BROADCAST, TE_GUNSHOT);
@@ -1014,13 +1015,15 @@ void() W_ChangeWeapon =
     self.impulse = 0;
 
     if (!(self.items & fl))
-    { // don't have the weapon or the ammo
+    {
+        // don't have the weapon or the ammo
         sprint(self, "no weapon.\n");
         return;
     }
 
     if (am)
-    { // don't have the ammo
+    {
+        // don't have the ammo
         sprint(self, "not enough ammo.\n");
         return;
     }

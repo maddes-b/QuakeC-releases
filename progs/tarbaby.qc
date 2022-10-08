@@ -126,7 +126,8 @@ void() Tar_JumpTouch =
     if (!checkbottom(self))
     {
         if (self.flags & FL_ONGROUND)
-        { // jump randomly to not get hung up
+        {
+            // jump randomly to not get hung up
             //dprint("popjump\n");
             self.touch = SUB_Null;
             self.think = tbaby_run1;
@@ -165,8 +166,7 @@ void() tbaby_jump1 = [ $jump1, tbaby_jump2 ] { ai_face(); };
 void() tbaby_jump2 = [ $jump2, tbaby_jump3 ] { ai_face(); };
 void() tbaby_jump3 = [ $jump3, tbaby_jump4 ] { ai_face(); };
 void() tbaby_jump4 = [ $jump4, tbaby_jump5 ] { ai_face(); };
-void() tbaby_jump5 = [ $jump5, tbaby_jump6 ]
-{
+void() tbaby_jump5 = [ $jump5, tbaby_jump6 ] {
     self.movetype = MOVETYPE_BOUNCE;
     self.touch = Tar_JumpTouch;
     makevectors(self.angles);
@@ -181,11 +181,8 @@ void() tbaby_jump6 = [ $jump6, tbaby_fly1  ] {};
 
 //=============================================================================
 
-void() tbaby_die1 = [ $exp, tbaby_die2 ] {
-    self.takedamage = DAMAGE_NO;
-};
-void() tbaby_die2 = [ $exp, tbaby_run1 ]
-{
+void() tbaby_die1 = [ $exp, tbaby_die2 ] { self.takedamage = DAMAGE_NO; };
+void() tbaby_die2 = [ $exp, tbaby_run1 ] {
     T_RadiusDamage(self, self, 120, world);
 
     sound(self, CHAN_VOICE, "blob/death1.wav", 1, ATTN_NORM);

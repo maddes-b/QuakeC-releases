@@ -78,7 +78,8 @@ void() knight_stand9 = [ $stand9, knight_stand1 ] { ai_stand(); };
 void() knight_walk1  = [ $walk1,  knight_walk2  ] {
     if (random() < 0.2)
         sound(self, CHAN_VOICE, "knight/idle.wav", 1, ATTN_IDLE);
-    ai_walk(3); };
+    ai_walk(3);
+};
 void() knight_walk2  = [ $walk2,  knight_walk3  ] { ai_walk(2); };
 void() knight_walk3  = [ $walk3,  knight_walk4  ] { ai_walk(3); };
 void() knight_walk4  = [ $walk4,  knight_walk5  ] { ai_walk(4); };
@@ -96,7 +97,8 @@ void() knight_walk14 = [ $walk14, knight_walk1  ] { ai_walk(3); };
 void() knight_run1 = [ $runb1, knight_run2 ] {
     if (random() < 0.2)
         sound(self, CHAN_VOICE, "knight/idle.wav", 1, ATTN_IDLE);
-    ai_run(16); };
+    ai_run(16);
+};
 void() knight_run2 = [ $runb2, knight_run3 ] { ai_run(20); };
 void() knight_run3 = [ $runb3, knight_run4 ] { ai_run(13); };
 void() knight_run4 = [ $runb4, knight_run5 ] { ai_run(7); };
@@ -105,8 +107,7 @@ void() knight_run6 = [ $runb6, knight_run7 ] { ai_run(20); };
 void() knight_run7 = [ $runb7, knight_run8 ] { ai_run(14); };
 void() knight_run8 = [ $runb8, knight_run1 ] { ai_run(6); };
 
-void() knight_runatk1  = [ $runattack1,  knight_runatk2  ]
-{
+void() knight_runatk1  = [ $runattack1,  knight_runatk2  ] {
     if (random() > 0.5)
         sound(self, CHAN_WEAPON, "knight/sword2.wav", 1, ATTN_NORM);
     else
@@ -124,18 +125,14 @@ void() knight_runatk9  = [ $runattack9,  knight_runatk10 ] { ai_melee_side(); };
 void() knight_runatk10 = [ $runattack10, knight_runatk11 ] { ai_charge_side(); };
 void() knight_runatk11 = [ $runattack11, knight_run1     ] { ai_charge(10); };
 
-void() knight_atk1  = [ $attackb1,  knight_atk2  ]
-{
-    sound(self, CHAN_WEAPON, "knight/sword1.wav", 1, ATTN_NORM);
-    ai_charge(0); };
+void() knight_atk1  = [ $attackb1,  knight_atk2  ] { sound(self, CHAN_WEAPON, "knight/sword1.wav", 1, ATTN_NORM); ai_charge(0); };
 void() knight_atk2  = [ $attackb2,  knight_atk3  ] { ai_charge(7); };
 void() knight_atk3  = [ $attackb3,  knight_atk4  ] { ai_charge(4); };
 void() knight_atk4  = [ $attackb4,  knight_atk5  ] { ai_charge(0); };
 void() knight_atk5  = [ $attackb5,  knight_atk6  ] { ai_charge(3); };
 void() knight_atk6  = [ $attackb6,  knight_atk7  ] { ai_charge(4); ai_melee(); };
 void() knight_atk7  = [ $attackb7,  knight_atk8  ] { ai_charge(1); ai_melee(); };
-void() knight_atk8  = [ $attackb8,  knight_atk9  ] { ai_charge(3);
-    ai_melee(); };
+void() knight_atk8  = [ $attackb8,  knight_atk9  ] { ai_charge(3); ai_melee(); };
 void() knight_atk9  = [ $attackb9,  knight_atk10 ] { ai_charge(1); };
 void() knight_atk10 = [ $attackb10, knight_run1  ] { ai_charge(5); };
 
@@ -199,8 +196,7 @@ void() knight_bow10 = [ $walk1,  knight_walk1 ] { ai_turn(); };
 
 void() knight_die1  = [ $death1,  knight_die2  ] {};
 void() knight_die2  = [ $death2,  knight_die3  ] {};
-void() knight_die3  = [ $death3,  knight_die4  ]
-{ self.solid = SOLID_NOT; };
+void() knight_die3  = [ $death3,  knight_die4  ] { self.solid = SOLID_NOT; };
 void() knight_die4  = [ $death4,  knight_die5  ] {};
 void() knight_die5  = [ $death5,  knight_die6  ] {};
 void() knight_die6  = [ $death6,  knight_die7  ] {};
@@ -211,8 +207,7 @@ void() knight_die10 = [ $death10, knight_die10 ] {};
 
 void() knight_dieb1  = [ $deathb1,  knight_dieb2  ] {};
 void() knight_dieb2  = [ $deathb2,  knight_dieb3  ] {};
-void() knight_dieb3  = [ $deathb3,  knight_dieb4  ]
-{ self.solid = SOLID_NOT; };
+void() knight_dieb3  = [ $deathb3,  knight_dieb4  ] { self.solid = SOLID_NOT; };
 void() knight_dieb4  = [ $deathb4,  knight_dieb5  ] {};
 void() knight_dieb5  = [ $deathb5,  knight_dieb6  ] {};
 void() knight_dieb6  = [ $deathb6,  knight_dieb7  ] {};

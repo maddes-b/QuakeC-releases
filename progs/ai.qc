@@ -341,7 +341,8 @@ void() SightSound =
 void() FoundTarget =
 {
     if (self.enemy.classname == "player")
-    { // let other monsters see this monster for a while
+    {
+        // let other monsters see this monster for a while
         sight_entity = self;
         sight_entity_time = time;
     }

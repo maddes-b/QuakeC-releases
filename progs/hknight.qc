@@ -150,9 +150,7 @@ void() hknight_stand9 = [ $stand9, hknight_stand1 ] { ai_stand(); };
 
 //===========================================================================
 
-void() hknight_walk1  = [ $walk1,  hknight_walk2  ] {
-    hk_idle_sound();
-    ai_walk(2); };
+void() hknight_walk1  = [ $walk1,  hknight_walk2  ] { hk_idle_sound(); ai_walk(2); };
 void() hknight_walk2  = [ $walk2,  hknight_walk3  ] { ai_walk(5); };
 void() hknight_walk3  = [ $walk3,  hknight_walk4  ] { ai_walk(5); };
 void() hknight_walk4  = [ $walk4,  hknight_walk5  ] { ai_walk(4); };
@@ -177,7 +175,9 @@ void() hknight_walk20 = [ $walk20, hknight_walk1  ] { ai_walk(2); };
 
 void() hknight_run1 = [ $run1, hknight_run2 ] {
     hk_idle_sound();
-    ai_run(20); CheckForCharge(); };
+    ai_run(20);
+    CheckForCharge();
+};
 void() hknight_run2 = [ $run2, hknight_run3 ] { ai_run(25); };
 void() hknight_run3 = [ $run3, hknight_run4 ] { ai_run(18); };
 void() hknight_run4 = [ $run4, hknight_run5 ] { ai_run(16); };
@@ -198,8 +198,7 @@ void() hknight_pain5 = [ $pain5, hknight_run1  ] {};
 
 void() hknight_die1  = [ $death1,  hknight_die2  ] { ai_forward(10); };
 void() hknight_die2  = [ $death2,  hknight_die3  ] { ai_forward(8); };
-void() hknight_die3  = [ $death3,  hknight_die4  ]
-{ self.solid = SOLID_NOT; ai_forward(7); };
+void() hknight_die3  = [ $death3,  hknight_die4  ] { self.solid = SOLID_NOT; ai_forward(7); };
 void() hknight_die4  = [ $death4,  hknight_die5  ] {};
 void() hknight_die5  = [ $death5,  hknight_die6  ] {};
 void() hknight_die6  = [ $death6,  hknight_die7  ] {};
@@ -212,8 +211,7 @@ void() hknight_die12 = [ $death12, hknight_die12 ] {};
 
 void() hknight_dieb1 = [ $deathb1, hknight_dieb2 ] {};
 void() hknight_dieb2 = [ $deathb2, hknight_dieb3 ] {};
-void() hknight_dieb3 = [ $deathb3, hknight_dieb4 ]
-{ self.solid = SOLID_NOT; };
+void() hknight_dieb3 = [ $deathb3, hknight_dieb4 ] { self.solid = SOLID_NOT; };
 void() hknight_dieb4 = [ $deathb4, hknight_dieb5 ] {};
 void() hknight_dieb5 = [ $deathb5, hknight_dieb6 ] {};
 void() hknight_dieb6 = [ $deathb6, hknight_dieb7 ] {};
@@ -312,8 +310,11 @@ void() hknight_char_a16 = [ $char_a16, hknight_run1     ] { ai_charge(13); };
 
 //===========================================================================
 
-void() hknight_char_b1 = [ $char_b1, hknight_char_b2 ]
-{ CheckContinueCharge(); ai_charge(23); ai_melee(); };
+void() hknight_char_b1 = [ $char_b1, hknight_char_b2 ] {
+    CheckContinueCharge();
+    ai_charge(23);
+    ai_melee();
+};
 void() hknight_char_b2 = [ $char_b2, hknight_char_b3 ] { ai_charge(17); ai_melee(); };
 void() hknight_char_b3 = [ $char_b3, hknight_char_b4 ] { ai_charge(12); ai_melee(); };
 void() hknight_char_b4 = [ $char_b4, hknight_char_b5 ] { ai_charge(22); ai_melee(); };
@@ -389,7 +390,8 @@ void(entity attacker, float damage) hknight_pain =
     sound(self, CHAN_VOICE, "hknight/pain1.wav", 1, ATTN_NORM);
 
     if (time - self.pain_finished > 5)
-    { // always go into pain frame if it has been a while
+    {
+        // always go into pain frame if it has been a while
         hknight_pain1();
         self.pain_finished = time + 1;
         return;

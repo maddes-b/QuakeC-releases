@@ -62,7 +62,8 @@ If targeted, it will toggle between on or off.
 void() light =
 {
     if (!self.targetname)
-    { // inert light
+    {
+        // inert light
         remove(self);
         return;
     }
@@ -527,7 +528,8 @@ SIMPLE BMODELS
 ==============================================================================
 */
 void() func_wall_use =
-{ // change to alternate textures
+{
+    // change to alternate textures
     self.frame = 1 - self.frame;
 };
 

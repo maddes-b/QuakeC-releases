@@ -70,12 +70,8 @@ void() boss_face =
 };
 
 
-void() boss_rise1  = [ $rise1,  boss_rise2    ] {
-    sound(self, CHAN_WEAPON, "boss1/out1.wav", 1, ATTN_NORM);
-};
-void() boss_rise2  = [ $rise2,  boss_rise3    ] {
-    sound(self, CHAN_VOICE, "boss1/sight1.wav", 1, ATTN_NORM);
-};
+void() boss_rise1  = [ $rise1,  boss_rise2    ] { sound(self, CHAN_WEAPON, "boss1/out1.wav", 1, ATTN_NORM); };
+void() boss_rise2  = [ $rise2,  boss_rise3    ] { sound(self, CHAN_VOICE, "boss1/sight1.wav", 1, ATTN_NORM); };
 void() boss_rise3  = [ $rise3,  boss_rise4    ] {};
 void() boss_rise4  = [ $rise4,  boss_rise5    ] {};
 void() boss_rise5  = [ $rise5,  boss_rise6    ] {};
@@ -92,8 +88,7 @@ void() boss_rise15 = [ $rise15, boss_rise16   ] {};
 void() boss_rise16 = [ $rise16, boss_rise17   ] {};
 void() boss_rise17 = [ $rise17, boss_missile1 ] {};
 
-void() boss_idle1  = [ $walk1,  boss_idle2  ]
-{
+void() boss_idle1  = [ $walk1,  boss_idle2  ] {
     // look for other players
 };
 void() boss_idle2  = [ $walk2,  boss_idle3  ] { boss_face(); };
@@ -184,9 +179,7 @@ void() boss_shockc8  = [ $shockc8,  boss_shockc9  ] {};
 void() boss_shockc9  = [ $shockc9,  boss_shockc10 ] {};
 void() boss_shockc10 = [ $shockc10, boss_death1   ] {};
 
-void() boss_death1  = [ $death1, boss_death2  ] {
-    sound(self, CHAN_VOICE, "boss1/death.wav", 1, ATTN_NORM);
-};
+void() boss_death1  = [ $death1, boss_death2  ] { sound(self, CHAN_VOICE, "boss1/death.wav", 1, ATTN_NORM); };
 void() boss_death2  = [ $death2, boss_death3  ] {};
 void() boss_death3  = [ $death3, boss_death4  ] {};
 void() boss_death4  = [ $death4, boss_death5  ] {};
@@ -194,8 +187,7 @@ void() boss_death5  = [ $death5, boss_death6  ] {};
 void() boss_death6  = [ $death6, boss_death7  ] {};
 void() boss_death7  = [ $death7, boss_death8  ] {};
 void() boss_death8  = [ $death8, boss_death9  ] {};
-void() boss_death9  = [ $death9, boss_death10 ]
-{
+void() boss_death9  = [ $death9, boss_death10 ] {
     sound(self, CHAN_BODY, "boss1/out1.wav", 1, ATTN_NORM);
     WriteByte(MSG_BROADCAST, SVC_TEMPENTITY);
     WriteByte(MSG_BROADCAST, TE_LAVASPLASH);
@@ -203,8 +195,7 @@ void() boss_death9  = [ $death9, boss_death10 ]
     WriteCoord(MSG_BROADCAST, self.origin_y);
     WriteCoord(MSG_BROADCAST, self.origin_z);
 };
-void() boss_death10 = [ $death9, boss_death10 ]
-{
+void() boss_death10 = [ $death9, boss_death10 ] {
     killed_monsters = killed_monsters + 1;
     WriteByte(MSG_ALL, SVC_KILLEDMONSTER); // FIXME: reliable broadcast
     SUB_UseTargets();
@@ -315,7 +306,8 @@ void() lightning_fire =
     local vector p1, p2;
 
     if (time >= lightning_end)
-    { // done here, put the terminals back up
+    {
+        // done here, put the terminals back up
         self = le1;
         door_go_down();
         self = le2;
@@ -360,10 +352,9 @@ void() lightning_use =
         return;
     }
 
-    if (
-       (le1.state != STATE_TOP && le1.state != STATE_BOTTOM)
-    || (le2.state != STATE_TOP && le2.state != STATE_BOTTOM)
-    || (le1.state != le2.state))
+    if ((le1.state != STATE_TOP && le1.state != STATE_BOTTOM)
+        || (le2.state != STATE_TOP && le2.state != STATE_BOTTOM)
+        || (le1.state != le2.state))
     {
         //dprint("not aligned\n");
         return;
