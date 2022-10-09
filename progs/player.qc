@@ -667,7 +667,7 @@ void() PlayerDie =
         return;
     }
 
-    i = cvar("temp1");
+    i = cvar("temp1"); // FIXME/Maddes: remove/disable old testing code
     if (!i)
     {
         i = 1 + floor(random() * 6);

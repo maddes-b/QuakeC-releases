@@ -749,7 +749,7 @@ void() ammo_touch =
     // cells
     else if (self.weapon == 4)
     {
-        if (other.ammo_cells >= 200)
+        if (other.ammo_cells >= 200) // FIXME/Maddes: incorrect check value; constants for max ammo would be useful
         {
             return;
         }

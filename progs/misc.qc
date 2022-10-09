@@ -216,7 +216,7 @@ void() misc_fireball =
     self.think = fire_fly;
     if (!self.speed)
     {
-        self.speed == 1000;
+        self.speed == 1000; // FIXME/Maddes: typo, should be an assignment
     }
 };
 

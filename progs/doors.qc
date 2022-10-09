@@ -895,6 +895,7 @@ void() func_door_secret =
         self.health = 10000;
         self.takedamage = DAMAGE_YES;
         self.th_pain = fd_secret_use;
+        // FIXME/Maddes: secret doors can still "die", so missing .th_die will cause a crash; increase/reset health, see fd_secret_use()/door_killed()
     }
     self.oldorigin = self.origin;
     if (!self.wait)

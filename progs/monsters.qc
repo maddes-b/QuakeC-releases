@@ -231,7 +231,7 @@ void() swimmonster_start_go =
     }
 
     self.takedamage = DAMAGE_AIM;
-    total_monsters = total_monsters + 1;
+    total_monsters = total_monsters + 1; // FIXME/Maddes: remove duplicate increase, do only in swimmonster_start() like for the other monster types
 
     self.ideal_yaw = self.angles * '0 1 0';
     if (!self.yaw_speed)
